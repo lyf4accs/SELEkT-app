@@ -19,6 +19,7 @@ io.on("connection", (socket) => {
 
   // Añadir dispositivo a la lista de dispositivos conectados
   devices.push(socket.id);
+  console.log("Dispositivos conectados:", devices);
 
   // Enviar la lista de dispositivos disponibles a todos los clientes
   io.emit("update-devices", devices);
@@ -37,6 +38,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(port, () => {
+server.listen(port, '0.0.0.0', () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });
