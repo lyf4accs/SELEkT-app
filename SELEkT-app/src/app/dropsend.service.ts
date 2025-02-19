@@ -10,7 +10,7 @@ export class DropsendService {
   private devices: string[] = [];
 
   constructor() {
-    this.socket = io('http://your-ec2-ip:3000'); // Usa la IP pública de tu servidor EC2
+    this.socket = io('192.168.1.145:3000'); // Usa la IP pública de tu servidor EC2
 
     // Escuchar la actualización de la lista de dispositivos
     this.socket.on('update-devices', (devices: string[]) => {
