@@ -1,1 +1,15 @@
-<p>peerscomponent works!</p>
+<!-- peers/peers.component.html -->
+<div *ngIf="peers.length === 0" class="no-peers">
+  <h2>Open Snapdrop on other devices to send files</h2>
+</div>
+<div *ngFor="let peer of peers" class="peer" (click)="selectPeer(peer)">
+  <div class="peer-icon">
+    <svg class="icon">
+      <use [attr.xlink:href]="getIcon(peer)"></use>
+    </svg>
+  </div>
+  <div class="peer-info">
+    <div class="peer-name">{{ peer.name.displayName }}</div>
+    <div class="peer-device">{{ peer.name.deviceName }}</div>
+  </div>
+</div>
