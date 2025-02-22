@@ -1,30 +1,17 @@
-<!-- app.component.html -->
 <header class="row-reverse">
-  <button (click)="showAbout()" title="About Snapdrop">
-    <svg class="icon">
-      <use xlink:href="#info-outline"></use>
-    </svg>
-  </button>
-  <button id="notification" *ngIf="showNotification" title="Enable Notifications">
-    <svg class="icon">
-      <use xlink:href="#notifications"></use>
-    </svg>
-  </button>
-  <button id="install" *ngIf="showInstall" title="Install Snapdrop" (click)="installApp()">
-    <svg class="icon">
-      <use xlink:href="#homescreen"></use>
-    </svg>
-  </button>
+  @if (showNotification) {
+    <button id="notification" title="Enable Notifications">
+      <svg class="icon">
+        <use xlink:href="#notifications"></use>
+      </svg>
+    </button>
+  }
 </header>
 
 <app-peerscomponent></app-peerscomponent>
 
 <!-- Se muestra un mensaje si no hay peers -->
-<div *ngIf="(peersListEmpty)" class="no-peers">
-  <h2>Open Snapdrop on other devices to send files</h2>
-</div>
 
-<!-- Se incluirían aquí componentes para diálogos (enviar texto, recibir archivo, toast, etc.) -->
 
 <footer class="column">
   <svg class="icon logo">
@@ -35,4 +22,3 @@
     You can be discovered by everyone on this network
   </div>
 </footer>
-

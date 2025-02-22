@@ -1,0 +1,97 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background-color: #282c34;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 10px;
+  background-color: #333;
+}
+
+header button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}
+
+.no-peers {
+  text-align: center;
+  margin-top: 20px;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #333;
+  width: 100%;
+}
+
+footer .logo {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
+}
+
+#displayName {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.font-body2 {
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+.peer {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 10px;
+  background-color: #444;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.peer:hover {
+  background-color: #555;
+}
+
+.peer-icon {
+  margin-right: 10px;
+}
+
+.peer-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.peer-name {
+  font-weight: bold;
+}
+
+.peer-device {
+  font-size: 0.9em;
+  opacity: 0.8;
+}
