@@ -65,12 +65,9 @@ export class DropsendService {
     };
   }
 
-  // Método privado para construir la URL del servidor WebSocket
   private getEndpoint(): string {
-    // Construye la URL del endpoint del servidor. Se puede ajustar según el entorno.
-    const protocol = location.protocol.startsWith('https') ? 'wss' : 'ws'; // Define el protocolo basado en la seguridad de la conexión
-    const webrtc = window.isRtcSupported ? '/webrtc' : '/fallback'; // Utiliza diferentes rutas según si WebRTC es soportado
-    return `${protocol}://${location.host}${location.pathname}server${webrtc}`; // Retorna la URL completa
+    const serverUrl = 'ws://192.168.1.145:3000'; //selecciono la IP donde está el servidor y el puerto donde se ubica
+    return serverUrl;
   }
 
   // Método privado para manejar los mensajes recibidos
@@ -108,7 +105,6 @@ export class DropsendService {
         console.error('Unknown message type:', msg); // Maneja tipos de mensaje desconocidos
     }
   }
-
 
   // Método para enviar mensajes a través del WebSocket
   send(message: any): void {

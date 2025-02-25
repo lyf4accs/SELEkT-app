@@ -49,5 +49,5 @@ io.on("connection", (socket) => {
 
 // Iniciamos el servidor en el puerto especificado y en todas las interfaces de red
 server.listen(port, "0.0.0.0", () => {
-  console.log(`Servidor escuchando en http://localhost:${port}`); // Mensaje en consola indicando que el servidor está funcionando
+  console.log(`Servidor escuchando en el puerto ${port}`); // Mensaje en consola indicando que el servidor está funcionando
 });
