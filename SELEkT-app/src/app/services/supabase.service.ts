@@ -13,7 +13,9 @@ export class SupabaseService {
     this.supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
   }
   async uploadAlbum(files: File[]): Promise<string | null> {
+
     try {
+
       // Obtener el usuario actual (asumiendo que usas Supabase Auth)
       const {
         data: { user },
@@ -23,11 +25,12 @@ export class SupabaseService {
         return null;
       }
 
+
       // Generar un código único para el álbum
       const albumCode = Math.random().toString(36).substring(7);
       const albumData = {
         code: albumCode,
-        usuario_id: user.id, // Asociar el álbum al usuario autenticado
+        user_id: 1,
         created_at: new Date().toISOString(),
       };
 
@@ -47,7 +50,7 @@ export class SupabaseService {
       for (const file of files) {
         const filePath = `public/${Date.now()}-${file.name}`;
         const { data: uploadData, error: uploadError } =
-          await this.supabase.storage.from('Foto').upload(filePath, file);
+          await this.supabase.storage.from('Fotos').upload(filePath, file);
 
         if (uploadError || !uploadData) {
           console.error(`Error subiendo la foto ${file.name}:`, uploadError);

@@ -1,0 +1,11 @@
+<div>
+  <h2>Subir Fotos</h2>
+  <input type="file" (change)="onFileSelected($event)" multiple accept="image/*" />
+  <button (click)="uploadPhotos()">Subir Fotos</button>
+
+  @if(albumLink){
+    <h3>Enlace al Álbum:</h3>
+    <a [href]="albumLink" target="_blank">{{ albumLink }}</a>
+    <button (click)="copyLink()">Copiar enlace</button>
+  }
+</div>
