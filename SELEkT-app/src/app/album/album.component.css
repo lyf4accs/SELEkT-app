@@ -1,0 +1,49 @@
+.album-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.photos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  justify-items: center;
+  margin-top: 20px;
+}
+
+.photo-card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  background: white;
+  max-width: 200px;
+}
+
+.photo {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.download-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.download-btn:hover {
+  background-color: #0056b3;
+}
+
+.no-photos {
+  font-size: 18px;
+  color: #666;
+  text-align: center;
+  margin-top: 20px;
+}
