@@ -6,9 +6,9 @@ import { LinksComponent } from './links/links.component';
 // import { SwiperSelektComponent } from './swiper-selekt/swiper-selekt.component';
 
 export const routes: Routes = [
+  { path: '', redirectTo:'dropsend', pathMatch:'full'},
   { path: 'dropsend', component: DropsendComponent },
   { path: 'album/:code', component: AlbumComponent },
   { path:'upload', component: UploadFilesComponent },
    { path:'links', component:LinksComponent },
-  // { path: 'swiper', component:SwiperSelektComponent },
 ]
