@@ -1,0 +1,13 @@
+<h1>LINKS COMPARTIDOS</h1>
+@if(albums.length > 0){
+    @for(album of albums; track album.id){
+  <div class="album-card">
+          <p><strong>Código:</strong> {{ album.code }}</p>
+          <p><strong>Fecha de Creación:</strong> {{ album.created_at}}</p>
+          <a [routerLink]="['/album', album.code]">Ver álbum</a>
+          <button (click)="deleteAlbum(album)">Eliminar</button>
+        </div>
+    }
+}@else{
+  <p>No tienes links compartidos</p>
+}

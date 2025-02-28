@@ -22,6 +22,7 @@ export class AlbumComponent implements OnInit {
       const albumId = await this.supabaseService.getAlbumByCode(albumCode);
       if (albumId) {
         this.photos = await this.supabaseService.getPhotosByAlbumId(albumId);
+        console.log(this.photos);
       }
     }
   }
