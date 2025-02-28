@@ -4,6 +4,7 @@ import { AlbumComponent } from './album/album.component';
 import { UploadFilesComponent } from './upload-files/upload-files.component';
 import { LinksComponent } from './links/links.component';
  import { SwiperSelektComponent } from './swiper-selekt/swiper-selekt.component';
+import { ManagePhotoComponent } from './manage-photo/manage-photo.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dropsend', pathMatch: 'full' },
@@ -12,4 +13,5 @@ export const routes: Routes = [
   { path: 'upload', component: UploadFilesComponent },
   { path: 'links', component: LinksComponent },
   { path: 'swiper', component: SwiperSelektComponent },
+  { path: 'manage', component: ManagePhotoComponent },
 ];
