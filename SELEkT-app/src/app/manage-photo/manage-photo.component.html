@@ -1,3 +1,41 @@
+<!-- <div *ngIf="!selectedAlbum">
+  <h2>Galería de Fotos</h2>
+
+  <div *ngFor="let photo of galleryPhotos">
+    <div>
+      <img [src]="photo" alt="Foto de la galería" />
+      <button (click)="selectPhoto(photo)">Seleccionar</button>
+    </div>
+  </div>
+
+  <h2>Fotos Duplicadas</h2>
+
+  <div *ngFor="let album of duplicatedAlbum">
+    <h3>{{ album.name }}</h3>
+    <div *ngFor="let photo of album.photos">
+      <div>
+        <img [src]="photo" alt="Foto duplicada" />
+        <button (click)="selectPhoto(photo)">Seleccionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="selectedAlbum">
+  <h2>{{ selectedAlbum.name }}</h2>
+  <button (click)="goBack()">Volver</button>
+  <div *ngFor="let photo of selectedAlbum.photos">
+    <div>
+      <img [src]="photo" alt="Foto del álbum" />
+      <button (click)="selectPhoto(photo)">Seleccionar</button>
+    </div>
+  </div>
+</div>
+
+<h3>Fotos seleccionadas para el swiper</h3>
+<div *ngFor="let photo of selectedPhotos">
+  <img [src]="photo" alt="Foto seleccionada" />
+</div> -->
 <!-- Mostrar álbumes -->
 <div *ngIf="!selectedAlbum">
   <div *ngFor="let album of albums" (click)="selectAlbum(album)" class="album">

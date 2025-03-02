@@ -1,14 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-
-interface Card {
-  id: number;
-  title: string;
-  description: string;
-  transform: string;
-  opacity: string;
-  zIndex: number;
-}
+import { Card } from '../models/Card';
 
 @Component({
   selector: 'app-swiper-selekt',

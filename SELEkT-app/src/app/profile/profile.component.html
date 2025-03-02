@@ -1,0 +1,27 @@
+<!-- <h2>Perfil del Usuario</h2>
+
+<h3>Mis Moodboards</h3>
+<div *ngFor="let moodboard of moodboards">
+  <div>
+    <h4>{{ moodboard.name }}</h4>
+    <button (click)="selectMoodboard(moodboard)">Seleccionar</button>
+  </div>
+</div>
+
+<h3>Crear un nuevo Moodboard</h3>
+<input [(ngModel)]="newMoodboardName" placeholder="Nombre del moodboard" />
+<button (click)="createMoodboard()">Crear Moodboard</button>
+
+<!-- Selección de imágenes para moodboards -->
+<h3>Seleccionar Imágenes para Moodboard</h3>
+<label for="moodboardName">Nombre del Moodboard</label>
+<input id="moodboardName" [(ngModel)]="newMoodboardName" placeholder="Introduce el nombre del moodboard" />
+
+
+<button (click)="addImagesToMoodboard()">Añadir Imágenes</button>
+
+<!-- Mostrar las imágenes seleccionadas -->
+<h3>Imágenes seleccionadas para el moodboard</h3>
+<div *ngFor="let image of imagesForMoodboard">
+  <img [src]="image" alt="Imagen seleccionada" />
+</div> -->
