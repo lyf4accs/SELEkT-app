@@ -23,6 +23,7 @@
     "@capacitor/camera": "^7.0.0",
     "@capacitor/cli": "^7.0.1",
     "@capacitor/core": "^7.0.1",
+    "@capacitor/filesystem": "^7.0.0",
     "@capacitor/ios": "^7.0.1",
     "@ionic/angular": "^8.4.3",
     "@supabase/supabase-js": "^2.49.1",
