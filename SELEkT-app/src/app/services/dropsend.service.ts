@@ -38,7 +38,7 @@ export class DropsendService {
       return; // Si hay una conexión, no hace nada
     }
     const endpoint = this.getEndpoint(); // Obtiene la URL del servidor WebSocket
-    this.socket = new WebSocket(endpoint); // Crea una nueva conexión WebSocket
+    this.socket = new WebSocket(`wss://${window.location.host}/ws`); // Crea una nueva conexión WebSocket
     this.socket.binaryType = 'arraybuffer'; // Configura el tipo de datos para recibir archivos binarios
 
     // Evento que se dispara al abrir la conexión
