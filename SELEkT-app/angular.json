@@ -19,6 +19,7 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
+              "src/_redirects",
               {
                 "glob": "**/*",
                 "input": "public"
@@ -73,8 +74,8 @@
             "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-                "src/assets",
-                 "src/favicon.ico",
+              "src/assets",
+              "src/favicon.ico",
               {
                 "glob": "**/*",
                 "input": "public"
