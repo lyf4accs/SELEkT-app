@@ -8,7 +8,7 @@ import { ManagePhotoComponent } from './manage-photo/manage-photo.component';
 // import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/dropsend', pathMatch: 'full' },
+  { path: '', redirectTo: '/upload', pathMatch: 'full' },
   { path: 'dropsend', component: DropsendComponent },
   { path: 'album/:code', component: AlbumComponent },
   { path: 'upload', component: UploadFilesComponent },

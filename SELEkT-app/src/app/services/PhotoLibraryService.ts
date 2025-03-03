@@ -6,7 +6,7 @@
 //   providedIn: 'root',
 // })
 // export class PhotoLibraryService {
-//   private apiUrl = 'http://localhost:3000'; // Asegúrate de que esto apunte a tu backend
+//   private apiUrl = 'https://localhost:3000'; // Asegúrate de que esto apunte a tu backend
 
 //   constructor(private http: HttpClient) {}
 
