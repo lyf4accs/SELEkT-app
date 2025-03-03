@@ -38,7 +38,7 @@ export class DropsendService {
       return; // Si hay una conexión, no hace nada
     }
     const endpoint = this.getEndpoint(); // Obtiene la URL del servidor WebSocket
-    this.socket = new WebSocket(`wss://${window.location.host}/ws`); // Crea una nueva conexión WebSocket
+    this.socket = new WebSocket(endpoint); // Crea una nueva conexión WebSocket
     this.socket.binaryType = 'arraybuffer'; // Configura el tipo de datos para recibir archivos binarios
 
     // Evento que se dispara al abrir la conexión
@@ -66,8 +66,8 @@ export class DropsendService {
   }
 
   private getEndpoint(): string {
-    const serverUrl = 'wss://192.168.1.145:3000'; //selecciono la IP donde está el servidor y el puerto donde se ubica
-    return serverUrl;
+    const endpoint = 'wss://<nombre-de-tu-app>.fly.dev:3000'; //selecciono la IP donde está el servidor y el puerto donde se ubica
+    return endpoint;
   }
 
   // Método privado para manejar los mensajes recibidos

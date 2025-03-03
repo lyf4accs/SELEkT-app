@@ -7,7 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "move-files": "xcopy /E /I /Y dist\\selek-t-app\\browser\\* dist\\selek-t-app"
+    "move-files": "xcopy /E /I /Y dist\\selek-t-app\\browser\\* dist\\selek-t-app",
+    "backend-start": "node server.js",
+    "backend-build": "echo 'Building backend...'"
   },
   "private": true,
   "dependencies": {
