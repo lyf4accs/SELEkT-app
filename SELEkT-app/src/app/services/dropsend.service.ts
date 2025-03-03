@@ -66,7 +66,7 @@ export class DropsendService {
   }
 
   private getEndpoint(): string {
-    const serverUrl = 'ws://192.168.1.145:3000'; //selecciono la IP donde está el servidor y el puerto donde se ubica
+    const serverUrl = 'wss://192.168.1.145:3000'; //selecciono la IP donde está el servidor y el puerto donde se ubica
     return serverUrl;
   }
 

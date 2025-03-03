@@ -3,7 +3,7 @@ import { DropsendComponent } from './dropsend/dropsend.component';
 import { AlbumComponent } from './album/album.component';
 import { UploadFilesComponent } from './upload-files/upload-files.component';
 import { LinksComponent } from './links/links.component';
- import { SwiperSelektComponent } from './swiper-selekt/swiper-selekt.component';
+import { SwiperSelektComponent } from './swiper-selekt/swiper-selekt.component';
 import { ManagePhotoComponent } from './manage-photo/manage-photo.component';
 // import { ProfileComponent } from './profile/profile.component';
 
