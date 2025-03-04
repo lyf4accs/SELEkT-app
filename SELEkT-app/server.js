@@ -1,53 +1,55 @@
 // Importamos las bibliotecas necesarias
 const express = require("express"); // Framework web para Node.js
-const https = require("https"); // Módulo nativo de Node.js para crear servidores HTTP
+const http = require("http"); // Módulo nativo para crear servidores HTTP
 const socketIo = require("socket.io"); // Biblioteca para habilitar la comunicación en tiempo real
 
-// Inicializamos la aplicación Express, ayuda a crear aplicaciones web y gestionar rutas
+// Inicializamos la aplicación Express
 const app = express();
 // Creamos un servidor HTTP utilizando la aplicación Express
-const server = https.createServer(app);
-// Inicializamos Socket.IO con el servidor HTTP para manejar la comunicación en tiempo real
-const io = socketIo(server);
+const server = http.createServer(app);
+// Inicializamos Socket.IO con el servidor HTTP
+const io = socketIo(server, {
+  cors: {
+    origin: "*", // Permitir acceso desde cualquier origen (ajustar según necesidad)
+    methods: ["GET", "POST"],
+  },
+});
 
-// Definimos el puerto en el que el servidor escuchará las solicitudes
-const port = 3000;
+// Definimos el puerto dinámico asignado por Render
+const PORT = process.env.PORT || 3000;
 
 // Inicializamos un array para almacenar la lista de dispositivos conectados
-let devices = []; // Este array contendrá los IDs de los sockets de los dispositivos conectados
+let devices = [];
 
-// Middleware para servir archivos estáticos (ej. HTML, CSS, JS) desde la carpeta "public"
-app.use(express.static("public"));
+// Middleware para servir archivos estáticos (cambiar la ruta si es necesario)
+app.use(express.static("dist/selek-t-app"));
 
-// Configuración de la conexión WebSocket
+// Configuración de WebSocket con Socket.IO
 io.on("connection", (socket) => {
-  console.log("Un cliente se ha conectado"); // Mensaje en la consola al establecer una conexión
+  console.log("Un cliente se ha conectado");
 
-  // Añadimos el ID del nuevo dispositivo a la lista de dispositivos conectados
+  // Añadimos el ID del dispositivo a la lista
   devices.push(socket.id);
-  console.log("Dispositivos conectados:", devices); // Imprimimos la lista actualizada de dispositivos conectados
+  console.log("Dispositivos conectados:", devices);
 
-  // Emitimos la lista de dispositivos disponibles a todos los clientes conectados
+  // Emitimos la lista actualizada
   io.emit("update-devices", devices);
 
-  // Configuramos un listener para recibir archivos de un dispositivo
+  // Recibir archivos
   socket.on("send-file", (fileData) => {
-    console.log("Recibiendo archivo..."); // Mensaje en consola indicando que se está recibiendo un archivo
-    // Emitimos el archivo recibido a todos los demás clientes conectados
+    console.log("Recibiendo archivo...");
     io.emit("receive-file", fileData);
   });
 
-  // Configuramos un listener para detectar cuando un dispositivo se desconecta
+  // Manejo de desconexión
   socket.on("disconnect", () => {
-    console.log("Un cliente se ha desconectado"); // Mensaje en consola al desconectar un cliente
-    // Filtramos la lista de dispositivos para eliminar el que se ha desconectado
+    console.log("Un cliente se ha desconectado");
     devices = devices.filter((id) => id !== socket.id);
-    // Emitimos la lista de dispositivos actualizada a todos los clientes
     io.emit("update-devices", devices);
   });
 });
 
-// Iniciamos el servidor en el puerto especificado y en todas las interfaces de red
-server.listen(port, "0.0.0.0", () => {
-  console.log(`Servidor escuchando en el puerto ${port}`); // Mensaje en consola indicando que el servidor está funcionando
+// Iniciamos el servidor en el puerto asignado
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
