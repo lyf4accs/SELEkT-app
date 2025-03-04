@@ -16,7 +16,7 @@ const io = socketIo(server, {
 });
 
 // Definimos el puerto dinámico asignado por Render
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
 // Inicializamos un array para almacenar la lista de dispositivos conectados
 let devices = [];
