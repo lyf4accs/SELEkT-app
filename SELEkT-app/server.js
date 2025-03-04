@@ -1,76 +1,102 @@
 // Importamos las bibliotecas necesarias
 const express = require("express"); // Framework web para Node.js
-const http = require("http"); // Para crear el servidor HTTP
+const http = require("http"); // Módulo nativo para crear servidores HTTP
 const path = require("path");
-const socketIo = require("socket.io");
+const socketIo = require("socket.io"); // Librería para WebSockets
 
 // Inicializamos la aplicación Express
 const app = express();
-app.use(express.json()); // Para parsear JSON en el body
 
-// Servir archivos estáticos de "public" (si los hay)
-app.use(express.static("public"));
-
-// Servir los archivos estáticos generados por Angular (asegúrate de que el outputPath coincida con el de angular.json)
-app.use(express.static(path.join(__dirname, "dist", "SELEkT-app")));
+// Middleware para parsear JSON en el body
+app.use(express.json());
 
 // Creamos un servidor HTTP utilizando la aplicación Express
 const server = http.createServer(app);
 
-// Inicializamos Socket.IO para la señalización
-const io = socketIo(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
-});
+// Configuramos Socket.IO para habilitar WebSockets
+const io = socketIo(server);
 
 // Definimos el puerto dinámico asignado por Render
 const PORT = process.env.PORT || 10000;
 
-// Manejo de conexión de clientes para señalización WebRTC
-io.on("connection", (socket) => {
-  console.log("Nuevo cliente conectado:", socket.id);
+// Variable para simular la lista de dispositivos conectados
+let devices = [];
 
-  // Notifica a los demás de la llegada de un nuevo peer
-  socket.broadcast.emit("new-peer", { socketId: socket.id });
+// Middleware para servir archivos estáticos (archivos en "public")
+app.use(express.static("public"));
 
-  // Escucha la oferta (SDP) y la reenvía al destinatario
-  socket.on("offer", (data) => {
-    console.log("Oferta recibida de", socket.id);
-    io.to(data.target).emit("offer", { sdp: data.sdp, socketId: socket.id });
-  });
+// Servir los archivos estáticos generados por Angular desde la carpeta `dist`
+app.use(express.static(path.join(__dirname, "dist/selek-t-app")));
 
-  // Escucha la respuesta y la reenvía al emisor de la oferta
-  socket.on("answer", (data) => {
-    console.log("Respuesta recibida de", socket.id);
-    io.to(data.target).emit("answer", { sdp: data.sdp, socketId: socket.id });
-  });
+// -----------------------------
+// Endpoints HTTP para reemplazar la lógica de WebSocket
+// -----------------------------
 
-  // Escucha candidatos ICE y los reenvía
-  socket.on("ice-candidate", (data) => {
-    console.log("Candidato ICE recibido de", socket.id);
-    io.to(data.target).emit("ice-candidate", {
-      candidate: data.candidate,
-      socketId: socket.id,
-    });
-  });
-
-  // Cuando un cliente se desconecta, se notifica a los demás
-  socket.on("disconnect", () => {
-    console.log("Cliente desconectado:", socket.id);
-    socket.broadcast.emit("peer-disconnected", { socketId: socket.id });
-  });
+// Obtener la lista de dispositivos (simulación)
+app.get("/devices", (req, res) => {
+  res.json({ devices });
 });
 
-// Ruta genérica para servir el index.html de Angular (para el enrutamiento de SPA)
+// Endpoint para "conectar" un dispositivo
+app.post("/connect-device", (req, res) => {
+  const { deviceId } = req.body;
+  if (deviceId) {
+    devices.push(deviceId);
+    console.log("Dispositivos conectados:", devices);
+    res.json({ message: "Dispositivo conectado", devices });
+  } else {
+    res.status(400).json({ message: "No se recibió deviceId" });
+  }
+});
+
+// Endpoint para "desconectar" un dispositivo
+app.post("/disconnect-device", (req, res) => {
+  const { deviceId } = req.body;
+  if (deviceId) {
+    devices = devices.filter((id) => id !== deviceId);
+    console.log("Dispositivos conectados:", devices);
+    res.json({ message: "Dispositivo desconectado", devices });
+  } else {
+    res.status(400).json({ message: "No se recibió deviceId" });
+  }
+});
+
+// Endpoint para enviar archivo
+app.post("/send-file", (req, res) => {
+  const fileData = req.body;
+  console.log("Recibiendo archivo...", fileData);
+  // Aquí puedes procesar o almacenar el archivo según necesites
+  res.json({ message: "Archivo recibido", fileData });
+});
+
+// Ruta genérica para servir el index.html de Angular (SPA)
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "SELEkT-app", "index.html"));
+  res.sendFile(path.join(__dirname, "dist/selek-t-app", "index.html"));
 });
 
-// (Opcional) Ping para mantener el servidor activo
+// ------------------------------
+// Manejo de WebSockets
+// ------------------------------
+io.on("connection", (socket) => {
+  console.log("Un cliente se ha conectado");
+  devices.push(socket.id); // Añade el dispositivo a la lista de dispositivos conectados
+  io.emit("update-devices", devices); // Notifica a todos los dispositivos conectados sobre los nuevos dispositivos
+
+  // Recibir archivos
+  socket.on("send-file", (fileData) => {
+    console.log("Recibiendo archivo...");
+    io.emit("receive-file", fileData); // Enviar el archivo a todos los dispositivos
+  });
+
+  // Manejo de desconexión
+  socket.on("disconnect", () => {
+    devices = devices.filter((id) => id !== socket.id); // Eliminar el dispositivo desconectado de la lista
+    io.emit("update-devices", devices); // Actualizar la lista de dispositivos conectados
+  });
+});
+
+// Ping para mantener el servidor activo (opcional)
 setInterval(() => {
-  // Utilizamos la URL interna HTTP ya que Render gestiona la salida
   fetch("http://selekt-app.onrender.com")
     .then((res) => console.log("Ping enviado para mantener el servidor activo"))
     .catch((err) => console.error("Error en el ping:", err));

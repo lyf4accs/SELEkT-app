@@ -1,63 +1,71 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DropsendService {
-  // URL base del servidor HTTP (usa http:// en lugar de ws:// o wss://)
-  private baseUrl = 'http://selekt-app.onrender.com';
+  private socket: WebSocket | undefined;
+  private reconnectTimer: any;
+  private peersSubject = new Subject<any[]>(); // Para notificar cambios en la lista de pares conectados
+  private peerJoinedSubject = new Subject<any[]>();
+  private peerLeftSubject = new Subject<any[]>();
 
-  // Se mantienen los Subjects para la comunicación interna si los necesitas
-  private peersSubject = new Subject<any[]>();
-  private peerJoinedSubject = new Subject<any>();
-  private peerLeftSubject = new Subject<string>();
-  private signalSubject = new Subject<any>();
-  private displayNameSubject = new Subject<any>();
-  private notificationSubject = new Subject<string>();
-
-  constructor(private http: HttpClient) {
-    // Puedes inicializar o suscribirte a algo aquí si lo requieres
+  constructor() {
+    this.connect(); // Conectar al servidor de señalización
+    window.addEventListener('beforeunload', () => this.disconnect()); // Manejo de desconexión al cerrar ventana
   }
 
-  // Método para obtener la lista de dispositivos
-  getDevices(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/devices`);
+  private connect(): void {
+    // Conexión al servidor de señalización (renderizado en http://selekt-app.onrender.com)
+    const endpoint = 'http://selekt-app.onrender.com'; // URL del servidor
+    this.socket = new WebSocket(endpoint); // Establecer la conexión WebSocket con el servidor de señalización
+    this.socket.onopen = () => {
+      console.log('Conectado al servidor de señalización');
+    };
+
+    // Manejo de los mensajes del servidor
+    this.socket.onmessage = (event) => {
+      this.handleMessage(event.data);
+    };
   }
 
-  // Método para simular la conexión de un dispositivo
-  connectDevice(deviceId: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/connect-device`, { deviceId });
+  private handleMessage(message: any): void {
+    // Aquí procesamos los mensajes del servidor y actualizamos la lista de dispositivos
+    let msg;
+    try {
+      msg = JSON.parse(message); // Parseamos el mensaje JSON
+    } catch (error) {
+      console.error('JSON inválido:', message);
+      return;
+    }
+
+    console.log('Mensaje recibido:', msg);
+
+    // Dependiendo del tipo de mensaje, actualizamos la lista de dispositivos
+    switch (msg.type) {
+      case 'peers': // Cuando se recibe la lista de dispositivos conectados
+        this.peersSubject.next(msg.peers); // Notificamos a los componentes
+        break;
+      case 'peer-joined': // Cuando un nuevo dispositivo se conecta
+        this.peerJoinedSubject.next(msg.peer);
+        break;
+      case 'peer-left': // Cuando un dispositivo se desconecta
+        this.peerLeftSubject.next(msg.peerId);
+        break;
+    }
   }
 
-  // Método para simular la desconexión de un dispositivo
-  disconnectDevice(deviceId: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/disconnect-device`, { deviceId });
-  }
-
-  // Método para enviar un archivo al servidor
-  sendFile(fileData: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/send-file`, fileData);
-  }
-
-  // Los métodos de los Subjects se mantienen (puedes usarlos según necesites)
+  // Obtén la lista de dispositivos conectados
   getPeers(): Observable<any[]> {
     return this.peersSubject.asObservable();
   }
-  getPeerJoined(): Observable<any> {
-    return this.peerJoinedSubject.asObservable();
-  }
-  getPeerLeft(): Observable<string> {
-    return this.peerLeftSubject.asObservable();
-  }
-  getSignal(): Observable<any> {
-    return this.signalSubject.asObservable();
-  }
-  getDisplayName(): Observable<any> {
-    return this.displayNameSubject.asObservable();
-  }
-  getNotifications(): Observable<string> {
-    return this.notificationSubject.asObservable();
+
+  // Desconectar del servidor
+  private disconnect(): void {
+    if (this.socket) {
+      this.socket.close();
+    }
+    clearInterval(this.reconnectTimer);
   }
 }
