@@ -67,7 +67,7 @@ app.post("/send-file", (req, res) => {
 
 // Ruta genérica para servir el index.html de Angular (SPA)
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist/selek-t-app", "index.html"));
+  res.sendFile(path.join(__dirname, "dist/selek-t-app/browser", "index.html"));
 });
 
 // Ping para mantener el servidor activo (opcional)
