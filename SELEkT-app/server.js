@@ -31,6 +31,10 @@ app.use(express.static("public"));
 // Servir los archivos estáticos generados por Angular desde la carpeta `dist`
 app.use(express.static(path.join(__dirname, "dist/selek-t-app")));
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist/selek-t-app", "src/index.html"));
+});
+
 // Configuración de WebSocket con Socket.IO
 io.on("connection", (socket) => {
   console.log("Un cliente se ha conectado");
