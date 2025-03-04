@@ -49,6 +49,12 @@ io.on("connection", (socket) => {
   });
 });
 
+setInterval(() => {
+  fetch("https://selekt-app.onrender.com")
+    .then((res) => console.log("Ping enviado para mantener el servidor activo"))
+    .catch((err) => console.error("Error en el ping:", err));
+}, 300000);
+
 // Iniciamos el servidor en el puerto asignado
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
