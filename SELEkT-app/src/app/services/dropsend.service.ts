@@ -66,7 +66,7 @@ export class DropsendService {
   }
 
   private getEndpoint(): string {
-    const endpoint = 'wss://<nombre-de-tu-app>.fly.dev:3000'; //selecciono la IP donde está el servidor y el puerto donde se ubica
+    const endpoint = 'https://selekt-app.onrender.com'; //selecciono la IP donde está el servidor y el puerto donde se ubica
     return endpoint;
   }
 
