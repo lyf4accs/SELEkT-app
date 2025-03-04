@@ -22,7 +22,12 @@ const PORT = process.env.PORT || 10000;
 let devices = [];
 
 // Middleware para servir archivos estáticos (cambiar la ruta si es necesario)
-app.use(express.static("dist/selek-t-app"));
+
+
+app.use(express.static("public"));
+
+// Servir los archivos estáticos generados por Angular desde la carpeta `dist`
+app.use(express.static(path.join(__dirname, "dist/selek-t-app")));
 
 // Configuración de WebSocket con Socket.IO
 io.on("connection", (socket) => {
