@@ -1,6 +1,6 @@
 // Importamos las bibliotecas necesarias
 const express = require("express"); // Framework web para Node.js
-const http = require("http"); // Módulo nativo para crear servidores HTTP
+const https = require("https"); // Módulo nativo para crear servidores HTTP
 const socketIo = require("socket.io"); // Biblioteca para habilitar la comunicación en tiempo real
 const path = require("path");
 
@@ -8,7 +8,7 @@ const path = require("path");
 // Inicializamos la aplicación Express
 const app = express();
 // Creamos un servidor HTTP utilizando la aplicación Express
-const server = http.createServer(app);
+const server = https.createServer(app);
 // Inicializamos Socket.IO con el servidor HTTP
 const io = socketIo(server, {
   cors: {
