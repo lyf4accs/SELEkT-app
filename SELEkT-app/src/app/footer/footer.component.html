@@ -1,0 +1,65 @@
+<div class="navigation mobile-footer">
+  <ul>
+    <li class="list" active>
+      <a href="#">
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
+            <path d="M12.5002 6.25H10.2502C8.85011 6.25 8.14953 6.25 7.61475 6.52248C7.14434 6.76217 6.76217 7.14434 6.52248 7.61475C6.25 8.14953 6.25 8.85011 6.25 10.2502V19.7502C6.25 21.1504 6.25 21.8501 6.52248 22.3849C6.76217 22.8553 7.14434 23.2381 7.61475 23.4778C8.149 23.75 8.84874 23.75 10.2461 23.75H19.7539C21.1513 23.75 21.85 23.75 22.3842 23.4778C22.8546 23.2381 23.2381 22.8549 23.4778 22.3845C23.75 21.8502 23.75 21.1513 23.75 19.7539V17.5M25 11.25V5M25 5H18.75M25 5L16.25 13.75" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="text">QualitySend</span>
+      </a>
+    </li>
+    <li class="list">
+      <a href="#">
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
+            <path d="M18.75 23.75C18.75 20.9886 15.3921 18.75 11.25 18.75C7.10786 18.75 3.75 20.9886 3.75 23.75M21.0352 6.46484C21.4995 6.92914 21.8677 7.48033 22.119 8.08696C22.3703 8.69359 22.4999 9.34416 22.4999 10.0008C22.4999 10.6574 22.3704 11.3062 22.1191 11.9128C21.8679 12.5195 21.4994 13.0713 21.0352 13.5356M23.75 3.75C24.5708 4.57076 25.2218 5.54515 25.666 6.61752C26.1102 7.6899 26.3398 8.83908 26.3398 9.99981C26.3398 11.1605 26.1107 12.3102 25.6665 13.3826C25.2223 14.4549 24.5708 15.4294 23.75 16.2502M11.25 15C8.48858 15 6.25 12.7614 6.25 10C6.25 7.23858 8.48858 5 11.25 5C14.0114 5 16.25 7.23858 16.25 10C16.25 12.7614 14.0114 15 11.25 15Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="text">DropSend</span>
+      </a>
+    </li>
+    <li class="list">
+      <a href="#">
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
+            <path d="M26.25 15L15 22.5L3.75 15M26.25 20L15 27.5L3.75 20M26.25 10L15 17.5L3.75 10L15 2.5L26.25 10Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="text">Manage</span>
+      </a>
+    </li>
+    <li class="list">
+      <a href="#">
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
+            <path d="M25 26.25C25 22.7982 20.5228 20 15 20C9.47715 20 5 22.7982 5 26.25M15 16.25C11.5482 16.25 8.75 13.4518 8.75 10C8.75 6.54822 11.5482 3.75 15 3.75C18.4518 3.75 21.25 6.54822 21.25 10C21.25 13.4518 18.4518 16.25 15 16.25Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="text">Profile</span>
+      </a>
+    </li>
+
+    <!-- Aquí envuelves el indicador en un <li> para cumplir con las normas de accesibilidad -->
+    <li class="list">
+      <div class="indicator"></div>
+    </li>
+  </ul>
+</div>
+
+<script>
+  const list = document.querySelectorAll('.list');
+const indicator = document.querySelector('.indicator'); // Obtén el indicador fuera de la función
+
+function activeLink(){
+    list.forEach((item) => item.classList.remove('active'));
+    this.classList.add('active');
+
+    // Mover el indicador
+    const index = [...list].indexOf(this); // Obtén el índice del ítem clickeado
+    indicator.style.transform = `translateX(${index * 70}px)`; // Mueve el indicador según el índice
+}
+
+list.forEach((item) => item.addEventListener('click', activeLink));
+</script>

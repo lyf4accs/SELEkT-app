@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Card } from '../models/Card';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-swiper-selekt',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FooterComponent],
   templateUrl: './swiper-selekt.component.html',
   styleUrls: ['./swiper-selekt.component.css'],
 })

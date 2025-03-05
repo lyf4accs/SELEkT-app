@@ -1,41 +1,35 @@
-<div *ngIf="!selectedAlbum">
-  <h2>Galería de Fotos</h2>
+<div>
+  <label for="file">Selecciona imágenes a procesar:</label>
+  <input id="file" type="file" (change)="onFileSelected($event)" multiple />
+  <button (click)="submitImages()">Procesar Imágenes</button>
 
-  <div *ngFor="let photo of galleryPhotos">
-    <div>
-      <img [src]="photo" alt="Foto de la galería" />
-      <button (click)="selectPhoto(photo)">Seleccionar</button>
+  <!-- Mostrar los álbumes (solo duplicados) -->
+  <div *ngIf="!selectedAlbum">
+    <div *ngFor="let album of albums" (click)="selectAlbum(album)" class="album">
+      <img
+        [src]="album.coverPhoto"
+        [alt]="'Portada del álbum ' + album.name"
+        [title]="'Álbum: ' + album.name"
+        class="cover-photo" />
+      <p>{{ album.name }}</p>
     </div>
   </div>
 
-  <h2>Fotos Duplicadas</h2>
-
-  <div *ngFor="let album of duplicatedAlbum">
-    <h3>{{ album.name }}</h3>
-    <div *ngFor="let photo of album.photos">
-      <div>
-        <img [src]="photo" alt="Foto duplicada" />
-        <button (click)="selectPhoto(photo)">Seleccionar</button>
-      </div>
+  <!-- Mostrar fotos de un álbum seleccionado -->
+  <div *ngIf="selectedAlbum">
+    <button (click)="goBack()">⬅ Volver a álbumes</button>
+    <h2>{{ selectedAlbum.name }}</h2>
+    <div class="photo-grid">
+      <img
+        *ngFor="let photo of selectedAlbum.photos"
+        [src]="photo"
+        [alt]="'Imagen en el álbum ' + selectedAlbum.name"
+        [title]="'Imagen en el álbum ' + selectedAlbum.name"
+        class="photo" />
     </div>
   </div>
 </div>
 
-<div *ngIf="selectedAlbum">
-  <h2>{{ selectedAlbum.name }}</h2>
-  <button (click)="goBack()">Volver</button>
-  <div *ngFor="let photo of selectedAlbum.photos">
-    <div>
-      <img [src]="photo" alt="Foto del álbum" />
-      <button (click)="selectPhoto(photo)">Seleccionar</button>
-    </div>
-  </div>
-</div>
-
-<h3>Fotos seleccionadas para el swiper</h3>
-<div *ngFor="let photo of selectedPhotos">
-  <img [src]="photo" alt="Foto seleccionada" />
-</div>
 <!--
 <div *ngIf="!selectedAlbum">
   <div *ngFor="let album of albums" (click)="selectAlbum(album)" class="album">

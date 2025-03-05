@@ -16,10 +16,12 @@ export class ManagePhotoComponent implements OnInit {
   photoService = inject(PhotoLibraryService);
 
   // Álbum de duplicados y fotos de la galería
-  duplicatedAlbum: PhotoAlbum[] = []; // Álbum con fotos duplicadas
+  duplicatedAlbum: any[] = []; // Álbum de duplicados
   galleryPhotos: string[] = []; // Galería con fotos para añadir a favoritos o eliminar
   selectedAlbum?: PhotoAlbum; // Álbum seleccionado
   selectedPhotos: string[] = []; // Fotos seleccionadas para el swiper
+  selectedImages: any[] = [];
+  albums: any[] = [];
 
   async ngOnInit() {
     // Suscribirse al observable para obtener las fotos de la galería y los álbumes duplicados
@@ -27,6 +29,12 @@ export class ManagePhotoComponent implements OnInit {
       this.galleryPhotos = photos;
       console.log('Galería cargada:', this.galleryPhotos);
     });
+
+    this.photoService.getDuplicatedPhotos().subscribe((response: any) => {
+      this.albums = response.albums;
+      console.log('Álbumes de duplicados:', this.albums);
+    });
+
 
     this.photoService
       .getDuplicatedPhotos()
@@ -46,25 +54,36 @@ export class ManagePhotoComponent implements OnInit {
     this.selectedAlbum = undefined;
   }
 
-  // Método para seleccionar una foto y añadirla al swiper
-  selectPhoto(photo: string) {
-    if (!this.selectedPhotos.includes(photo)) {
-      this.selectedPhotos.push(photo);
+  // Método en el componente Angular para manejar la selección de archivos
+  onFileSelected(event: any) {
+    const files = event.target.files;
+    this.selectedImages = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const reader = new FileReader();
+      reader.readAsDataURL(files[i]);
+      reader.onload = (e: any) => {
+        this.selectedImages.push({
+          name: files[i].name,
+          base64: e.target.result,
+        });
+      };
     }
   }
 
-  // Método para deseleccionar una foto
-  deselectPhoto(photo: string) {
-    this.selectedPhotos = this.selectedPhotos.filter((p) => p !== photo);
-  }
+  // Método para enviar las imágenes seleccionadas al backend
+  submitImages() {
+    const base64Images = this.selectedImages.map((image) => image.base64);
 
-  // Métodos para gestionar fotos (añadir a favoritos o eliminar)
-  addToFavorites(photo: string) {
-    console.log('Añadir a favoritos:', photo);
-  }
-
-  deletePhoto(photo: string) {
-    console.log('Eliminar foto:', photo);
+    this.photoService.processImages(base64Images).subscribe(
+      (response) => {
+        // Los álbumes se devuelven con moodboards y duplicados
+        this.albums = response.albums;
+      },
+      (error) => {
+        console.error('Error al procesar las imágenes', error);
+      }
+    );
   }
 }
 // import { Component, inject, OnInit } from '@angular/core';
