@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { DropsendComponent } from './dropsend/dropsend.component';
+//import { DropsendComponent } from './dropsend/dropsend.component';
 import { AlbumComponent } from './album/album.component';
 import { UploadFilesComponent } from './upload-files/upload-files.component';
 import { LinksComponent } from './links/links.component';
@@ -9,7 +9,7 @@ import { ManagePhotoComponent } from './manage-photo/manage-photo.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/upload', pathMatch: 'full' },
-  { path: 'dropsend', component: DropsendComponent },
+  //{ path: 'dropsend', component: DropsendComponent },
   { path: 'album/:code', component: AlbumComponent },
   { path: 'upload', component: UploadFilesComponent },
   { path: 'links', component: LinksComponent },

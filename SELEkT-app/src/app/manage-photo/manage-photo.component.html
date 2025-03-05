@@ -1,4 +1,4 @@
-<!-- <div *ngIf="!selectedAlbum">
+<div *ngIf="!selectedAlbum">
   <h2>Galería de Fotos</h2>
 
   <div *ngFor="let photo of galleryPhotos">
@@ -35,8 +35,8 @@
 <h3>Fotos seleccionadas para el swiper</h3>
 <div *ngFor="let photo of selectedPhotos">
   <img [src]="photo" alt="Foto seleccionada" />
-</div> -->
-<!-- Mostrar álbumes -->
+</div>
+<!--
 <div *ngIf="!selectedAlbum">
   <div *ngFor="let album of albums" (click)="selectAlbum(album)" class="album">
     <img
@@ -48,7 +48,6 @@
   </div>
 </div>
 
-<!-- Mostrar fotos dentro de un álbum -->
 <div *ngIf="selectedAlbum">
   <button (click)="goBack()">⬅ Volver a álbumes</button>
   <h2>{{ selectedAlbum.name }}</h2>
@@ -60,4 +59,4 @@
       [title]="'Imagen en el álbum ' + selectedAlbum.name"
       class="photo" />
   </div>
-</div>
+</div> -->
