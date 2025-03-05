@@ -7,7 +7,7 @@ import { FooterComponent } from "../footer/footer.component";  // Asegúrate de 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FooterComponent],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })

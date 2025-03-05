@@ -6,6 +6,7 @@ import { LinksComponent } from './links/links.component';
 import { SwiperSelektComponent } from './swiper-selekt/swiper-selekt.component';
 import { ManagePhotoComponent } from './manage-photo/manage-photo.component';
 import { ProfileComponent } from './profile/profile.component';
+import { FooterComponent } from './footer/footer.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/upload', pathMatch: 'full' },
@@ -16,4 +17,5 @@ export const routes: Routes = [
   { path: 'swiper', component: SwiperSelektComponent },
   { path: 'manage', component: ManagePhotoComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'footer', component:FooterComponent},
 ];

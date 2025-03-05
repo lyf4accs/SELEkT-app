@@ -3,11 +3,12 @@ import { ChangeDetectorRef } from '@angular/core';
 import { PhotoLibraryService } from '../services/PhotoLibraryService';
 import { CommonModule } from '@angular/common';
 import { PhotoAlbum } from '../models/PhotoAlbum';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-manage-photo',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FooterComponent],
   templateUrl: './manage-photo.component.html',
   styleUrls: ['./manage-photo.component.css'],
 })

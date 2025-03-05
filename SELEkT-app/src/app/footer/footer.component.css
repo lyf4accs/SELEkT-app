@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,2000,300,400,500,600,700,800,900');
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+  font-family:'Poppins', sans-serif ;
+}
+
 :root{
   --clr: #F62F38;
   --clr2: #052F50;
@@ -7,20 +16,23 @@ body{
   display:flex;
   justify-content: center;
   align-items: center;
-  min-width: 100vh;
+  min-height: 100vh;
   background-color: white;
 }
 
 .navigation{
-  position:relative;
-  width: 400px;
   height:70px;
-  background-color: var(--clr2);
+  background-color: #052F50;
   display: flex;
-  justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 5px;
+  justify-content: space-around;
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+  bottom:0;
 }
+
 
 .navigation ul {
   display: flex;
@@ -34,6 +46,7 @@ body{
   height:70px;
   z-index:1;
 }
+
 
 .navigation ul li a {
   position: relative;
@@ -81,7 +94,7 @@ body{
   top:-50%;
   width: 70px;
   height: 70px;
-  background: var(--clr);
+  background-color:#F62F38;
   border-radius: 50%;
   border: 6px solid white;
   transition: 0.5s;
@@ -111,32 +124,23 @@ body{
 }
 
 .navigation ul li:nth-child(1).active~.indicator {
-  transform: translateX(calc(70px * 0));
+  transform: translateX(calc(70px * 0))!important;
 }
 
 .navigation ul li:nth-child(2).active~.indicator {
-  transform: translateX(calc(70px * 1));
+  transform: translateX(calc(70px * 1))!important;
 }
 
 .navigation ul li:nth-child(3).active~.indicator {
-  transform: translateX(calc(70px * 2));
+  transform: translateX(calc(70px * 2))!important;
 }
 
 .navigation ul li:nth-child(4).active~.indicator {
-  transform: translateX(calc(70px * 3));
+  transform: translateX(calc(70px * 3))!important;
 }
 
 .navigation ul li:nth-child(5).active~.indicator {
-  transform: translateX(calc(70px * 4));
+  transform: translateX(calc(70px * 4))!important;
 }
 
-.mobile-footer {
-  display: flex;
-  justify-content: space-around;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: white;
-  padding: 10px 0;
-  z-index: 1000;
-}
+

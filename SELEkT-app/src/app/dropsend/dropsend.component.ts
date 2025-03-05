@@ -7,7 +7,7 @@
 // // Decorador Component para definir el componente Dropsend.
 // @Component({
 //   selector: 'app-dropsend', // Selector para usar este componente en las plantillas.
-//   imports: [PeersComponent], // Importamos el componente PeersComponent.
+//   imports: [PeersComponent, FooterComponent], // Importamos el componente PeersComponent.
 //   templateUrl: './dropsend.component.html', // Ruta al archivo de plantilla HTML del componente.
 //   styleUrls: ['./dropsend.component.css'], // Ruta al archivo de estilos CSS del componente.
 // })

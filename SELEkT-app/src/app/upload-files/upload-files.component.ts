@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-upload-files',
-  imports: [],
+  imports: [FooterComponent],
   templateUrl: './upload-files.component.html',
   styleUrl: './upload-files.component.css',
 })
