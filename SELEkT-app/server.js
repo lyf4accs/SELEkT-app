@@ -1,61 +1,59 @@
-// Importamos las bibliotecas necesarias
-const express = require("express"); // Framework web para Node.js
-const http = require("http"); // Módulo nativo para crear servidores HTTP
-const socketIo = require("socket.io"); // Biblioteca para habilitar la comunicación en tiempo real
-
-// Inicializamos la aplicación Express
-const app = express();
-// Creamos un servidor HTTP utilizando la aplicación Express
-const server = http.createServer(app);
-// Inicializamos Socket.IO con el servidor HTTP
-const io = socketIo(server, {
-  cors: {
-    origin: "*", // Permitir acceso desde cualquier origen (ajustar según necesidad)
-    methods: ["GET", "POST"],
-  },
-});
+const WebSocket = require("ws");
 
 // Definimos el puerto dinámico asignado por Render
 const PORT = process.env.PORT || 10000;
 
-// Inicializamos un array para almacenar la lista de dispositivos conectados
+// Creamos el servidor WebSocket
+const wss = new WebSocket.Server({ port: PORT });
+
 let devices = [];
 
-// Middleware para servir archivos estáticos (cambiar la ruta si es necesario)
-app.use(express.static("dist/selek-t-app"));
-
-// Configuración de WebSocket con Socket.IO
-io.on("connection", (socket) => {
+wss.on("connection", (ws) => {
   console.log("Un cliente se ha conectado");
 
-  // Añadimos el ID del dispositivo a la lista
-  devices.push(socket.id);
+  // Asignamos un ID único al socket
+  const deviceId = `device-${Date.now()}`;
+  devices.push(deviceId);
   console.log("Dispositivos conectados:", devices);
 
-  // Emitimos la lista actualizada
-  io.emit("update-devices", devices);
+  // Enviar la lista de dispositivos conectados
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify({ type: "update-devices", devices }));
+    }
+  });
 
-  // Recibir archivos
-  socket.on("send-file", (fileData) => {
-    console.log("Recibiendo archivo...");
-    io.emit("receive-file", fileData);
+  // Manejo de mensajes
+  ws.on("message", (message) => {
+    try {
+      const data = JSON.parse(message);
+      if (data.type === "send-file") {
+        console.log("Recibiendo archivo...");
+        // Reenviar el archivo a todos los clientes conectados
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(
+              JSON.stringify({ type: "receive-file", fileData: data.fileData })
+            );
+          }
+        });
+      }
+    } catch (error) {
+      console.error("Error procesando mensaje:", error);
+    }
   });
 
   // Manejo de desconexión
-  socket.on("disconnect", () => {
+  ws.on("close", () => {
     console.log("Un cliente se ha desconectado");
-    devices = devices.filter((id) => id !== socket.id);
-    io.emit("update-devices", devices);
+    devices = devices.filter((id) => id !== deviceId);
+    // Notificar la lista actualizada a los clientes conectados
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ type: "update-devices", devices }));
+      }
+    });
   });
 });
 
-setInterval(() => {
-  fetch("https://selekt-app.onrender.com")
-    .then((res) => console.log("Ping enviado para mantener el servidor activo"))
-    .catch((err) => console.error("Error en el ping:", err));
-}, 300000);
-
-// Iniciamos el servidor en el puerto asignado
-server.listen(PORT, "0.0.0.0", () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
-});
+console.log(`Servidor WebSocket escuchando en el puerto ${PORT}`);
