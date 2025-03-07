@@ -54,9 +54,9 @@ export class DropsendService {
     // Evento que se dispara al cerrar la conexión
     this.socket.onclose = () => {
       console.log('WS: disconnected'); // Mensaje de desconexión
-      this.notificationSubject.next('Connection lost. Retry in 5 seconds...'); // Notifica al usuario sobre la desconexión
+      this.notificationSubject.next('Connection lost. Retry in 10 seconds...'); // Notifica al usuario sobre la desconexión
       clearTimeout(this.reconnectTimer); // Limpia el temporizador anterior
-      this.reconnectTimer = setTimeout(() => this.connect(), 5000); // Intenta reconectar después de 5 segundos
+      this.reconnectTimer = setTimeout(() => this.connect(), 10000); // Intenta reconectar después de 5 segundos
     };
 
     // Evento que se dispara en caso de error en la conexión WebSocket
@@ -66,7 +66,8 @@ export class DropsendService {
   }
 
   private getEndpoint(): string {
-    const endpoint = 'https://selekt-app.onrender.com'; //selecciono la IP donde está el servidor y el puerto donde se ubica
+    const endpoint =
+      'wss://web-fdtu2nbtpzf0.up-de-fra1-k8s-1.apps.run-on-seenode.com'; //selecciono la IP donde está el servidor y el puerto donde se ubica
     return endpoint;
   }
 
