@@ -84,6 +84,11 @@ export class DropsendService {
 
     // Maneja el mensaje según su tipo
     switch (msg.type) {
+      case 'update-devices':
+        // Aquí gestionas la lista de dispositivos actualizada
+        console.log('Dispositivos actualizados:', msg.devices);
+        this.peersSubject.next(msg.devices); // Notifica a los componentes sobre los dispositivos conectados
+        break;
       case 'peers':
         this.peersSubject.next(msg.peers); // Notifica a los componentes sobre la lista de pares conectados
         break;
@@ -106,7 +111,6 @@ export class DropsendService {
         console.error('Unknown message type:', msg); // Maneja tipos de mensaje desconocidos
     }
   }
-
   // Método para enviar mensajes a través del WebSocket
   send(message: any): void {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
