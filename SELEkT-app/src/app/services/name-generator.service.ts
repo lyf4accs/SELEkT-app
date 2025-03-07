@@ -38,20 +38,20 @@ const animales = [
 export class NameGeneratorService {
   // Método para generar un nombre basado en una semilla proporcionada.
   generateName(seed: string): { displayName: string; deviceName: string } {
-    // Genera un displayName utilizando la función uniqueNamesGenerator.
-    // Se usa una semilla para garantizar que el nombre generado sea consistente para el mismo usuario.
+    if (!seed) {
+      seed = 'defaultSeed'; // Si no se pasa una semilla válida, usa un valor predeterminado
+    }
+
+    // Generar un displayName consistente basado en el peer.id
     const displayName = uniqueNamesGenerator({
-      length: 2, // Longitud del nombre generado, en este caso, dos palabras.
-      separator: ' ', // Separador entre las palabras generadas.
-      dictionaries: [animales, colores], // Usamos los diccionarios de colores y animales en español.
-      style: 'capital', // Las palabras generadas se capitalizan.
-      seed: this.hashCode(seed), // Se utiliza la función hashCode para obtener una semilla numérica.
+      length: 2,
+      separator: ' ',
+      dictionaries: [animales, colores],
+      style: 'capital',
+      seed: this.hashCode(seed), // Usa peer.id o un valor relacionado
     });
 
-    // Genera un nombre básico para el dispositivo basado en el User Agent.
-    const deviceName = this.getDeviceName();
-
-    // Retorna un objeto con el displayName y el deviceName.
+    const deviceName = this.getDeviceName(); // Nombre del dispositivo basado en User Agent
     return { displayName, deviceName };
   }
 

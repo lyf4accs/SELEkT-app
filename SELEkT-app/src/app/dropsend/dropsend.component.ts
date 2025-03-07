@@ -4,6 +4,7 @@ import { NameGeneratorService } from '../services/name-generator.service';
 import { DropsendService } from '../services/dropsend.service';
 import { PeersComponent } from '../peerscomponent/peerscomponent.component';
 import { FooterComponent } from '../footer/footer.component';
+import { MediatorService } from '../services/mediator.service';
 
 // Decorador Component para definir el componente Dropsend.
 @Component({
@@ -13,44 +14,26 @@ import { FooterComponent } from '../footer/footer.component';
   styleUrls: ['./dropsend.component.css'], // Ruta al archivo de estilos CSS del componente.
 })
 export class DropsendComponent implements OnInit {
-  [x: string]: any; // Permite definir propiedades dinámicas en el componente.
-
-  // Propiedades del componente.
   showAboutPage = false; // Indica si se debe mostrar la página "Acerca de".
   showNotification = false; // Indica si se deben mostrar notificaciones.
   showInstall = false; // Indica si se debe mostrar el prompt de instalación.
-  displayName = 'Unknown'; // Nombre de usuario a mostrar, inicializado en "Desconocido".
-
+  displayName: string = 'Unknown'; // Nombre de usuario que se mostrará
   // Constructor del componente, inyectando los servicios necesarios.
   constructor(
     private dropSendService: DropsendService, // Servicio para manejar la lógica de Dropsend.
-    private nameGen: NameGeneratorService // Servicio para generar nombres únicos.
+    private nameGen: NameGeneratorService, // Servicio para generar nombres únicos.
+    private mediatorService: MediatorService
   ) {}
 
   // Método del ciclo de vida de Angular, llamado al inicializar el componente.
   ngOnInit(): void {
-    // Suscribirse al evento display-name enviado por el servidor.
-    this.dropSendService.getDisplayName().subscribe((msg) => {
-      if (msg && msg.message) {
-        // Si el mensaje recibido contiene un displayName, lo asignamos a la propiedad displayName.
-        this.displayName = msg.message.displayName;
+    // Nos suscribimos al Mediator para recibir el nombre
+    this.mediatorService.peerName$.subscribe((name) => {
+      if (name) {
+        this.displayName = name; // Asignamos el nombre recibido al displayName
       }
     });
-
-    // Generar un nombre único localmente (para uso inmediato o para enviarlo al servidor).
-    const seed = this.generateSeed(); // Genera una semilla aleatoria.
-    const name = this.nameGen.generateName(seed); // Genera un nombre único usando la semilla.
-    this.displayName = name.displayName; // Asigna el nombre generado a displayName.
-    // Aquí podrías enviar este nombre al servidor, si es necesario.
   }
-
-  // Método para generar una semilla aleatoria.
-  generateSeed(): string {
-    // Ejemplo: usar una cadena aleatoria. Alternativamente, se puede usar la cookie o el user-agent.
-    return Math.random().toString(36).substring(2, 15); // Genera una cadena aleatoria.
-  }
-
-  // Método para mostrar la página "Acerca de".
 
 
   // Método para manejar la lógica de instalación de la aplicación como PWA (Progressive Web App).

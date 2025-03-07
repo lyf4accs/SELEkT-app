@@ -7,10 +7,8 @@
 @for (peer of peers; track peer.id) {
   <div class="peer" (click)="selectPeer(peer)">
     <div class="peer-icon">
-      <svg class="icon">
-        <use [attr.xlink:href]="getIcon(peer)"></use>
-      </svg>
-    </div>
+      <div class="circle"></div>
+  </div>
     <div class="peer-info">
       <div class="peer-name">{{ peer.name.displayName }}</div>
       <div class="peer-device">{{ peer.name.deviceName }}</div>

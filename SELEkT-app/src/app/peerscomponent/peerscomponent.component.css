@@ -1,0 +1,56 @@
+.peer {
+  display: flex;
+  padding: 10px;
+  background-color: #f9f9f9;
+  margin: 10px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 50px;
+  align-items: center;
+}
+
+.peer:hover {
+  background-color: #eaeaea;
+}
+
+.peer-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  /* Esto crea el círculo */
+  background-color: #007bff;
+  /* Color del círculo */
+  color: white;
+  /* Color del texto dentro del círculo */
+  font-size: 20px;
+  /* Tamaño del texto (puedes poner un ícono dentro si lo deseas) */
+}
+
+.peer-info {
+  margin-left: 10px;
+}
+
+.peer-name {
+  font-weight: bold;
+}
+
+.peer-device {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.no-peers {
+  text-align: center;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.no-peers h2 {
+  margin: 0;
+  color: #333;
+}
