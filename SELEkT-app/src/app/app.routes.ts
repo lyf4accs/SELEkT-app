@@ -7,10 +7,11 @@ import { SwiperSelektComponent } from './swiper-selekt/swiper-selekt.component';
 import { ManagePhotoComponent } from './manage-photo/manage-photo.component';
 import { ProfileComponent } from './profile/profile.component';
 import { FooterComponent } from './footer/footer.component';
+import { DropsendComponent } from './dropsend/dropsend.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/upload', pathMatch: 'full' },
-  //{ path: 'dropsend', component: DropsendComponent },
+  { path: 'dropsend', component: DropsendComponent },
   { path: 'album/:code', component: AlbumComponent },
   { path: 'upload', component: UploadFilesComponent },
   { path: 'links', component: LinksComponent },
