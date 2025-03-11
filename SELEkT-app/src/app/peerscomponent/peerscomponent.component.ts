@@ -10,8 +10,8 @@ import { MediatorService } from '../services/mediator.service';
 })
 export class PeersComponent implements OnInit {
   peers: any[] = [];
-  displayedNames: Set<string> = new Set();
-  myPeerId: string = ''; // Variable para guardar el peerId
+  peerIdsSet: Set<string> = new Set(); // 🆕 Set para evitar duplicados
+  myPeerId: string = '';
 
   constructor(
     private dropSendService: DropsendService,
@@ -20,42 +20,65 @@ export class PeersComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    // Esperar a que el peerId esté disponible
+    // 1️⃣ Obtener Peer ID antes de suscribirse a eventos
     this.myPeerId = await this.dropSendService.getMyPeerId();
     console.log('Peer ID actualizado:', this.myPeerId);
 
-    // Suscripción a los peers
+    // 2️⃣ Generar y enviar el nombre del propio peer
+    const seed = this.myPeerId || Math.random().toString(36).substring(2, 15);
+    const { displayName } = this.nameGeneratorService.generateName(seed);
+    this.mediatorService.sendPeerName(displayName);
+    console.log('🔹 Enviando mi nombre:', displayName);
+
+    // 3️⃣ Suscribirse a eventos de peers
     this.dropSendService.getPeers().subscribe((peers) => {
-      this.peers = []; // Limpiar la lista de peers antes de actualizar
-
-      peers.forEach((peer) => {
-        const seed = peer.id || Math.random().toString(36).substring(2, 15);
-        const { displayName, deviceName } =
-          this.nameGeneratorService.generateName(seed);
-
-        console.log(peer.id);
-        console.log(this.myPeerId); // Ahora tiene el valor actualizado
-
-        // Verificar que no sea el propio peer
-        if (
-          !this.displayedNames.has(displayName) &&
-          !this.displayedNames.has(deviceName) &&
-          peer.id !== this.myPeerId // Verificamos que no sea el propio dispositivo
-        ) {
-          this.displayedNames.add(displayName);
-          this.peers.push({
-            ...peer,
-            name: { displayName, deviceName },
-          });
-
-          // Enviamos el nombre si es el propio peer
-          if (peer.id === this.myPeerId) {
-            this.mediatorService.sendPeerName(displayName);
-          }
-        }
-      });
-      console.log(this.peers.length);
+      this.updatePeersList(peers);
     });
+
+    // 4️⃣ Escuchar cuando un peer se conecta
+    this.dropSendService.getPeerJoined().subscribe((peer) => {
+      this.addPeer(peer);
+    });
+
+    // 5️⃣ Escuchar cuando un peer se desconecta
+    this.dropSendService.getPeerLeft().subscribe((peerId) => {
+      this.removePeer(peerId);
+    });
+  }
+
+  /** 🔄 Sincroniza la lista de peers evitando duplicados **/
+  private updatePeersList(peers: any[]): void {
+    // 🧹 Limpiar la lista y el Set antes de actualizar
+    this.peers = [];
+    this.peerIdsSet.clear();
+
+    peers.forEach((peer) => {
+      if (peer.id !== this.myPeerId && !this.peerIdsSet.has(peer.id)) {
+        this.addPeer(peer);
+      }
+    });
+
+    console.log('📌 Lista sincronizada de peers:', this.peers);
+  }
+
+  /** ➕ Añadir un peer si no está en la lista **/
+  private addPeer(peer: any): void {
+    if (!this.peerIdsSet.has(peer.id) && peer.id !== this.myPeerId) {
+      this.peerIdsSet.add(peer.id);
+      const { displayName, deviceName } =
+        this.nameGeneratorService.generateName(peer.id);
+      this.peers.push({ ...peer, name: { displayName, deviceName } });
+      console.log('✅ Peer conectado:', peer.id);
+    }
+  }
+
+  /** ❌ Eliminar un peer si se desconecta **/
+  private removePeer(peerId: string): void {
+    if (this.peerIdsSet.has(peerId)) {
+      this.peerIdsSet.delete(peerId);
+      this.peers = this.peers.filter((peer) => peer.id !== peerId);
+      console.log('❌ Peer desconectado:', peerId);
+    }
   }
 
   selectPeer(peer: any): void {

@@ -17,7 +17,7 @@ export class DropsendComponent implements OnInit {
   showAboutPage = false; // Indica si se debe mostrar la página "Acerca de".
   showNotification = false; // Indica si se deben mostrar notificaciones.
   showInstall = false; // Indica si se debe mostrar el prompt de instalación.
-  displayName: string = 'Unknown'; // Nombre de usuario que se mostrará
+  displayName: string = ''; // Nombre de usuario que se mostrará
   // Constructor del componente, inyectando los servicios necesarios.
   constructor(
     private dropSendService: DropsendService, // Servicio para manejar la lógica de Dropsend.
@@ -31,8 +31,11 @@ export class DropsendComponent implements OnInit {
     this.mediatorService.peerName$.subscribe((name) => {
       if (name) {
         this.displayName = name; // Asignamos el nombre recibido al displayName
+        console.log('🔻 Nombre recibido en DropsendComponent:');
       }
     });
+
+
   }
 
 
