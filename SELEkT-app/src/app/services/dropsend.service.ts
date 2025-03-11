@@ -91,6 +91,7 @@ export class DropsendService {
 
       case 'peer-left':
         this.peerLeftSubject.next(msg.peerId);
+        console.log('haciendo peer-left')
         break;
 
       case 'signal':
