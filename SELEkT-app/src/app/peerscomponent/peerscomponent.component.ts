@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DropsendService } from '../services/dropsend.service';
-import { NameGeneratorService } from '../services/name-generator.service';
 import { MediatorService } from '../services/mediator.service';
 
 @Component({
@@ -13,24 +12,23 @@ export class PeersComponent implements OnInit {
   peerIdsSet: Set<string> = new Set();
   myPeerId: string = '';
   myDeviceName: string = '';
+  displayName: string = '';
 
   constructor(
     private dropSendService: DropsendService,
-    private nameGeneratorService: NameGeneratorService,
     private mediatorService: MediatorService
   ) {}
 
   async ngOnInit(): Promise<void> {
-    // Obtener Peer ID y nombre
+    // Obtener el Peer ID
     this.myPeerId = await this.dropSendService.getMyPeerId();
-    // Generar y enviar el nombre del propio peer
-    const seed = this.myPeerId || Math.random().toString(36).substring(2, 15);
-    const { displayName } = this.nameGeneratorService.generateName(seed);
-    this.mediatorService.sendPeerName(displayName);
-    console.log('🔹 Enviando mi nombre:', displayName);
+    console.log('Mi Peer ID:', this.myPeerId);
 
-    // Enviar nombre al servidor
-    this.mediatorService.sendPeerName(this.myDeviceName);
+    // Obtener el display name
+    this.mediatorService.displayName$.subscribe((name) => {
+      this.displayName = name;
+      console.log(`Display Name: ${this.displayName}`);
+    });
 
     // Suscribirse a los eventos de nuevos peers
     this.dropSendService.getPeers().subscribe((peers) => {
@@ -49,12 +47,21 @@ export class PeersComponent implements OnInit {
   }
 
   private updatePeersList(peers: any[]): void {
-    peers = [];
-    this.peers = peers.filter((peer) => peer.id !== this.myPeerId);
+    // Limpiar la lista de peers antes de actualizarla
+    this.peers = peers
+      .filter((peer) => peer.peerId !== this.myPeerId) // Filtrar el propio peer
+      .filter((peer) => !this.peerIdsSet.has(peer.peerId)); // Filtrar peers ya presentes
+
+    // Asegurarse de que no se agreguen duplicados
+    this.peers.forEach((peer) => {
+      this.peerIdsSet.add(peer.peerId); // Añadir los peerIds únicos al set
+    });
+
     console.log('Lista de peers actualizada:', this.peers);
   }
 
   private addPeer(peer: any): void {
+    // Si el peer no está en la lista y no es el propio peer, lo agregamos
     if (!this.peerIdsSet.has(peer.peerId) && peer.peerId !== this.myPeerId) {
       this.peerIdsSet.add(peer.peerId);
       this.peers.push(peer);
@@ -63,6 +70,7 @@ export class PeersComponent implements OnInit {
   }
 
   private removePeer(peerId: string): void {
+    // Eliminar el peer de la lista cuando se desconecta
     this.peerIdsSet.delete(peerId);
     this.peers = this.peers.filter((peer) => peer.peerId !== peerId);
     console.log('Peer desconectado:', peerId);

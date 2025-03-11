@@ -5,12 +5,11 @@ import { BehaviorSubject, Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class MediatorService {
-  private peerNameSource = new BehaviorSubject<string>(''); // Usamos un Subject para emitir el nombre.
-  peerName$ = this.peerNameSource.asObservable(); // Un observable para que otros componentes se suscriban.
+  private displayNameSubject = new BehaviorSubject<string>(''); // Usamos BehaviorSubject para emitir el nombre
+  displayName$ = this.displayNameSubject.asObservable(); // Observable para otros componentes
 
-  // Método para emitir el nombre
-  sendPeerName(name: string): void {
-    console.log('🔹 Emitiendo nombre:', name);
-    this.peerNameSource.next(name); // Emitimos el nombre al canal.
+  // Método para actualizar el nombre del dispositivo
+  updateDisplayName(displayName: string): void {
+    this.displayNameSubject.next(displayName);
   }
 }

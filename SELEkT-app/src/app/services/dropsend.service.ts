@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { MediatorService } from './mediator.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ export class DropsendService {
   private displayNameSubject = new Subject<any>();
   private notificationSubject = new Subject<string>();
 
-  constructor() {
+  constructor(private mediatorService: MediatorService) {
     this.connect();
     window.addEventListener('beforeunload', () => this.disconnect());
     document.addEventListener('visibilitychange', () =>
@@ -75,6 +76,7 @@ export class DropsendService {
     switch (msg.type) {
       case 'update-devices':
         console.log('Dispositivos actualizados:', msg.devices);
+        // Actualiza la lista de dispositivos con los nombres y dispositivos generados
         this.peersSubject.next(msg.devices);
         break;
 
@@ -83,15 +85,20 @@ export class DropsendService {
         break;
 
       case 'peer-joined':
-        this.peerJoinedSubject.next(msg.peer);
-        console.log('Dispositivo conectado:', msg.peer);
-        this.myPeerId = msg.peer; // Actualiza el myPeerId
-        console.log(this.myPeerId); // Este es el valor actualizado de myPeerId
+        // Añadimos el peer y su nombre a la lista de dispositivos conectados
+        const peerData = {
+          peerId: msg.peerId,
+          displayName: msg.displayName,
+          deviceName: msg.deviceName,
+        };
+        this.peerJoinedSubject.next(peerData);
+        console.log('Dispositivo conectado:', msg.peerId);
+        this.myPeerId = msg.peerId; // Actualiza el myPeerId
         break;
 
       case 'peer-left':
         this.peerLeftSubject.next(msg.peerId);
-        console.log('haciendo peer-left')
+        console.log('Dispositivo desconectado:', msg.peerId);
         break;
 
       case 'signal':
@@ -104,6 +111,10 @@ export class DropsendService {
 
       case 'display-name':
         this.displayNameSubject.next(msg);
+        // Cuando recibimos el display-name, lo pasamos al mediador
+        this.mediatorService.updateDisplayName(msg.displayName);
+        console.log(`Dispositivo conectado con nombre: ${msg.displayName}`);
+        break;
         break;
 
       default:

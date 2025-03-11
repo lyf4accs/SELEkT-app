@@ -7,8 +7,7 @@
 @for (peer of peers; track peer.id) {
   <div class="peer" (click)="selectPeer(peer)">
     <div class="peer-info">
-      <div class="peer-name">{{ peer}}</div>
-      <div class="peer-device">{{ peer.name.deviceName }}</div>
+      <div class="peer-name">{{ peer.displayName }}</div>
     </div>
   </div>
 }

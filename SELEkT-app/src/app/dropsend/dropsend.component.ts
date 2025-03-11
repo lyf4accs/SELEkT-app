@@ -28,7 +28,7 @@ export class DropsendComponent implements OnInit {
   // Método del ciclo de vida de Angular, llamado al inicializar el componente.
   ngOnInit(): void {
     // Nos suscribimos al Mediator para recibir el nombre
-    this.mediatorService.peerName$.subscribe((name) => {
+    this.mediatorService.displayName$.subscribe((name) => {
       if (name) {
         this.displayName = name; // Asignamos el nombre recibido al displayName
         console.log('🔻 Nombre recibido en DropsendComponent:');
