@@ -102,7 +102,7 @@ export class DropsendService {
         break;
 
       case 'receive-file':
-        console.log('receive-file')
+        console.log('receive-file');
         this.handleReceivedFile(msg.fileData, msg.fileName);
         break;
 
@@ -130,25 +130,24 @@ export class DropsendService {
   }
 
   private handleReceivedFile(fileData: ArrayBuffer, fileName: string): void {
+    console.log('Datos del archivo recibido:', fileData); // Añadir log para depuración
+
     const notification = window.confirm(
       `¡Nuevo archivo recibido: ${fileName}! ¿Deseas descargarlo?`
     );
 
     if (notification) {
-      // Si el usuario hace clic en "OK", procederemos con la descarga
-
       // Convertir el ArrayBuffer a un Blob
       const blob = new Blob([fileData]);
-      const url = URL.createObjectURL(blob);
 
-      // Crear un enlace de descarga y simular el clic para descargar el archivo
+      // Asegúrate de que el tipo MIME del archivo sea correcto
+      const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = fileName; // Usamos el nombre del archivo recibido
+      link.download = fileName; // Asegurarse de usar el nombre del archivo recibido
       link.click();
 
       console.log('Archivo recibido y descargado:', fileName);
-      // Emitir una notificación al usuario de que el archivo ha sido descargado
       this.notificationSubject.next(`Archivo descargado: ${fileName}`);
     } else {
       console.log('El usuario ha cancelado la descarga del archivo.');
@@ -165,17 +164,38 @@ export class DropsendService {
 
   sendFile(buffer: ArrayBuffer, fileName: string, peer: any): void {
     console.log('Enviando archivo al servidor'); // Verifica que esta línea se imprima
+
+    // Verificar que el buffer sea un ArrayBuffer válido
+    if (!(buffer instanceof ArrayBuffer)) {
+      console.error('El archivo no es un ArrayBuffer válido');
+      return;
+    }
+
+    // Verificar que el peer tiene un peerId
+    if (!peer || !peer.peerId) {
+      console.error('Peer no tiene un peerId válido');
+      return;
+    }
+
+    console.log('Tipo de fileData:', buffer.constructor.name); // Debería ser "ArrayBuffer"
+
     const message = {
       type: 'send-file',
       fileName: fileName,
-      fileData: buffer,
-      peerId: peer.peerId
+      peerId: peer.peerId,
     };
 
-    // Enviar el archivo al peer seleccionado usando WebSocket
+    // Convertir el objeto JSON en una cadena de texto
+    const messageString = JSON.stringify(message);
+    const messageBuffer = new TextEncoder().encode(messageString); // Convertir texto a ArrayBuffer
+
+    // Combinar los datos en un Blob
+    const blob = new Blob([messageBuffer, buffer]);
+
+    // Verificar que la conexión WebSocket esté abierta
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      console.log('Mensaje a enviar:', message); // Verifica qué mensaje estás enviando
-      this.socket.send(JSON.stringify(message));
+      console.log('Enviando archivo como Blob:', blob);
+      this.socket.send(blob); // Enviar el Blob
     } else {
       console.error('Socket no está abierto');
     }

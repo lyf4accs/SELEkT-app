@@ -100,17 +100,4 @@ export class PeersComponent implements OnInit {
       reader.readAsArrayBuffer(file);
     }
   }
-
-  sendFile(buffer: ArrayBuffer, fileName: string, peer: any): void {
-    const message = {
-      type: 'file',
-      fileName: fileName,
-      fileData: buffer,
-    };
-
-    // Enviar el archivo al peer seleccionado usando WebSocket
-    if (peer.socket) {
-      peer.socket.send(JSON.stringify(message));
-    }
-  }
 }
