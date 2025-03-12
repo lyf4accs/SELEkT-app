@@ -42,7 +42,23 @@ export class DropsendService {
     };
 
     this.socket.onmessage = (event) => {
-      this.handleMessage(event.data);
+      if (event.data instanceof Blob) {
+        // Si es un Blob, lo procesamos como archivo
+        console.log('Recibiendo archivo...');
+        this.handleReceivedFile(event.data);
+      } else if (event.data instanceof ArrayBuffer) {
+        // Si es un ArrayBuffer, procesarlo según sea necesario (ej. convertir a un archivo o buffer)
+        console.log('Recibiendo ArrayBuffer...');
+        this.handleReceivedArrayBuffer(event.data);
+      } else {
+        // Si no es un Blob ni un ArrayBuffer, intentamos procesarlo como JSON
+        try {
+          console.log('Recibiendo mensaje:', event.data);
+          this.handleMessage(event.data);
+        } catch (e) {
+          console.error('Error al parsear JSON:', e);
+        }
+      }
     };
 
     this.socket.onclose = () => {
@@ -64,11 +80,13 @@ export class DropsendService {
   }
 
   private handleMessage(message: any): void {
-  if (message instanceof Blob) {
-    // Es un archivo recibido, lo convertimos a ArrayBuffer antes de procesarlo
-    this.handleReceivedFile(message);
-    return;
-  }
+    if (message instanceof Blob) {
+      // Es un archivo recibido, lo convertimos a ArrayBuffer antes de procesarlo
+      console.log('Recibiendo un Blob de tipo:', message.type);
+      console.log('Tamaño del Blob:', message.size);
+      this.handleReceivedFile(message);
+      return;
+    }
 
     let msg;
     try {
@@ -107,8 +125,6 @@ export class DropsendService {
         console.log('Dispositivo desconectado:', msg.peerId);
         break;
 
-
-
       case 'ping':
         this.send({ type: 'pong' });
         break;
@@ -132,43 +148,50 @@ export class DropsendService {
     }
   }
 
-  private async handleReceivedFile(blob: Blob): Promise<void> {
-  console.log("Archivo recibido como Blob.");
-
-  const arrayBuffer = await blob.arrayBuffer();
-
-  // Extraer JSON
-  const textDecoder = new TextDecoder();
-  const textPart = textDecoder.decode(arrayBuffer.slice(0, 256));
-  const jsonEnd = textPart.indexOf("}") + 1;
-  const jsonString = textPart.substring(0, jsonEnd);
-  const data = JSON.parse(jsonString);
-
-  console.log("Archivo recibido:", data.fileName);
-
-  // Extraer archivo
-  const fileBuffer = arrayBuffer.slice(jsonEnd);
-  const fileBlob = new Blob([fileBuffer]);
-
-  const notification = window.confirm(
-    `¡Nuevo archivo recibido: ${data.fileName}! ¿Deseas descargarlo?`
-  );
-
-  if (notification) {
-    // Descargar el archivo
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(fileBlob);
-    link.download = data.fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    console.log("Archivo descargado:", data.fileName);
-    this.notificationSubject.next(`Archivo descargado: ${data.fileName}`);
-  } else {
-    console.log("El usuario canceló la descarga.");
+  private handleReceivedArrayBuffer(arrayBuffer: ArrayBuffer): void {
+    // Aquí procesas el ArrayBuffer como archivo binario o lo conviertes a un formato adecuado
+    // Por ejemplo, podrías convertirlo a un Blob y luego a un archivo:
+    const blob = new Blob([arrayBuffer]);
+    this.handleReceivedFile(blob); // Llamamos a la función que ya tienes para manejar los archivos
   }
-}
+
+  private async handleReceivedFile(blob: Blob): Promise<void> {
+    console.log('Archivo recibido como Blob.');
+
+    const arrayBuffer = await blob.arrayBuffer();
+
+    // Extraer JSON
+    const textDecoder = new TextDecoder();
+    const textPart = textDecoder.decode(arrayBuffer.slice(0, 256));
+    const jsonEnd = textPart.indexOf('}') + 1;
+    const jsonString = textPart.substring(0, jsonEnd);
+    const data = JSON.parse(jsonString);
+
+    console.log('Archivo recibido:', data.fileName);
+
+    // Extraer archivo
+    const fileBuffer = arrayBuffer.slice(jsonEnd);
+    const fileBlob = new Blob([fileBuffer]);
+
+    const notification = window.confirm(
+      `¡Nuevo archivo recibido: ${data.fileName}! ¿Deseas descargarlo?`
+    );
+
+    if (notification) {
+      // Descargar el archivo
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(fileBlob);
+      link.download = data.fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      console.log('Archivo descargado:', data.fileName);
+      this.notificationSubject.next(`Archivo descargado: ${data.fileName}`);
+    } else {
+      console.log('El usuario canceló la descarga.');
+    }
+  }
 
   disconnect(): void {
     this.send({ type: 'disconnect' });
