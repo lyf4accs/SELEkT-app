@@ -32,6 +32,7 @@ export class PeersComponent implements OnInit {
 
     // Suscribirse a los eventos de nuevos peers
     this.dropSendService.getPeers().subscribe((peers) => {
+      console.log('nada más entrar hago update')
       this.updatePeersList(peers);
     });
 

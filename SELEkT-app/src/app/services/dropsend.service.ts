@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { MediatorService } from './mediator.service';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class DropsendService {
   private reconnectTimer: any;
   private myPeerId: string = ''; // Inicializamos el valor en vacío
 
-  private peersSubject = new Subject<any[]>();
+  private peersSubject = new BehaviorSubject<any[]>([]);
   private peerJoinedSubject = new Subject<any>();
   private peerLeftSubject = new Subject<string>();
   private signalSubject = new Subject<any>();
