@@ -64,6 +64,12 @@ export class DropsendService {
   }
 
   private handleMessage(message: any): void {
+  if (message instanceof Blob) {
+    // Es un archivo recibido, lo convertimos a ArrayBuffer antes de procesarlo
+    this.handleReceivedFile(message);
+    return;
+  }
+
     let msg;
     try {
       msg = JSON.parse(message);
@@ -101,10 +107,7 @@ export class DropsendService {
         console.log('Dispositivo desconectado:', msg.peerId);
         break;
 
-      case 'receive-file':
-        console.log('receive-file');
-        this.handleReceivedFile(msg.fileData, msg.fileName);
-        break;
+
 
       case 'ping':
         this.send({ type: 'pong' });
@@ -129,30 +132,43 @@ export class DropsendService {
     }
   }
 
-  private handleReceivedFile(fileData: ArrayBuffer, fileName: string): void {
-    console.log('Datos del archivo recibido:', fileData); // Añadir log para depuración
+  private async handleReceivedFile(blob: Blob): Promise<void> {
+  console.log("Archivo recibido como Blob.");
 
-    const notification = window.confirm(
-      `¡Nuevo archivo recibido: ${fileName}! ¿Deseas descargarlo?`
-    );
+  const arrayBuffer = await blob.arrayBuffer();
 
-    if (notification) {
-      // Convertir el ArrayBuffer a un Blob
-      const blob = new Blob([fileData]);
+  // Extraer JSON
+  const textDecoder = new TextDecoder();
+  const textPart = textDecoder.decode(arrayBuffer.slice(0, 256));
+  const jsonEnd = textPart.indexOf("}") + 1;
+  const jsonString = textPart.substring(0, jsonEnd);
+  const data = JSON.parse(jsonString);
 
-      // Asegúrate de que el tipo MIME del archivo sea correcto
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = fileName; // Asegurarse de usar el nombre del archivo recibido
-      link.click();
+  console.log("Archivo recibido:", data.fileName);
 
-      console.log('Archivo recibido y descargado:', fileName);
-      this.notificationSubject.next(`Archivo descargado: ${fileName}`);
-    } else {
-      console.log('El usuario ha cancelado la descarga del archivo.');
-    }
+  // Extraer archivo
+  const fileBuffer = arrayBuffer.slice(jsonEnd);
+  const fileBlob = new Blob([fileBuffer]);
+
+  const notification = window.confirm(
+    `¡Nuevo archivo recibido: ${data.fileName}! ¿Deseas descargarlo?`
+  );
+
+  if (notification) {
+    // Descargar el archivo
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(fileBlob);
+    link.download = data.fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    console.log("Archivo descargado:", data.fileName);
+    this.notificationSubject.next(`Archivo descargado: ${data.fileName}`);
+  } else {
+    console.log("El usuario canceló la descarga.");
   }
+}
 
   disconnect(): void {
     this.send({ type: 'disconnect' });
