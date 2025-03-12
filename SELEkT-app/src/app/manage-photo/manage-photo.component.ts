@@ -16,7 +16,8 @@ export class ManagePhotoComponent implements OnInit {
   photoService = inject(PhotoLibraryService);
   selectedImages: { name: string; base64: string }[] = [];
   duplicateAlbum: any = null;
-  isAlbumView: boolean = false; // To toggle between album view and photo view
+  similarAlbum: any = null; // Añadir para almacenar álbum similar
+  isAlbumView: boolean = false; // Para alternar entre vista de álbum y fotos
 
   ngOnInit(): void {}
 
@@ -38,7 +39,7 @@ export class ManagePhotoComponent implements OnInit {
     }
   }
 
-  // Enviar imágenes al servidor para detectar duplicados
+  // Enviar imágenes al servidor para detectar duplicados y similares
   processImages(): void {
     if (this.selectedImages.length === 0) {
       alert('Por favor, selecciona imágenes primero.');
@@ -51,7 +52,7 @@ export class ManagePhotoComponent implements OnInit {
       (response) => {
         const albums = response.albums;
         this.displayDuplicateAlbum(albums);
-
+        this.displaySimilarAlbum(albums); // Mostrar las imágenes similares
       },
       (error) => {
         console.error('Error al procesar imágenes:', error);
@@ -67,10 +68,19 @@ export class ManagePhotoComponent implements OnInit {
     if (duplicateAlbum) {
       this.duplicateAlbum = duplicateAlbum;
     }
-
   }
 
-  // Toggle view between album and photo view
+  // Mostrar el álbum de similares en la interfaz
+  displaySimilarAlbum(albums: any): void {
+    const similarAlbum = albums.find(
+      (album: any) => album.name === 'Similares'
+    );
+    if (similarAlbum) {
+      this.similarAlbum = similarAlbum;
+    }
+  }
+
+  // Alternar entre vista de álbum y fotos
   toggleAlbumView(): void {
     this.isAlbumView = !this.isAlbumView;
   }

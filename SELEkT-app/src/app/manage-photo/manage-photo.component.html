@@ -33,4 +33,26 @@
   </div>
 </div>
 
+<!-- Mostrar el álbum de similares -->
+<div *ngIf="similarAlbum && similarAlbum.photos.length > 0">
+  <h2>{{ similarAlbum.name }}</h2>
+  <div (click)="toggleAlbumView()" style="cursor: pointer;">
+    <img [src]="similarAlbum.coverPhoto" alt="Cover Photo" width="100" />
+    <p>Click to view similar photos</p>
+  </div>
+
+  <!-- Mostrar las imágenes similares -->
+  <div *ngIf="isAlbumView">
+    <h3>Similar Photos:</h3>
+    <ul>
+      <li *ngFor="let photo of similarAlbum.photos">
+        <img [src]="photo" alt="Similar Photo" width="100" />
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="similarAlbum.photos.length === 0">
+    <p>No similar photos found!</p>
+  </div>
+</div>
+
 <app-footer></app-footer>
