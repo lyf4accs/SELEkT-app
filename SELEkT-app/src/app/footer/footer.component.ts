@@ -12,40 +12,37 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 export class FooterComponent implements AfterViewInit {
   renderer = inject(Renderer2);
   router = inject(Router);
+  private lastOffset = 0; // Guarda la última posición del indicador
 
   ngAfterViewInit() {
     this.router.events.subscribe(() => {
-      setTimeout(() => this.updateIndicatorPosition(), 10); // Espera que Angular renderice antes de actualizar
+      setTimeout(() => this.updateIndicatorPosition(), 50); // Pequeña espera para asegurar que el DOM se actualice
     });
-    setTimeout(() => this.updateIndicatorPosition(), 10); // Asegurar al cargar
+
+    setTimeout(() => this.updateIndicatorPosition(), 50);
   }
 
   updateIndicatorPosition() {
-    const activeItem = document.querySelector('.list.active') as HTMLElement;
+    const activeItem = document.querySelector(
+      '.navigation ul li.active'
+    ) as HTMLElement;
     const indicator = document.querySelector('.indicator') as HTMLElement;
 
     if (activeItem && indicator) {
-      const listItems = Array.from(
-        document.querySelectorAll('.navigation ul li')
-      ); // Obtener todos los elementos de la lista
+      const offset = activeItem.offsetLeft; // Obtener la posición exacta dentro del contenedor
 
-      // Encontrar el índice del ítem activo
-      const activeIndex = listItems.indexOf(activeItem);
+      // Si la posición no ha cambiado, no animamos
+      if (this.lastOffset === offset) return;
 
-      // Solo realizar el cálculo si el ítem activo existe
-      if (activeIndex >= 0) {
-        const container = activeItem.parentElement!;
-        const itemWidth = activeItem.offsetWidth; // Obtener el ancho de cada item
-        const offset = itemWidth * activeIndex; // Calcular el desplazamiento de acuerdo al índice
+      this.lastOffset = offset; // Guardamos la nueva posición
 
-        // Aplicar la posición de la animación
-        this.renderer.setStyle(indicator, 'transition', 'transform 0.5s ease');
-        this.renderer.setStyle(
-          indicator,
-          'transform',
-          `translateX(${offset}px)`
-        );
-      }
+      // Aplicamos la animación suavemente
+      this.renderer.setStyle(
+        indicator,
+        'transition',
+        'transform 0.5s ease-in-out'
+      );
+      this.renderer.setStyle(indicator, 'transform', `translateX(${offset}px)`);
     }
   }
 }

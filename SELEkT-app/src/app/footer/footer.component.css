@@ -1,27 +1,26 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:100,2000,300,400,500,600,700,800,900');
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
 
-*{
-  margin:0;
-  padding:0;
+* {
+  padding: 0;
   box-sizing: border-box;
-  font-family:'Poppins', sans-serif ;
+  font-family: 'Poppins', sans-serif;
 }
 
-:root{
+:root {
   --clr: #F62F38;
   --clr2: #052F50;
 }
 
-body{
-  display:flex;
+body {
+  display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   background-color: white;
 }
 
-.navigation{
-  height:70px;
+.navigation {
+  height: 70px;
   background-color: #052F50;
   display: flex;
   align-items: center;
@@ -30,58 +29,61 @@ body{
   position: absolute;
   width: 100%;
   z-index: 1000;
-  bottom:0;
+  bottom: 0;
 }
-
 
 .navigation ul {
   display: flex;
-  width: 350px;
+  width: 100%;
+  margin: 0 15px;
 }
 
-.navigation ul li{
-  position:relative;
+.navigation ul li {
+  position: relative;
   list-style: none;
-  width:70px;
-  height:70px;
-  z-index:1;
+  width: 25%;
+  height: 70px;
+  z-index: 1;
+  text-align: center;
+  padding-left:9px;
+  padding-right: 9px;
 }
-
 
 .navigation ul li a {
   position: relative;
-  display:flex;
+  display: flex;
   justify-content: center;
-  align-items:center;
+  align-items: center;
   flex-direction: column;
   width: 100%;
   text-align: center;
   font-weight: 500;
 }
 
-.navigation ul li a .icon{
-  position:relative;
-  display:block;
+.navigation ul li a .icon {
+  position: relative;
+  display: block;
   line-height: 80px;
   font-size: 1.5em;
   text-align: center;
-  transition:0.5s;
+  transition: 0.5s;
   color: white;
+  margin: 0 25px;
 }
 
-.navigation ul li.active a .icon{
+.navigation ul li.active a .icon {
   transform: translateY(-35px);
 }
 
-.navigation ul li a .text{
-  position:absolute;
-  color:white;
+.navigation ul li a .text {
+  position: absolute;
+  color: white;
   font-weight: 400;
   font-size: 0.75em;
   letter-spacing: 0.05em;
   transition: 0.5s;
-  opacity:0;
-  transform:translateY(20px);
+  opacity: 0;
+  transform: translateY(20px);
 }
 
 .navigation ul li.active a .text {
@@ -101,17 +103,18 @@ body{
   transform: translateX(0);
 }
 
-.indicator::before{
+.indicator::before {
   content: '';
-  position:absolute;
-  top:50%;
-  left:-22px;
+  position: absolute;
+  top: 50%;
+  left: -22px;
   width: 20px;
-  height:20px;
+  height: 20px;
   background: transparent;
-  border-top-right-radius:20px ;
+  border-top-right-radius: 20px;
   box-shadow: 1px -10px 0 0 white;
 }
+
 .indicator::after {
   content: '';
   position: absolute;
@@ -123,7 +126,3 @@ body{
   border-top-left-radius: 20px;
   box-shadow: -1px -10px 0 0 white;
 }
-
-
-
-
