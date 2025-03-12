@@ -169,6 +169,7 @@ export class DropsendService {
       type: 'send-file',
       fileName: fileName,
       fileData: buffer,
+      peerId: peer.peerId
     };
 
     // Enviar el archivo al peer seleccionado usando WebSocket
