@@ -1,56 +1,36 @@
 <div>
   <label for="file">Selecciona imágenes a procesar:</label>
-  <input id="file" type="file" (change)="onFileSelected($event)" multiple />
-  <button (click)="submitImages()">Procesar Imágenes</button>
+  <input id="file" type="file" (change)="getGalleryPhotos($event)" multiple />
+  <button (click)="processImages()">Procesar imágenes</button>
+</div>
 
-  <!-- Mostrar los álbumes (solo duplicados) -->
-  <div *ngIf="!selectedAlbum">
-    <div *ngFor="let album of albums" (click)="selectAlbum(album)" class="album">
-      <img
-        [src]="album.coverPhoto"
-        [alt]="'Portada del álbum ' + album.name"
-        [title]="'Álbum: ' + album.name"
-        class="cover-photo" />
-      <p>{{ album.name }}</p>
-    </div>
-  </div>
-
-  <!-- Mostrar fotos de un álbum seleccionado -->
-  <div *ngIf="selectedAlbum">
-    <button (click)="goBack()">⬅ Volver a álbumes</button>
-    <h2>{{ selectedAlbum.name }}</h2>
-    <div class="photo-grid">
-      <img
-        *ngFor="let photo of selectedAlbum.photos"
-        [src]="photo"
-        [alt]="'Imagen en el álbum ' + selectedAlbum.name"
-        [title]="'Imagen en el álbum ' + selectedAlbum.name"
-        class="photo" />
-    </div>
+<!-- Mostrar las imágenes seleccionadas -->
+<div *ngIf="selectedImages.length > 0">
+  <h3>Imágenes seleccionadas:</h3>
+  <div class="image-container">
+    <img *ngFor="let img of selectedImages" [src]="img.base64" [alt]="img.name" class="thumbnail" />
   </div>
 </div>
+
+<!-- Mostrar el álbum de duplicados -->
+<div *ngIf="duplicateAlbum && duplicateAlbum.photos.length > 0">
+  <h2>{{ duplicateAlbum.name }}</h2>
+  <div (click)="toggleAlbumView()" style="cursor: pointer;">
+    <img [src]="duplicateAlbum.coverPhoto" alt="Cover Photo" width="100" class="thumbnail"/>
+  </div>
+
+  <!-- Mostrar las imágenes duplicadas -->
+  <div *ngIf="isAlbumView">
+    <h3>Duplicate Photos:</h3>
+    <ul>
+      <li *ngFor="let photo of duplicateAlbum.photos">
+        <img [src]="photo" alt="Duplicate Photo" width="100" />
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="duplicateAlbum.photos.length === 0">
+    <p>No duplicates found!</p>
+  </div>
+</div>
+
 <app-footer></app-footer>
-<!--
-<div *ngIf="!selectedAlbum">
-  <div *ngFor="let album of albums" (click)="selectAlbum(album)" class="album">
-    <img
-      [src]="album.coverPhoto"
-      [alt]="'Portada del álbum ' + album.name"
-      [title]="'Álbum: ' + album.name"
-      class="cover-photo" />
-    <p>{{ album.name }}</p>
-  </div>
-</div>
-
-<div *ngIf="selectedAlbum">
-  <button (click)="goBack()">⬅ Volver a álbumes</button>
-  <h2>{{ selectedAlbum.name }}</h2>
-  <div class="photo-grid">
-    <img
-      *ngFor="let photo of selectedAlbum.photos"
-      [src]="photo"
-      [alt]="'Imagen en el álbum ' + selectedAlbum.name"
-      [title]="'Imagen en el álbum ' + selectedAlbum.name"
-      class="photo" />
-  </div>
-</div> -->
