@@ -82,22 +82,28 @@ export class PeersComponent implements OnInit {
     // Crear un input de tipo file y simular el clic para que se abra el selector de archivos
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
+    fileInput.multiple = true;
     fileInput.click();
 
     //cuando seleccione el archivo se procede a enviarlo
-    fileInput.onchange = (event: any) => this.onFileSelected(event, peer);
+    fileInput.onchange = (event: any) => this.onFilesSelected(event, peer);
   }
 
-  onFileSelected(event: any, peer: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        const arrayBuffer = e.target.result; // El ArrayBuffer del archivo
+  onFilesSelected(event: Event, peer: any): void {
+    const inputElement = event.target as HTMLInputElement;
+    const files = inputElement?.files;
 
-        this.dropSendService.sendFile(arrayBuffer, file.name, peer);
-      };
-      reader.readAsArrayBuffer(file);
+    if (files && files.length > 0) {
+      Array.from(files).forEach((file: File) => {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          const arrayBuffer = e.target.result; // El ArrayBuffer del archivo
+
+          // Enviar el archivo al peer
+          this.dropSendService.sendFile(arrayBuffer, file.name, peer);
+        };
+        reader.readAsArrayBuffer(file);
+      });
     }
   }
 }
