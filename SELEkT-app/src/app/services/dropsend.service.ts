@@ -12,7 +12,7 @@ export class DropsendService {
 
   private peersSubject = new BehaviorSubject<any[]>([]);
   private peerJoinedSubject = new Subject<any>();
-  private peerLeftSubject = new Subject<string>();
+  private peerLeftSubject = new BehaviorSubject<any>([]);
   private signalSubject = new Subject<any>();
   private displayNameSubject = new Subject<any>();
   private notificationSubject = new Subject<string>();
@@ -47,9 +47,9 @@ export class DropsendService {
 
     this.socket.onclose = () => {
       console.log('WS: disconnected');
-      this.notificationSubject.next('Connection lost. Retry in 10 seconds...');
+      this.notificationSubject.next('Connection lost. Retry in 5 seconds...');
       clearTimeout(this.reconnectTimer);
-      this.reconnectTimer = setTimeout(() => this.connect(), 10000);
+      this.reconnectTimer = setTimeout(() => this.connect(), 5000);
     };
 
     this.socket.onerror = (err) => {
@@ -101,8 +101,8 @@ export class DropsendService {
         console.log('Dispositivo desconectado:', msg.peerId);
         break;
 
-      case 'signal':
-        this.signalSubject.next(msg);
+      case 'receive-file':
+        this.handleReceivedFile(msg.fileData, msg.fileName);
         break;
 
       case 'ping':
@@ -128,11 +128,53 @@ export class DropsendService {
     }
   }
 
+  private handleReceivedFile(fileData: ArrayBuffer, fileName: string): void {
+
+    const notification = window.confirm(
+       `¡Nuevo archivo recibido: ${fileName}! ¿Deseas descargarlo?`
+     );
+
+  if (notification) {
+    // Si el usuario hace clic en "OK", procederemos con la descarga
+
+    // Convertir el ArrayBuffer a un Blob
+    const blob = new Blob([fileData]);
+    const url = URL.createObjectURL(blob);
+
+    // Crear un enlace de descarga y simular el clic para descargar el archivo
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName; // Usamos el nombre del archivo recibido
+    link.click();
+
+    console.log('Archivo recibido y descargado:', fileName);
+    // Emitir una notificación al usuario de que el archivo ha sido descargado
+    this.notificationSubject.next(`Archivo descargado: ${fileName}`);
+  } else {
+    console.log('El usuario ha cancelado la descarga del archivo.');
+  }
+
+
+  }
+
   disconnect(): void {
     this.send({ type: 'disconnect' });
     if (this.socket) {
       this.socket.onclose = null;
       this.socket.close();
+    }
+  }
+
+  sendFile(buffer: ArrayBuffer, fileName: string, peer: any): void {
+    const message = {
+      type: 'send-file',
+      fileName: fileName,
+      fileData: buffer,
+    };
+
+    // Enviar el archivo al peer seleccionado usando WebSocket
+    if (peer.socket) {
+      peer.socket.send(JSON.stringify(message));
     }
   }
 

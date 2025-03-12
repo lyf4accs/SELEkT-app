@@ -32,7 +32,7 @@ export class PeersComponent implements OnInit {
 
     // Suscribirse a los eventos de nuevos peers
     this.dropSendService.getPeers().subscribe((peers) => {
-      console.log('nada más entrar hago update')
+      console.log('nada más entrar hago update');
       this.updatePeersList(peers);
     });
 
@@ -79,5 +79,37 @@ export class PeersComponent implements OnInit {
 
   selectPeer(peer: any): void {
     console.log('Seleccionado el peer:', peer);
+    // Crear un input de tipo file y simular el clic para que se abra el selector de archivos
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.click();
+
+    //cuando seleccione el archivo se procede a enviarlo
+    fileInput.onchange = (event: any) => this.onFileSelected(event, peer);
+  }
+
+  onFileSelected(event: any, peer: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const arrayBuffer = e.target.result; // El ArrayBuffer del archivo
+        this.dropSendService.sendFile(arrayBuffer, file.name, peer);
+      };
+      reader.readAsArrayBuffer(file);
+    }
+  }
+
+  sendFile(buffer: ArrayBuffer, fileName: string, peer: any): void {
+    const message = {
+      type: 'file',
+      fileName: fileName,
+      fileData: buffer,
+    };
+
+    // Enviar el archivo al peer seleccionado usando WebSocket
+    if (peer.socket) {
+      peer.socket.send(JSON.stringify(message));
+    }
   }
 }
