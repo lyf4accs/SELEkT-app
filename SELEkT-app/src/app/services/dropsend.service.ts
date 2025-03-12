@@ -102,7 +102,7 @@ export class DropsendService {
         break;
 
       case 'receive-file':
-        console.log('receive-file');
+        console.log('receive-file')
         this.handleReceivedFile(msg.fileData, msg.fileName);
         break;
 
@@ -130,18 +130,12 @@ export class DropsendService {
   }
 
   private handleReceivedFile(fileData: ArrayBuffer, fileName: string): void {
-    console.log('Archivo recibido:', fileName);
-    console.log('Datos del archivo:', fileData);
-
     const notification = window.confirm(
       `¡Nuevo archivo recibido: ${fileName}! ¿Deseas descargarlo?`
     );
 
     if (notification) {
-      if (!(fileData instanceof ArrayBuffer)) {
-        console.error('El archivo no es un ArrayBuffer válido.');
-        return;
-      }
+      // Si el usuario hace clic en "OK", procederemos con la descarga
 
       // Convertir el ArrayBuffer a un Blob
       const blob = new Blob([fileData]);
@@ -154,6 +148,7 @@ export class DropsendService {
       link.click();
 
       console.log('Archivo recibido y descargado:', fileName);
+      // Emitir una notificación al usuario de que el archivo ha sido descargado
       this.notificationSubject.next(`Archivo descargado: ${fileName}`);
     } else {
       console.log('El usuario ha cancelado la descarga del archivo.');
@@ -174,7 +169,7 @@ export class DropsendService {
       type: 'send-file',
       fileName: fileName,
       fileData: buffer,
-      peerId: peer.peerId,
+      peerId: peer.peerId
     };
 
     // Enviar el archivo al peer seleccionado usando WebSocket

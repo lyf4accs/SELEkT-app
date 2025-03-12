@@ -94,6 +94,7 @@ export class PeersComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const arrayBuffer = e.target.result; // El ArrayBuffer del archivo
+
         this.dropSendService.sendFile(arrayBuffer, file.name, peer);
       };
       reader.readAsArrayBuffer(file);
