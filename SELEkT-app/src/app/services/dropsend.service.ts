@@ -102,6 +102,7 @@ export class DropsendService {
         break;
 
       case 'receive-file':
+        console.log('receive-file')
         this.handleReceivedFile(msg.fileData, msg.fileName);
         break;
 
@@ -129,32 +130,29 @@ export class DropsendService {
   }
 
   private handleReceivedFile(fileData: ArrayBuffer, fileName: string): void {
-
     const notification = window.confirm(
-       `¡Nuevo archivo recibido: ${fileName}! ¿Deseas descargarlo?`
-     );
+      `¡Nuevo archivo recibido: ${fileName}! ¿Deseas descargarlo?`
+    );
 
-  if (notification) {
-    // Si el usuario hace clic en "OK", procederemos con la descarga
+    if (notification) {
+      // Si el usuario hace clic en "OK", procederemos con la descarga
 
-    // Convertir el ArrayBuffer a un Blob
-    const blob = new Blob([fileData]);
-    const url = URL.createObjectURL(blob);
+      // Convertir el ArrayBuffer a un Blob
+      const blob = new Blob([fileData]);
+      const url = URL.createObjectURL(blob);
 
-    // Crear un enlace de descarga y simular el clic para descargar el archivo
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName; // Usamos el nombre del archivo recibido
-    link.click();
+      // Crear un enlace de descarga y simular el clic para descargar el archivo
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName; // Usamos el nombre del archivo recibido
+      link.click();
 
-    console.log('Archivo recibido y descargado:', fileName);
-    // Emitir una notificación al usuario de que el archivo ha sido descargado
-    this.notificationSubject.next(`Archivo descargado: ${fileName}`);
-  } else {
-    console.log('El usuario ha cancelado la descarga del archivo.');
-  }
-
-
+      console.log('Archivo recibido y descargado:', fileName);
+      // Emitir una notificación al usuario de que el archivo ha sido descargado
+      this.notificationSubject.next(`Archivo descargado: ${fileName}`);
+    } else {
+      console.log('El usuario ha cancelado la descarga del archivo.');
+    }
   }
 
   disconnect(): void {
@@ -166,6 +164,7 @@ export class DropsendService {
   }
 
   sendFile(buffer: ArrayBuffer, fileName: string, peer: any): void {
+    console.log('Enviando archivo al servidor'); // Verifica que esta línea se imprima
     const message = {
       type: 'send-file',
       fileName: fileName,
@@ -173,8 +172,11 @@ export class DropsendService {
     };
 
     // Enviar el archivo al peer seleccionado usando WebSocket
-    if (peer.socket) {
-      peer.socket.send(JSON.stringify(message));
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      console.log('Mensaje a enviar:', message); // Verifica qué mensaje estás enviando
+      this.socket.send(JSON.stringify(message));
+    } else {
+      console.error('Socket no está abierto');
     }
   }
 
