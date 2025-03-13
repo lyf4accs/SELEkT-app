@@ -25,17 +25,15 @@ export class PeersComponent implements OnInit {
     this.dropSendService.getMyPeerId().subscribe((peerId) => {
       this.myPeerId = peerId;
     });
-    console.log('Mi Peer ID:', this.myPeerId);
+
 
     // Obtener el display name
     this.mediatorService.displayName$.subscribe((name) => {
       this.displayName = name;
-      console.log(`Display Name: ${this.displayName}`);
     });
 
     // Suscribirse a los eventos de nuevos peers
     this.dropSendService.getPeers().subscribe((peers) => {
-      console.log('nada más entrar hago update');
       this.updatePeersList(peers);
     });
 
@@ -52,18 +50,20 @@ export class PeersComponent implements OnInit {
 
   }
 
+
+
   private updatePeersList(peers: any[]): void {
     // Limpiar la lista de peers antes de actualizarla
+
     this.peers = peers
       .filter((peer) => peer.peerId !== this.myPeerId) // Filtrar el propio peer
       .filter((peer) => !this.peerIdsSet.has(peer.peerId)); // Filtrar peers ya presentes
 
     // Asegurarse de que no se agreguen duplicados
     this.peers.forEach((peer) => {
+      console.log('add peer a la lista:', peer.peerId, this.myPeerId);
       this.peerIdsSet.add(peer.peerId); // Añadir los peerIds únicos al set
     });
-
-    console.log('Lista de peers actualizada:', this.peers);
   }
 
   private addPeer(peer: any): void {

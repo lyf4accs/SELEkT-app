@@ -102,6 +102,7 @@ export class DropsendService {
       case 'peer-joined':
         // Solo actualizamos el peerId cuando realmente tengamos un peerId
         if (msg.peerId) {
+          console.log(msg.peerId);
           this.myPeerIdSubject.next(msg.peerId); // Emitimos el peerId recibido
         }
         this.peerJoinedSubject.next({
