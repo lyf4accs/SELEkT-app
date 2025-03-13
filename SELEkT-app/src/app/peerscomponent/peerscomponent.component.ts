@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DropsendService } from '../services/dropsend.service';
 import { MediatorService } from '../services/mediator.service';
+import { timeout } from 'rxjs';
 
 @Component({
   selector: 'app-peerscomponent',
@@ -21,7 +22,9 @@ export class PeersComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     // Obtener el Peer ID
-    this.myPeerId = await this.dropSendService.getMyPeerId();
+    this.dropSendService.getMyPeerId().subscribe((peerId) => {
+      this.myPeerId = peerId;
+    });
     console.log('Mi Peer ID:', this.myPeerId);
 
     // Obtener el display name
@@ -45,6 +48,8 @@ export class PeersComponent implements OnInit {
     this.dropSendService.getPeerLeft().subscribe((peerId) => {
       this.removePeer(peerId);
     });
+
+
   }
 
   private updatePeersList(peers: any[]): void {

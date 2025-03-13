@@ -8,8 +8,9 @@ import { MediatorService } from './mediator.service';
 export class DropsendService {
   private socket: WebSocket | undefined;
   private reconnectTimer: any;
-  private myPeerId: string = ''; // Inicializamos el valor en vacío
+  private myPeerId = ''; // Inicializamos el valor en vacío
 
+  private myPeerIdSubject = new BehaviorSubject<string>('');
   private peersSubject = new BehaviorSubject<any[]>([]);
   private peerJoinedSubject = new Subject<any>();
   private peerLeftSubject = new BehaviorSubject<any>([]);
@@ -98,26 +99,27 @@ export class DropsendService {
     console.log('WS message:', msg);
 
     switch (msg.type) {
-      case 'update-devices':
-        console.log('Dispositivos actualizados:', msg.devices);
-        // Actualiza la lista de dispositivos con los nombres y dispositivos generados
-        this.peersSubject.next(msg.devices);
-        break;
-
-      case 'peers':
-        this.peersSubject.next(msg.peers);
-        break;
-
       case 'peer-joined':
-        // Añadimos el peer y su nombre a la lista de dispositivos conectados
-        const peerData = {
+        // Solo actualizamos el peerId cuando realmente tengamos un peerId
+        if (msg.peerId) {
+          this.myPeerIdSubject.next(msg.peerId); // Emitimos el peerId recibido
+        }
+        this.peerJoinedSubject.next({
           peerId: msg.peerId,
           displayName: msg.displayName,
           deviceName: msg.deviceName,
-        };
-        this.peerJoinedSubject.next(peerData);
+        });
         console.log('Dispositivo conectado:', msg.peerId);
-        this.myPeerId = msg.peerId; // Actualiza el myPeerId
+        break;
+
+      case 'update-devices':
+        // Aquí verificamos que solo emitimos el peerId cuando lo tengamos
+        if (!this.myPeerIdSubject.getValue() && msg.devices.length > 0) {
+          const firstDevice = msg.devices[0]; // Asumimos que el primer dispositivo tiene el peerId
+          this.myPeerIdSubject.next(firstDevice.peerId);
+        }
+        this.peersSubject.next(msg.devices);
+        console.log('Dispositivos actualizados:', msg.devices);
         break;
 
       case 'peer-left':
@@ -134,7 +136,6 @@ export class DropsendService {
         // Cuando recibimos el display-name, lo pasamos al mediador
         this.mediatorService.updateDisplayName(msg.displayName);
         console.log(`Dispositivo conectado con nombre: ${msg.displayName}`);
-        break;
         break;
 
       default:
@@ -247,24 +248,14 @@ export class DropsendService {
   }
 
   // Creamos una función async que devolverá el peerId cuando esté disponible
-  async getMyPeerId(): Promise<string> {
-    return new Promise((resolve) => {
-      // Comprobamos si ya está disponible
-      if (this.myPeerId) {
-        resolve(this.myPeerId);
-      } else {
-        // En caso contrario, esperamos a que se reciba
-        const interval = setInterval(() => {
-          if (this.myPeerId) {
-            resolve(this.myPeerId);
-            clearInterval(interval); // Limpiamos el intervalo
-          }
-        }, 100);
-      }
-    });
-  }
+
 
   // Métodos para exponer observables a los componentes:
+  getMyPeerId(): Observable<string> {
+    console.log('pasando la ip a component', this.myPeerId)
+    return this.myPeerIdSubject.asObservable();
+  }
+
   getPeers(): Observable<any[]> {
     return this.peersSubject.asObservable();
   }
