@@ -1,8 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { PhotoLibraryService } from '../services/PhotoLibraryService';
+import { MediatorService } from '../services/mediator.service'; // Importar MediatorService
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../footer/footer.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manage-photo',
@@ -14,10 +16,14 @@ import { FooterComponent } from '../footer/footer.component';
 export class ManagePhotoComponent implements OnInit {
   cdr = inject(ChangeDetectorRef);
   photoService = inject(PhotoLibraryService);
+  mediatorService = inject(MediatorService);
+  router = inject(Router);
   selectedImages: { name: string; base64: string }[] = [];
   duplicateAlbum: any = null;
-  similarAlbum: any = null; // Añadir para almacenar álbum similar
-  isAlbumView: boolean = false; // Para alternar entre vista de álbum y fotos
+  similarAlbum: any = null;
+  activeAlbum: string | null = null;
+  isProcessing: boolean = false;
+  albumsLoaded: boolean = false;
 
   ngOnInit(): void {}
 
@@ -34,7 +40,7 @@ export class ManagePhotoComponent implements OnInit {
           name: files[i].name,
           base64: e.target.result,
         });
-        this.cdr.detectChanges(); // Forzar actualización de la vista
+        this.cdr.detectChanges();
       };
     }
   }
@@ -46,42 +52,59 @@ export class ManagePhotoComponent implements OnInit {
       return;
     }
 
+    this.isProcessing = true;
     const base64Images = this.selectedImages.map((img) => img.base64);
 
     this.photoService.processImages(base64Images).subscribe(
       (response) => {
         const albums = response.albums;
         this.displayDuplicateAlbum(albums);
-        this.displaySimilarAlbum(albums); // Mostrar las imágenes similares
+        this.displaySimilarAlbum(albums);
+        this.isProcessing = false;
+        this.albumsLoaded = true;
       },
       (error) => {
         console.error('Error al procesar imágenes:', error);
+        this.isProcessing = false;
       }
     );
   }
 
-  // Mostrar el álbum de duplicados en la interfaz
   displayDuplicateAlbum(albums: any): void {
     const duplicateAlbum = albums.find(
       (album: any) => album.name === 'Duplicados'
     );
     if (duplicateAlbum) {
       this.duplicateAlbum = duplicateAlbum;
+      this.mediatorService.updateDuplicatePhotos(duplicateAlbum.photos); // Emitir fotos duplicadas
     }
   }
 
-  // Mostrar el álbum de similares en la interfaz
   displaySimilarAlbum(albums: any): void {
     const similarAlbum = albums.find(
       (album: any) => album.name === 'Similares'
     );
     if (similarAlbum) {
       this.similarAlbum = similarAlbum;
+      this.mediatorService.updateSimilarPhotos(similarAlbum.photos); // Emitir fotos similares
     }
   }
 
-  // Alternar entre vista de álbum y fotos
-  toggleAlbumView(): void {
-    this.isAlbumView = !this.isAlbumView;
+  viewAlbum(albumType: string): void {
+    if (albumType === 'duplicate') {
+      this.activeAlbum = 'duplicate'; // Muestra el álbum de duplicados
+      console.log('Fotos duplicadas a enviar: ', this.duplicateAlbum?.photos);
+
+      this.router.navigate(['/manage/swiper'], {
+        state: { albumType: 'duplicate', photos: this.duplicateAlbum?.photos },
+      });
+    } else if (albumType === 'similar') {
+      this.activeAlbum = 'similar'; // Muestra el álbum de similares
+      console.log('Fotos similares a enviar: ', this.similarAlbum?.photos);
+
+      this.router.navigate(['/manage/swiper'], {
+        state: { albumType: 'similar', photos: this.similarAlbum?.photos },
+      });
+    }
   }
 }

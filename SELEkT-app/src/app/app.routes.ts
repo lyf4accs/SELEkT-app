@@ -15,7 +15,7 @@ export const routes: Routes = [
   { path: 'album/:code', component: AlbumComponent },
   { path: 'upload', component: UploadFilesComponent },
   { path: 'links', component: LinksComponent },
-  { path: 'swiper', component: SwiperSelektComponent },
+  { path: 'manage/swiper', component: SwiperSelektComponent },
   { path: 'manage', component: ManagePhotoComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'footer', component:FooterComponent},

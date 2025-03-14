@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { Card } from '../models/Card';
+import { Component, inject, OnInit } from '@angular/core';
 import { FooterComponent } from '../footer/footer.component';
+import { Router } from '@angular/router';
+import { Card } from '../models/Card';
+import { MediatorService } from '../services/mediator.service';
 
 @Component({
   selector: 'app-swiper-selekt',
@@ -11,59 +13,44 @@ import { FooterComponent } from '../footer/footer.component';
   styleUrls: ['./swiper-selekt.component.css'],
 })
 export class SwiperSelektComponent implements OnInit {
-  cards: Card[] = [
-    {
-      id: 1,
-      title: 'Card 1',
-      description: 'This is card 1',
-      transform: '',
-      opacity: '1',
-      zIndex: 5,
-    },
-    {
-      id: 2,
-      title: 'Card 2',
-      description: 'This is card 2',
-      transform: '',
-      opacity: '1',
-      zIndex: 4,
-    },
-    {
-      id: 3,
-      title: 'Card 3',
-      description: 'This is card 3',
-      transform: '',
-      opacity: '1',
-      zIndex: 3,
-    },
-    {
-      id: 4,
-      title: 'Card 4',
-      description: 'This is card 4',
-      transform: '',
-      opacity: '1',
-      zIndex: 2,
-    },
-    {
-      id: 5,
-      title: 'Card 5',
-      description: 'This is card 5',
-      transform: '',
-      opacity: '1',
-      zIndex: 1,
-    },
-  ];
-
+  cards: Card[] = [];
   savedCards: Card[] = [];
   favoriteCards: Card[] = [];
-
   draggingIndex: number | null = null;
   startX = 0;
   startY = 0;
   currentTransform = 'none';
 
-  ngOnInit(): void {}
+  router = inject(Router);
+  mediatorService = inject(MediatorService);
+  ngOnInit(): void {
+    // Suscríbete a los datos de fotos duplicadas o similares a través del MediatorService
+    this.mediatorService.similarPhotos$.subscribe((photos) => {
+      if (photos) {
+        console.log('Fotos similares recibidas: ', photos);
+        // Definir el tipo de 'photo' como string y 'index' como number
+        this.cards = photos.map((photo: string, index: number) => ({
+          id: index + 1,
+          title: `Foto ${index + 1}`,
+          description: `Imagen del álbum similar`,
+          transform: '',
+          opacity: '1',
+          zIndex: photos.length - index,
+          imageUrl: photo,
+        }));
+      } else {
+        console.log('No se recibieron fotos similares');
+      }
+    });
 
+    // Verificar también si las fotos duplicadas llegaron (por si es necesario manejar ambos tipos de álbumes)
+    this.mediatorService.duplicatePhotos$.subscribe((photos) => {
+      if (photos) {
+        console.log('Fotos duplicadas recibidas: ', photos);
+        // Puedes usar las fotos duplicadas si es necesario
+      }
+    });
+  }
   onDragStart(index: number, event: MouseEvent | TouchEvent) {
     this.draggingIndex = index;
     event.preventDefault();
@@ -125,7 +112,7 @@ export class SwiperSelektComponent implements OnInit {
     } else if (deltaY > 100) {
       this.moveToEnd();
     } else {
-      this.cards[this.draggingIndex].transform = ''; // Resetear posición
+      this.cards[this.draggingIndex].transform = ''; // Resetear posición
     }
 
     this.draggingIndex = null;
@@ -159,7 +146,7 @@ export class SwiperSelektComponent implements OnInit {
       if (direction === 'right') this.savedCards.push(card);
       if (direction === 'top') this.favoriteCards.push(card);
       this.cards.splice(this.draggingIndex!, 1);
-    }, 300); // Tiempo de animación
+    }, 300); // Tiempo de animación
   }
 
   moveToEnd() {

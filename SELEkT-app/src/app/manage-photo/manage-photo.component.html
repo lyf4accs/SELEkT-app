@@ -1,7 +1,13 @@
-<div>
+<div *ngIf="!albumsLoaded ">
+  <div>
   <label for="file">Selecciona imágenes a procesar:</label>
   <input id="file" type="file" (change)="getGalleryPhotos($event)" multiple />
-  <button (click)="processImages()">Procesar imágenes</button>
+  <button (click)="processImages()" [disabled]="isProcessing">Procesar imágenes</button>
+</div>
+
+<!-- Mostrar el mensaje de "Procesando" -->
+<div *ngIf="isProcessing" class="processing-message">
+  <p>Procesando...</p>
 </div>
 
 <!-- Mostrar las imágenes seleccionadas -->
@@ -11,47 +17,47 @@
     <img *ngFor="let img of selectedImages" [src]="img.base64" [alt]="img.name" class="thumbnail" />
   </div>
 </div>
-
-<!-- Mostrar el álbum de duplicados -->
-<div *ngIf="duplicateAlbum && duplicateAlbum.photos.length > 0">
-  <h2>{{ duplicateAlbum.name }}</h2>
-  <div (click)="toggleAlbumView()" style="cursor: pointer;">
-    <img [src]="duplicateAlbum.coverPhoto" alt="Cover Photo" width="100" class="thumbnail"/>
-  </div>
-
-  <!-- Mostrar las imágenes duplicadas -->
-  <div *ngIf="isAlbumView">
-    <h3>Duplicate Photos:</h3>
-    <ul>
-      <li *ngFor="let photo of duplicateAlbum.photos">
-        <img [src]="photo" alt="Duplicate Photo" width="100" />
-      </li>
-    </ul>
-  </div>
-  <div *ngIf="duplicateAlbum.photos.length === 0">
-    <p>No duplicates found!</p>
-  </div>
 </div>
+<!-- Mostrar los álbumes de duplicados y similares -->
+<div *ngIf="duplicateAlbum || similarAlbum">
+  <div class="albums-container">
+    <!-- Mostrar el álbum de duplicados -->
+    <div *ngIf="duplicateAlbum && duplicateAlbum.photos.length > 0" class="album" (click)="viewAlbum('duplicate')">
+      <h2 >{{ duplicateAlbum.name }}</h2>
+      <div>
+        <img [src]="duplicateAlbum.coverPhoto" alt="Cover Photo" class="album-cover" />
+      </div>
 
-<!-- Mostrar el álbum de similares -->
-<div *ngIf="similarAlbum && similarAlbum.photos.length > 0">
-  <h2>{{ similarAlbum.name }}</h2>
-  <div (click)="toggleAlbumView()" style="cursor: pointer;">
-    <img [src]="similarAlbum.coverPhoto" alt="Cover Photo" width="100" />
-    <p>Click to view similar photos</p>
-  </div>
+      <div *ngIf="activeAlbum === 'duplicate'">
+        <ul>
+          <li *ngFor="let photo of duplicateAlbum.photos">
+            <img [src]="photo" alt="Duplicate Photo" class="album-photo" />
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="duplicateAlbum.photos.length === 0">
+        <p>No duplicates found!</p>
+      </div>
+    </div>
 
-  <!-- Mostrar las imágenes similares -->
-  <div *ngIf="isAlbumView">
-    <h3>Similar Photos:</h3>
-    <ul>
-      <li *ngFor="let photo of similarAlbum.photos">
-        <img [src]="photo" alt="Similar Photo" width="100" />
-      </li>
-    </ul>
-  </div>
-  <div *ngIf="similarAlbum.photos.length === 0">
-    <p>No similar photos found!</p>
+    <!-- Mostrar el álbum de similares -->
+    <div *ngIf="similarAlbum && similarAlbum.photos.length > 0" class="album" (click)="viewAlbum('similar')">
+      <h2 >{{ similarAlbum.name }}</h2>
+      <div>
+        <img [src]="similarAlbum.coverPhoto" alt="Cover Photo" class="album-cover" />
+      </div>
+
+      <div *ngIf="activeAlbum === 'similar'">
+        <ul>
+          <li *ngFor="let photo of similarAlbum.photos">
+            <img [src]="photo" alt="Similar Photo" class="album-photo" />
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="similarAlbum.photos.length === 0">
+        <p>No similar photos found!</p>
+      </div>
+    </div>
   </div>
 </div>
 

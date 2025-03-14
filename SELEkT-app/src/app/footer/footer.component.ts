@@ -32,53 +32,51 @@ export class FooterComponent implements AfterViewInit {
     setTimeout(() => this.updateIndicatorPosition(), 50);
   }
 
-  updateIndicatorPosition() {
-    // Obtener el índice del ítem activo en función de la ruta
-    const activeRoute = this.router.url.split('/').pop(); // Obtiene la última parte de la URL
-    let activeIndex: number;
+ updateIndicatorPosition() {
+  // Obtener la URL actual
+  const activeRoute = this.router.url;
 
-    switch (activeRoute) {
-      case 'upload':
-        activeIndex = 0;
-        break;
-      case 'dropsend':
-        activeIndex = 1;
-        break;
-      case 'manage':
-        activeIndex = 2;
-        break;
-      case 'profile':
-        activeIndex = 3;
-        break;
-      default:
-        activeIndex = 0; // Por defecto, si no hay coincidencia
-    }
+  let activeIndex: number;
 
-    // Si el índice no ha cambiado, no actualizamos nada
-    if (this.lastIndex === activeIndex) {
-      return;
-    }
-
-    // Obtener el indicador
-    const indicator = document.querySelector('.indicator') as HTMLElement;
-
-    if (indicator) {
-      // Asegurarse de que la transición sea visible solo cuando se mueve
-      this.renderer.setStyle(
-        indicator,
-        'transition',
-        'transform 0.3s ease-out' // Transición suave
-      );
-
-      // Mover el indicador a la posición fija correspondiente solo si es necesario
-      this.renderer.setStyle(
-        indicator,
-        'transform',
-        `translateX(${this.positions[activeIndex]}px)`
-      );
-    }
-
-    // Actualizar el índice del último ítem activo
-    this.lastIndex = activeIndex;
+  // Verificar si la ruta actual pertenece a "manage" (incluye /manage/swiper)
+  if (activeRoute.startsWith('/manage')) {
+    activeIndex = 2; // Índice de "Manage"
+  } else if (activeRoute.startsWith('/upload')) {
+    activeIndex = 0;
+  } else if (activeRoute.startsWith('/dropsend')) {
+    activeIndex = 1;
+  } else if (activeRoute.startsWith('/profile')) {
+    activeIndex = 3;
+  } else {
+    activeIndex = 0; // Default
   }
+
+  // Si el índice no ha cambiado, no actualizamos nada
+  if (this.lastIndex === activeIndex) {
+    return;
+  }
+
+  // Obtener el indicador
+  const indicator = document.querySelector('.indicator') as HTMLElement;
+
+  if (indicator) {
+    // Aplicar transición suave
+    this.renderer.setStyle(
+      indicator,
+      'transition',
+      'transform 0.3s ease-out'
+    );
+
+    // Mover el indicador a la posición correcta
+    this.renderer.setStyle(
+      indicator,
+      'transform',
+      `translateX(${this.positions[activeIndex]}px)`
+    );
+  }
+
+  // Actualizar el índice del último ítem activo
+  this.lastIndex = activeIndex;
+}
+
 }

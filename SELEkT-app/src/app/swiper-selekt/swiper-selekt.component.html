@@ -2,16 +2,17 @@
   <div
     *ngFor="let card of cards; let i = index"
     class="card"
-    [ngStyle]="{
-      transform: card.transform,
-      zIndex: cards.length - i
-    }"
+    [style.backgroundImage]="'url(' + card.imageUrl + ')'"
+    [style.transform]="card.transform"
+    [style.opacity]="card.opacity"
+    [style.zIndex]="card.zIndex"
     (mousedown)="onDragStart(i, $event)"
     (touchstart)="onDragStart(i, $event)"
   >
-    <h2>{{ card.title }}</h2>
-    <p>{{ card.description }}</p>
+    <div class="card-content">
+      <h3>{{ card.title }}</h3>
+      <p>{{ card.description }}</p>
+    </div>
   </div>
 </div>
-
 <app-footer></app-footer>

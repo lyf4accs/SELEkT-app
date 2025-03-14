@@ -6,4 +6,5 @@ export interface Card {
   transform: string;
   opacity: string;
   zIndex: number;
+  imageUrl: string;
 }
