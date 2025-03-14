@@ -10,7 +10,7 @@ import { MediatorService } from '../services/mediator.service';
 export class PeersComponent implements OnInit {
   peers: any[] = [];
   peerIdsSet: Set<string> = new Set();
-  myPeerId: string = '';
+  myPeerId: string | null | undefined;
   myDeviceName: string = '';
   displayName: string = '';
 
@@ -21,23 +21,31 @@ export class PeersComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     // Obtener el Peer ID
-    this.myPeerId = await this.dropSendService.getMyPeerId();
-    console.log('Mi Peer ID:', this.myPeerId);
 
+      this.dropSendService.getMyPeerId().subscribe((peerId) => {
+        this.myPeerId = peerId;
+        console.log('Mi Peer ID:', this.myPeerId);
+
+          // Solo suscribir a los peers y actualizar la lista si ya se ha obtenido el myPeerId
+        if (this.myPeerId) {
+          this.dropSendService.getPeers().subscribe((peers) => {
+            this.updatePeersList(peers);
+          });
+        }
+      });
     // Obtener el display name
     this.mediatorService.displayName$.subscribe((name) => {
       this.displayName = name;
-      console.log(`Display Name: ${this.displayName}`);
     });
 
     // Suscribirse a los eventos de nuevos peers
     this.dropSendService.getPeers().subscribe((peers) => {
-      console.log('nada más entrar hago update');
       this.updatePeersList(peers);
     });
 
     // Escuchar cuando un peer se conecta
     this.dropSendService.getPeerJoined().subscribe((peer) => {
+      console.log('lo añadimos porque es nuevo')
       this.addPeer(peer);
     });
 
@@ -48,33 +56,39 @@ export class PeersComponent implements OnInit {
   }
 
   private updatePeersList(peers: any[]): void {
+    if (!this.myPeerId) {
+      // Si aún no tenemos el myPeerId, no actualizamos la lista
+      console.log('Esperando a que myPeerId esté disponible...');
+      return;
+    }
+
     // Limpiar la lista de peers antes de actualizarla
-    this.peers = peers
-      .filter((peer) => peer.peerId !== this.myPeerId) // Filtrar el propio peer
-      .filter((peer) => !this.peerIdsSet.has(peer.peerId)); // Filtrar peers ya presentes
-
-    // Asegurarse de que no se agreguen duplicados
-    this.peers.forEach((peer) => {
-      this.peerIdsSet.add(peer.peerId); // Añadir los peerIds únicos al set
-    });
-
-    console.log('Lista de peers actualizada:', this.peers);
-  }
-
-  private addPeer(peer: any): void {
-    // Si el peer no está en la lista y no es el propio peer, lo agregamos
-    if (!this.peerIdsSet.has(peer.peerId) && peer.peerId !== this.myPeerId) {
+    peers.forEach((peer) => {
+    if (peer.peerId !== this.myPeerId && !this.peerIdsSet.has(peer.peerId)) {
+      // Agregar el nuevo peer
       this.peerIdsSet.add(peer.peerId);
       this.peers.push(peer);
-      console.log('Nuevo peer conectado:', peer);
+      console.log('Nuevo peer añadido:', peer.peerId);
     }
+  });
+}
+
+private addPeer(peer: any): void {
+  // Solo agregar el peer si no está ya en la lista
+  console.log(peer);
+  console.log(this.peerIdsSet);
+  if (peer.peerId !== this.myPeerId && !this.peerIdsSet.has(peer.peerId)) {
+    this.peerIdsSet.add(peer.peerId);
+    this.peers.push(peer);
+    console.log('Nuevo peer conectado:', peer);
   }
+}
+
 
   private removePeer(peerId: string): void {
     // Eliminar el peer de la lista cuando se desconecta
     this.peerIdsSet.delete(peerId);
     this.peers = this.peers.filter((peer) => peer.peerId !== peerId);
-    console.log('Peer desconectado:', peerId);
   }
 
   selectPeer(peer: any): void {
