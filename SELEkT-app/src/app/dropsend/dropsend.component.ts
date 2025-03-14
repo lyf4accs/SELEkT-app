@@ -31,7 +31,6 @@ export class DropsendComponent implements OnInit {
     this.mediatorService.displayName$.subscribe((name) => {
       if (name) {
         this.displayName = name; // Asignamos el nombre recibido al displayName
-        console.log('🔻 Nombre recibido en DropsendComponent:');
       }
     });
 

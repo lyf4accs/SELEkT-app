@@ -10,7 +10,7 @@ export class DropsendService {
   private reconnectTimer: any;
   private myPeerId = ''; // Inicializamos el valor en vacío
 
-  private myPeerIdSubject = new BehaviorSubject<string>('');
+  private myPeerIdSubject = new BehaviorSubject<string | null>(null);
   private peersSubject = new BehaviorSubject<any[]>([]);
   private peerJoinedSubject = new Subject<any>();
   private peerLeftSubject = new BehaviorSubject<any>([]);
@@ -54,7 +54,6 @@ export class DropsendService {
       } else {
         // Si no es un Blob ni un ArrayBuffer, intentamos procesarlo como JSON
         try {
-          console.log('Recibiendo mensaje:', event.data);
           this.handleMessage(event.data);
         } catch (e) {
           console.error('Error al parsear JSON:', e);
@@ -100,25 +99,35 @@ export class DropsendService {
 
     switch (msg.type) {
       case 'peer-joined':
-        // Solo actualizamos el peerId cuando realmente tengamos un peerId
         if (msg.peerId) {
-          console.log(msg.peerId);
-          this.myPeerIdSubject.next(msg.peerId); // Emitimos el peerId recibido
+          console.log('Nuevo peer conectado:', msg.peerId);
+          if (!this.myPeerIdSubject.getValue()) {
+            // Si aún no hemos asignado nuestro peerId
+            this.myPeerIdSubject.next(msg.peerId); // Asignar el peerId recibido como el de nuestro dispositivo
+          }
         }
         this.peerJoinedSubject.next({
           peerId: msg.peerId,
           displayName: msg.displayName,
           deviceName: msg.deviceName,
         });
-        console.log('Dispositivo conectado:', msg.peerId);
         break;
 
       case 'update-devices':
-        // Aquí verificamos que solo emitimos el peerId cuando lo tengamos
+      // Aquí verificamos que solo emitimos el peerId cuando lo tengamos
+      case 'update-devices':
+        // Verificamos que solo emitimos el peerId cuando lo tengamos
         if (!this.myPeerIdSubject.getValue() && msg.devices.length > 0) {
-          const firstDevice = msg.devices[0]; // Asumimos que el primer dispositivo tiene el peerId
-          this.myPeerIdSubject.next(firstDevice.peerId);
+          // Buscamos el dispositivo actual entre los dispositivos para asignar el myPeerId
+          const currentDevice = msg.devices.find(
+            (device: { peerId: string | null; }) => device.peerId === this.myPeerIdSubject.getValue()
+          );
+
+          if (currentDevice) {
+            this.myPeerIdSubject.next(currentDevice.peerId);
+          }
         }
+
         this.peersSubject.next(msg.devices);
         console.log('Dispositivos actualizados:', msg.devices);
         break;
@@ -252,8 +261,7 @@ export class DropsendService {
 
 
   // Métodos para exponer observables a los componentes:
-  getMyPeerId(): Observable<string> {
-    console.log('pasando la ip a component', this.myPeerId)
+  getMyPeerId(): Observable<string |null> {
     return this.myPeerIdSubject.asObservable();
   }
 
