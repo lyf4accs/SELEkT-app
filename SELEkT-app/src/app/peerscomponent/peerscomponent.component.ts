@@ -63,29 +63,27 @@ export class PeersComponent implements OnInit {
     }
 
     // Limpiar la lista de peers antes de actualizarla
-    this.peers = peers
-      .filter((peer) => peer.peerId !== this.myPeerId) // Filtrar el propio peer
-      .filter((peer) => !this.peerIdsSet.has(peer.peerId)); // Filtrar peers ya presentes
-
-    // Asegurarse de que no se agreguen duplicados
-    this.peers.forEach((peer) => {
-      console.log('add peer a la lista:', peer.peerId, this.myPeerId);
-      this.peerIdsSet.add(peer.peerId); // Añadir los peerIds únicos al set
-
-    });
-  }
-
-  private addPeer(peer: any): void {
-    // Si el peer no está en la lista y no es el propio peer, lo agregamos
-    console.log(peer);
-    console.log(this.peerIdsSet);
-    console.log(this.myPeerId)
-    if (this.peerIdsSet.has(peer.peerId) && peer.peerId !== this.myPeerId) {
+    peers.forEach((peer) => {
+    if (peer.peerId !== this.myPeerId && !this.peerIdsSet.has(peer.peerId)) {
+      // Agregar el nuevo peer
       this.peerIdsSet.add(peer.peerId);
       this.peers.push(peer);
-      console.log('Nuevo peer conectado:', peer);
+      console.log('Nuevo peer añadido:', peer.peerId);
     }
+  });
+}
+
+private addPeer(peer: any): void {
+  // Solo agregar el peer si no está ya en la lista
+  console.log(peer);
+  console.log(this.peerIdsSet);
+  if (peer.peerId !== this.myPeerId && !this.peerIdsSet.has(peer.peerId)) {
+    this.peerIdsSet.add(peer.peerId);
+    this.peers.push(peer);
+    console.log('Nuevo peer conectado:', peer);
   }
+}
+
 
   private removePeer(peerId: string): void {
     // Eliminar el peer de la lista cuando se desconecta
