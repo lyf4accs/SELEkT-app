@@ -1,67 +1,84 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, inject, Renderer2 } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  NavigationEnd,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+} from '@angular/router';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './footer.component.html',
-  styleUrl: './footer.component.css',
+  styleUrls: ['./footer.component.css'],
 })
 export class FooterComponent implements AfterViewInit {
   renderer = inject(Renderer2);
   router = inject(Router);
-  private lastOffset = 0; // Última posición del indicador
+  private positions = [0, 100, 196, 294]; // 4 posiciones fijas (ajústalas según tu layout)
+  private lastIndex = -1; // Índice del último ítem activo
 
   ngAfterViewInit() {
-    this.router.events.subscribe(() => {
-      setTimeout(() => this.updateIndicatorPosition(), 50);
+    // Suscripción a eventos de navegación
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.updateIndicatorPosition(); // Actualiza la posición del indicador cuando cambia la ruta
+      }
     });
 
+    // Inicialización en el primer renderizado
     setTimeout(() => this.updateIndicatorPosition(), 50);
   }
 
   updateIndicatorPosition() {
-    requestAnimationFrame(() => {
-      const activeItem = document.querySelector(
-        '.navigation ul li.active'
-      ) as HTMLElement;
-      const indicator = document.querySelector('.indicator') as HTMLElement;
+    // Obtener el índice del ítem activo en función de la ruta
+    const activeRoute = this.router.url.split('/').pop(); // Obtiene la última parte de la URL
+    let activeIndex: number;
 
-      if (!activeItem || !indicator) {
-        return;
-      }
+    switch (activeRoute) {
+      case 'upload':
+        activeIndex = 0;
+        break;
+      case 'dropsend':
+        activeIndex = 1;
+        break;
+      case 'manage':
+        activeIndex = 2;
+        break;
+      case 'profile':
+        activeIndex = 3;
+        break;
+      default:
+        activeIndex = 0; // Por defecto, si no hay coincidencia
+    }
 
-      // Cálculo de la nueva posición (offset en X) basado en el elemento activo
-      const newOffset =
-        activeItem.getBoundingClientRect().left -
-        activeItem.parentElement!.getBoundingClientRect().left;
+    // Si el índice no ha cambiado, no actualizamos nada
+    if (this.lastIndex === activeIndex) {
+      return;
+    }
 
-      // Obtenemos el desplazamiento actual
-      let currentOffset =
-        parseFloat(getComputedStyle(indicator).transform.split(',')[4]) ||
-        this.lastOffset;
+    // Obtener el indicador
+    const indicator = document.querySelector('.indicator') as HTMLElement;
 
-      // Verificamos si la posición ha cambiado
-      if (isNaN(currentOffset)) {
-        currentOffset = this.lastOffset;
-      }
+    if (indicator) {
+      // Asegurarse de que la transición sea visible solo cuando se mueve
+      this.renderer.setStyle(
+        indicator,
+        'transition',
+        'transform 0.3s ease-out' // Transición suave
+      );
 
-      // Si la posición cambió, actualizamos la posición del indicador
-      if (currentOffset !== newOffset) {
-        this.renderer.setStyle(
-          indicator,
-          'transition',
-          'transform 0.5s ease-in-out'
-        );
-        this.renderer.setStyle(
-          indicator,
-          'transform',
-          `translateX(${newOffset}px)`
-        );
-        this.lastOffset = newOffset;
-      }
-    });
+      // Mover el indicador a la posición fija correspondiente solo si es necesario
+      this.renderer.setStyle(
+        indicator,
+        'transform',
+        `translateX(${this.positions[activeIndex]}px)`
+      );
+    }
+
+    // Actualizar el índice del último ítem activo
+    this.lastIndex = activeIndex;
   }
 }
