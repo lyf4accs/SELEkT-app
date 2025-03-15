@@ -1,0 +1,40 @@
+<div class="title-container">
+  <h1><strong>INICIO DE SESIÓN</strong></h1>
+</div>
+
+  <form id="f" (ngSubmit)="signIn();">
+    <input
+      type="text"
+      id="email"
+      class="font-email"
+      name="email"
+      placeholder="CORREO"
+      required
+    >
+
+    <input
+      type="password"
+      id="password"
+      class="font-password"
+      name="password"
+      placeholder="CONTRASEÑA"
+      required
+    >
+
+    @if (errorMessage) {
+      <div class="error-message">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <button class="entrar" type="submit">
+      <strong>ENTRAR</strong>
+    </button>
+  </form>
+
+  <div class="registro">
+    <p>
+      <strong>¿NO TIENES UNA CUENTA? <a>REGÍSTRATE</a></strong>
+    </p>
+  </div>
+

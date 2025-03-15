@@ -8,6 +8,7 @@ import { ManagePhotoComponent } from './manage-photo/manage-photo.component';
 import { ProfileComponent } from './profile/profile.component';
 import { FooterComponent } from './footer/footer.component';
 import { DropsendComponent } from './dropsend/dropsend.component';
+import { LoginComponent } from './login/login.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/upload', pathMatch: 'full' },
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'manage/swiper', component: SwiperSelektComponent },
   { path: 'manage', component: ManagePhotoComponent },
   { path: 'profile', component: ProfileComponent },
-  { path: 'footer', component:FooterComponent},
+  { path: 'footer', component: FooterComponent },
+  { path: 'login', component: LoginComponent }
 ];
