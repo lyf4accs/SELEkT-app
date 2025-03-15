@@ -19,13 +19,13 @@ export class MediatorService {
   private similarPhotosSubject = new BehaviorSubject<any>(null); // Nuevo subject para similares
   similarPhotos$ = this.similarPhotosSubject.asObservable(); // Observable para similares
 
-  // Nuevo método para enviar fotos duplicadas
   updateDuplicatePhotos(photos: any): void {
-    this.duplicatePhotosSubject.next(photos); // Emitir las fotos duplicadas
+    this.duplicatePhotosSubject.next(null); // Limpiar antes de actualizar
+    this.duplicatePhotosSubject.next(photos);
   }
 
-  // Nuevo método para enviar fotos similares
   updateSimilarPhotos(photos: any): void {
-    this.similarPhotosSubject.next(photos); // Emitir las fotos similares
+    this.similarPhotosSubject.next(null); // Limpiar antes de actualizar
+    this.similarPhotosSubject.next(photos);
   }
 }

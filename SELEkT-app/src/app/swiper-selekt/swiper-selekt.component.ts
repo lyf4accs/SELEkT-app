@@ -28,6 +28,7 @@ export class SwiperSelektComponent implements OnInit {
     this.mediatorService.similarPhotos$.subscribe((photos) => {
       if (photos) {
         console.log('Fotos similares recibidas: ', photos);
+        this.cards = [];
         // Definir el tipo de 'photo' como string y 'index' como number
         this.cards = photos.map((photo: string, index: number) => ({
           id: index + 1,
@@ -145,40 +146,33 @@ export class SwiperSelektComponent implements OnInit {
     setTimeout(() => {
       if (direction === 'right') this.savedCards.push(card);
       if (direction === 'top') this.favoriteCards.push(card);
+
+      // Eliminar tarjeta
       this.cards.splice(this.draggingIndex!, 1);
-    }, 300); // Tiempo de animación
+      this.draggingIndex = null;
+    }, 300);
   }
 
   moveToEnd() {
-    if (this.draggingIndex === null) return;
-    const card = this.cards[this.draggingIndex];
+    if (this.draggingIndex === null) return; // Si no hay tarjeta seleccionada, salir
 
-    this.cards.forEach((c, index) => {
-      if (index < this.draggingIndex!) {
-        c.transform = 'translateY(-30px)';
-      }
+    const index = this.draggingIndex;
+    const card = this.cards[index];
+
+    // Remover la tarjeta de la posición actual y agregarla al final
+    this.cards = [
+      ...this.cards.slice(0, index),
+      ...this.cards.slice(index + 1),
+      card,
+    ];
+
+    // Asegurar que todas las tarjetas se rendericen en el nuevo orden
+    this.cards.forEach((c, i) => {
+      c.transform = ''; // Resetear transformación
+      c.opacity = '1'; // Restaurar opacidad
+      c.zIndex = this.cards.length - i; // Ajustar zIndex para mantener orden
     });
 
-    card.transform = 'translateY(20px)';
-    card.opacity = '0.5';
-    card.zIndex = 0;
-
-    setTimeout(() => {
-      this.cards.forEach((c) => {
-        c.transform = '';
-      });
-
-      this.cards.splice(this.draggingIndex!, 1);
-      this.cards.push({
-        ...card,
-        transform: 'translateY(0)',
-        opacity: '1',
-        zIndex: 1,
-      });
-
-      setTimeout(() => {
-        card.transform = '';
-      }, 150);
-    }, 250);
+    this.draggingIndex = null; // Resetear el índice de la tarjeta movida
   }
 }

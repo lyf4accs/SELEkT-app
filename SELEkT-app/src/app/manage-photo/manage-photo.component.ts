@@ -58,6 +58,9 @@ export class ManagePhotoComponent implements OnInit {
     this.photoService.processImages(base64Images).subscribe(
       (response) => {
         const albums = response.albums;
+           this.duplicateAlbum = null;
+           this.similarAlbum = null;
+
         this.displayDuplicateAlbum(albums);
         this.displaySimilarAlbum(albums);
         this.isProcessing = false;
