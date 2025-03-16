@@ -4,6 +4,8 @@ import { FooterComponent } from '../footer/footer.component';
 import { Router } from '@angular/router';
 import { Card } from '../models/Card';
 import { MediatorService } from '../services/mediator.service';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-swiper-selekt',
@@ -20,37 +22,52 @@ export class SwiperSelektComponent implements OnInit {
   startX = 0;
   startY = 0;
   currentTransform = 'none';
+  w: string | undefined = undefined;
 
   router = inject(Router);
   mediatorService = inject(MediatorService);
-  ngOnInit(): void {
-    // Suscríbete a los datos de fotos duplicadas o similares a través del MediatorService
-    this.mediatorService.similarPhotos$.subscribe((photos) => {
-      if (photos) {
-        console.log('Fotos similares recibidas: ', photos);
-        this.cards = [];
-        // Definir el tipo de 'photo' como string y 'index' como number
-        this.cards = photos.map((photo: string, index: number) => ({
-          id: index + 1,
-          title: `Foto ${index + 1}`,
-          description: `Imagen del álbum similar`,
-          transform: '',
-          opacity: '1',
-          zIndex: photos.length - index,
-          imageUrl: photo,
-        }));
-      } else {
-        console.log('No se recibieron fotos similares');
-      }
-    });
+  alertCtrl = inject(AlertController);
 
-    // Verificar también si las fotos duplicadas llegaron (por si es necesario manejar ambos tipos de álbumes)
-    this.mediatorService.duplicatePhotos$.subscribe((photos) => {
-      if (photos) {
-        console.log('Fotos duplicadas recibidas: ', photos);
-        // Puedes usar las fotos duplicadas si es necesario
-      }
-    });
+  ngOnInit(): void {
+    this.w = this.mediatorService.getWhichAlbum()?.toString();
+    console.log('swiper: ' + this.w);
+    if (this.w==='similar') {
+      this.mediatorService.similarPhotos$.subscribe((photos) => {
+        if (photos) {
+          console.log('Fotos similares recibidas: ', photos);
+          this.cards = [];
+          // Definir el tipo de 'photo' como string y 'index' como number
+          this.cards = photos.map((photo: string, index: number) => ({
+            id: index + 1,
+            title: `Foto ${index + 1}`,
+            description: `Imagen del álbum similar`,
+            transform: '',
+            opacity: '1',
+            zIndex: photos.length - index,
+            imageUrl: photo,
+          }));
+        } else {
+          console.log('No se recibieron fotos similares');
+        }
+      });
+    } else if (this.w==='duplicate'){
+      this.mediatorService.duplicatePhotos$.subscribe((photos) => {
+        if (photos) {
+          console.log('Fotos duplicadas recibidas: ', photos);
+          this.cards = photos.map((photo: string, index: number) => ({
+            id: index + 1,
+            title: `Foto ${index + 1}`,
+            description: `Imagen del álbum duplicado`,
+            transform: '',
+            opacity: '1',
+            zIndex: photos.length - index,
+            imageUrl: photo,
+          }));
+        } else {
+          console.log('No se recibieron fotos duplicadas');
+        }
+      });
+    }
   }
   onDragStart(index: number, event: MouseEvent | TouchEvent) {
     this.draggingIndex = index;
@@ -132,7 +149,7 @@ export class SwiperSelektComponent implements OnInit {
     return match ? parseFloat(match[2]) : 0;
   }
 
-  removeCard(direction: 'left' | 'right' | 'top') {
+  async removeCard(direction: 'left' | 'right' | 'top') {
     if (this.draggingIndex === null) return;
     const card = this.cards[this.draggingIndex];
 
@@ -143,14 +160,77 @@ export class SwiperSelektComponent implements OnInit {
         ? 'translate(200vw, 0) rotate(30deg)'
         : 'translate(0, -200vh) rotate(0)';
 
-    setTimeout(() => {
-      if (direction === 'right') this.savedCards.push(card);
-      if (direction === 'top') this.favoriteCards.push(card);
+    setTimeout(async () => {
+      if (direction === 'top') {
+        await this.addToFavorites(card.imageUrl);
+      } else if (direction === 'left') {
+        await this.confirmDelete(card.imageUrl);
+      }
 
-      // Eliminar tarjeta
       this.cards.splice(this.draggingIndex!, 1);
       this.draggingIndex = null;
     }, 300);
+  }
+
+  async addToFavorites(imageUrl: string) {
+    const fileName = imageUrl.split('/').pop(); // Extrae el nombre del archivo
+
+    try {
+      // Verificar si el archivo existe antes de leerlo
+      await Filesystem.stat({
+        path: imageUrl,
+        directory: Directory.External,
+      });
+
+      // Si el archivo existe, lo leemos
+      const fileData = await Filesystem.readFile({
+        path: imageUrl,
+        directory: Directory.External,
+      });
+
+      // Si lo leemos correctamente, lo escribimos en la carpeta de Favoritos
+      await Filesystem.writeFile({
+        path: `DCIM/Favoritos/${fileName}`,
+        data: fileData.data,
+        directory: Directory.External,
+      });
+
+      console.log('Imagen guardada en favoritos');
+    } catch (error) {
+      console.error('Error al guardar en favoritos:', error);
+    }
+  }
+
+  async confirmDelete(imageUrl: string) {
+    console.log('Intentando mostrar la alerta');
+    const alert = await this.alertCtrl.create({
+      header: 'Eliminar Imagen',
+      message: '¿Estás seguro de que quieres eliminar esta imagen?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'Eliminar',
+          handler: () => this.deleteImage(imageUrl),
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  async deleteImage(imageUrl: string) {
+    try {
+      await Filesystem.deleteFile({
+        path: imageUrl,
+        directory: Directory.External,
+      });
+      console.log('Imagen eliminada');
+    } catch (error) {
+      console.error('Error al eliminar imagen:', error);
+    }
   }
 
   moveToEnd() {

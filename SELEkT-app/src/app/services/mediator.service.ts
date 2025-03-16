@@ -28,4 +28,16 @@ export class MediatorService {
     this.similarPhotosSubject.next(null); // Limpiar antes de actualizar
     this.similarPhotosSubject.next(photos);
   }
+
+  w: string | undefined = undefined;
+  setWhichAlbum(whichAlbum: string | undefined) {
+    this.w= whichAlbum;
+    console.log('set:' + this.w);
+  }
+
+  getWhichAlbum(): string | undefined {
+    console.log('get:' + this.w);
+    return this.w;
+
+  }
 }

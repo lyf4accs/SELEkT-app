@@ -24,8 +24,9 @@ export class ManagePhotoComponent implements OnInit {
   activeAlbum: string | null = null;
   isProcessing: boolean = false;
   albumsLoaded: boolean = false;
+  whichAlbum: string | undefined = undefined;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {this.whichAlbum=undefined}
 
   // Método para seleccionar imágenes desde la galería
   getGalleryPhotos(event: any): void {
@@ -58,8 +59,8 @@ export class ManagePhotoComponent implements OnInit {
     this.photoService.processImages(base64Images).subscribe(
       (response) => {
         const albums = response.albums;
-           this.duplicateAlbum = null;
-           this.similarAlbum = null;
+        this.duplicateAlbum = null;
+        this.similarAlbum = null;
 
         this.displayDuplicateAlbum(albums);
         this.displaySimilarAlbum(albums);
@@ -97,11 +98,14 @@ export class ManagePhotoComponent implements OnInit {
     if (albumType === 'duplicate') {
       this.activeAlbum = 'duplicate'; // Muestra el álbum de duplicados
       console.log('Fotos duplicadas a enviar: ', this.duplicateAlbum?.photos);
-
+      this.whichAlbum = 'duplicate';
+      this.mediatorService.setWhichAlbum(this.whichAlbum);
       this.router.navigate(['/manage/swiper'], {
         state: { albumType: 'duplicate', photos: this.duplicateAlbum?.photos },
       });
     } else if (albumType === 'similar') {
+      this.mediatorService.setWhichAlbum(this.whichAlbum);
+      this.whichAlbum = 'similar';
       this.activeAlbum = 'similar'; // Muestra el álbum de similares
       console.log('Fotos similares a enviar: ', this.similarAlbum?.photos);
 
