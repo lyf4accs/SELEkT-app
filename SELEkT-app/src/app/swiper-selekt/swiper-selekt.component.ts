@@ -23,6 +23,7 @@ export class SwiperSelektComponent implements OnInit {
   startY = 0;
   currentTransform = 'none';
   w: string | undefined = undefined;
+  alertShown:boolean=false;
 
   router = inject(Router);
   mediatorService = inject(MediatorService);
@@ -202,23 +203,28 @@ export class SwiperSelektComponent implements OnInit {
   }
 
   async confirmDelete(imageUrl: string) {
-    console.log('Intentando mostrar la alerta');
-    const alert = await this.alertCtrl.create({
-      header: 'Eliminar Imagen',
-      message: '¿Estás seguro de que quieres eliminar esta imagen?',
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
-        {
-          text: 'Eliminar',
-          handler: () => this.deleteImage(imageUrl),
-        },
-      ],
-    });
-
-    await alert.present();
+      try {
+        console.log('Intentando mostrar la alerta');
+        const alert = await this.alertCtrl.create({
+          header: 'Eliminar Imagen',
+          message: '¿Estás seguro de que quieres eliminar esta imagen?',
+          buttons: [
+            {
+              text: 'Cancelar',
+              role: 'cancel',
+            },
+            {
+              text: 'Eliminar',
+              handler: () => {
+                this.deleteImage(imageUrl);
+              },
+            },
+          ],
+        });
+        await alert.present();
+      } catch (error) {
+        console.error('Error al mostrar la alerta: ', error);
+      }
   }
 
   async deleteImage(imageUrl: string) {

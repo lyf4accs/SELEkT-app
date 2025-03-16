@@ -5,6 +5,7 @@ import { MediatorService } from '../services/mediator.service'; // Importar Medi
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../footer/footer.component';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-manage-photo',
@@ -18,6 +19,8 @@ export class ManagePhotoComponent implements OnInit {
   photoService = inject(PhotoLibraryService);
   mediatorService = inject(MediatorService);
   router = inject(Router);
+  alertCtrl = inject(AlertController);
+
   selectedImages: { name: string; base64: string }[] = [];
   duplicateAlbum: any = null;
   similarAlbum: any = null;
@@ -26,7 +29,9 @@ export class ManagePhotoComponent implements OnInit {
   albumsLoaded: boolean = false;
   whichAlbum: string | undefined = undefined;
 
-  ngOnInit(): void {this.whichAlbum=undefined}
+  ngOnInit(): void {
+    this.whichAlbum = undefined;
+  }
 
   // Método para seleccionar imágenes desde la galería
   getGalleryPhotos(event: any): void {
@@ -104,14 +109,31 @@ export class ManagePhotoComponent implements OnInit {
         state: { albumType: 'duplicate', photos: this.duplicateAlbum?.photos },
       });
     } else if (albumType === 'similar') {
-      this.mediatorService.setWhichAlbum(this.whichAlbum);
       this.whichAlbum = 'similar';
+      this.mediatorService.setWhichAlbum(this.whichAlbum);
       this.activeAlbum = 'similar'; // Muestra el álbum de similares
       console.log('Fotos similares a enviar: ', this.similarAlbum?.photos);
 
       this.router.navigate(['/manage/swiper'], {
         state: { albumType: 'similar', photos: this.similarAlbum?.photos },
       });
+    }
+  }
+
+  async showSimpleAlert() {
+    console.log('trying');
+    try {
+      console.log('Creando la alerta...');
+      const alert = await this.alertCtrl.create({
+        header: 'Prueba',
+        message: 'Esta es una alerta de prueba.',
+        buttons: ['OK'],
+      });
+      console.log('Alert creada, presentando...');
+      await alert.present();
+      console.log('Alert presentada');
+    } catch (error) {
+      console.error('Error al mostrar la alerta:', error);
     }
   }
 }
