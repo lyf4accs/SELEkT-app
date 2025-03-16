@@ -3,7 +3,7 @@ import { supabaseClient } from '../utils/supabase_client';
 export async function signInUser(
   email: string,
   password: string
-): Promise<void> {
+): Promise<boolean> {
   const signInInfo = {
     email,
     password,
@@ -11,62 +11,40 @@ export async function signInUser(
 
   try {
     if (await camposVacios(email, password)) {
-      throw new Error('Rellena todos los campos');
+      console.error('Rellena todos los campos');
+      return false; // Devolvemos false si hay campos vacíos
     }
     if (await validarCorreoElectronico(email)) {
-      throw new Error('Email incorrecto. Escribe un email válido');
+      console.error('Email incorrecto. Escribe un email válido');
+      return false; // Devolvemos false si el correo no es válido
     }
     const { data, error } = await supabaseClient.auth.signInWithPassword(
       signInInfo
     );
     if (error) {
-      throw new Error('Email o contraseña incorrecto/s');
+      console.error('Email o contraseña incorrecto/s');
+      return false; // Devolvemos false si hay error de autenticación
     }
-    console.log('Exito iniciando sesión');
+    console.log('Éxito iniciando sesión', data.user);
+    return true; // Devuelve true en caso de éxito
   } catch (error) {
     console.error('Error inesperado:', (error as Error).message);
-    throw error;
+    return false; // Si ocurre un error inesperado, devolvemos false
   }
 }
 
 function validarCorreoElectronico(correo: string): boolean {
-  console.log('validando email');
   const expresionRegular = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return !expresionRegular.test(correo);
 }
 
 function camposVacios(email: string, password: string): boolean {
-  console.log('validando email');
   return email.trim() === '' || password.trim() === '';
 }
 
-export async function compruebaNuevo(): Promise<boolean> {
-  try {
-    const {
-      data: { user },
-      error: errorUsuario,
-    } = await supabaseClient.auth.getUser();
-    if (errorUsuario) {
-      throw new Error('No se ha encontrado un usuario autenticado');
-    }
-
-    const { data, error } = await supabaseClient
-      .from('users_info')
-      .select('is_new')
-      .eq('user_id', user?.id);
-
-    if (error) {
-      console.error('Error al obtener los usuarios:', error.message);
-      throw error;
-    }
-    return data[0].is_new;
-  } catch (error) {
-    console.error('Error inesperado:', (error as Error).message);
-    throw error;
-  }
-}
 
 export async function isUser(email: string): Promise<Boolean> {
+  console.log('haciendo ahora isUser')
   try {
     const { data, error, count } = await supabaseClient
       .from('users_info')
