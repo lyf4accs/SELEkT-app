@@ -5,7 +5,6 @@ export async function signUpUser(
   email: string,
   password: string,
   fullName: string,
-  phoneNumber: string
 ): Promise<void> {
   const userData = {
     email,
@@ -13,7 +12,6 @@ export async function signUpUser(
     options: {
       data: {
         full_name: fullName,
-        phone_number: phoneNumber,
       },
       emailRedirectTo: 'https://selek-t-app.netlify.app/login',
     },
@@ -29,4 +27,28 @@ export async function signUpUser(
     console.error('Error inesperado:', (error as Error).message);
     throw error;
   }
+}
+
+export async function validarCorreoElectronico(correo: string): Promise<boolean> {
+  console.log('validando email');
+  const expresionRegular = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return !expresionRegular.test(correo);
+}
+export async function camposVacios(email: string, password: string): Promise<boolean> {
+  console.log('validando email');
+  return email.trim() === '' || password.trim() === '';
+}
+export async function validarNombre(texto: string): Promise<boolean> {
+  const contieneDigitos = /\d/.test(texto);
+  const masDe100Caracteres = texto.length > 50;
+  return contieneDigitos || masDe100Caracteres;
+}
+
+export async function validarContrasena(password: string, rep: string): Promise<boolean> {
+  const contrasenaInvalida = password === rep;
+  return !contrasenaInvalida;
+}
+export async function validarLongitudContrasena(password: string): Promise<boolean> {
+  const longitudValida = password.length >= 8 && password.length <= 16;
+  return !longitudValida;
 }

@@ -1,24 +1,36 @@
-
 <div class="container">
-          <div class="form-container">
-            <div class="title">
-              <p style="color: black; font-size: 30px; margin-bottom: 5px;"><strong>SIGN UP</strong></p>
-            </div>
-              <form id="f"  (ngSubmit)="signUp();">
-                  <input type="text" id="nombre" name="nombre" placeholder="NOMBRE COMPLETO" required=" required">
-                  <input type="text" id="correo" name="correo" placeholder="CORREO ELECTRÓNICO" required=" required">
-                  <input type="password" id="password" name="password" placeholder="CONTRASEÑA" required=" required">
-                  <input type="password" id="rep" name="rep" placeholder="REPETIR CONTRASEÑA" required=" required">
-                  @if (errorMessage) {
-                    <div class="error-message-register" style="position: absolute; top: 98%;">
-                      {{ errorMessage }}
-                    </div>
-                  }
-                  <button class="registrarse" type="submit"><strong>REGISTRAR</strong></button>
-              </form>
-          <div class="registro">
-              <p><strong>¿YA TIENES CUENTA? <a routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" >
-              INICIAR SESION</a></strong></p>
-          </div>
+  <div class="form-container">
+    <div class="title">
+      <p style="color: black; font-size: 30px; margin-bottom: 5px;">
+        <strong>SIGN UP</strong>
+      </p>
+    </div>
+
+    <!-- IMPORTANTE: Agrega (submit)="signUp()" en el formulario -->
+    <form id="f" (submit)="signUp(); $event.preventDefault();">
+      <input type="text" id="nombre" name="nombre" placeholder="NOMBRE COMPLETO" required>
+      <input type="text" id="correo" name="correo" placeholder="CORREO ELECTRÓNICO" required>
+      <input type="password" id="password" name="password" placeholder="CONTRASEÑA" required>
+      <input type="password" id="rep" name="rep" placeholder="REPETIR CONTRASEÑA" required>
+
+      @if (errorMessage) {
+        <div class="error-message-register">
+          {{ errorMessage }}
         </div>
+      }
+
+      <!-- IMPORTANTE: Usa type="submit" para que se dispare ngSubmit -->
+      <button class="registrarse" type="submit"><strong>REGISTRAR</strong></button>
+    </form>
+
+    <div class="registro">
+      <p>
+        <strong>¿YA TIENES CUENTA?
+          <a routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            INICIAR SESION
+          </a>
+        </strong>
+      </p>
+    </div>
+  </div>
 </div>
