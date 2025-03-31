@@ -1,2 +1,15 @@
-<p>Profile works!</p>
+<div class="profile-container">
+  <div class="user-info">
+    <h2>{{ user.username }}</h2>
+    <p class="email">{{ user.email }}</p>
+  </div>
+
+  <div class="card">
+      <button id="premium" (click)="goToPremium()">Premium</button>
+      <button id="config" (click)="goToConfig()">Configuración</button>
+      <button id="colores" (click)="goToColores()">Colores</button>
+      <button id="changePassword" (click)="goToChange()">Cambiar contraseña</button>
+  </div>
+</div>
+
 <app-footer></app-footer>
