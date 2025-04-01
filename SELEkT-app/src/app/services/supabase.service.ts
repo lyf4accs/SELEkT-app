@@ -195,4 +195,22 @@ export class SupabaseService {
       return false;
     }
   }
+
+  async updatePassword(currentPassword: string, newPassword: string) {
+    const { data: session } = await this.supabase.auth.getSession();
+    const email = session?.session?.user.email ?? '';
+
+    // Re-autenticación usando email y current password
+    const { error: signInError } = await this.supabase.auth.signInWithPassword({
+      email,
+      password: currentPassword,
+    });
+
+    if (signInError) return { error: signInError };
+
+    const { error } = await this.supabase.auth.updateUser({
+      password: newPassword,
+    });
+    return { error };
+  }
 }
