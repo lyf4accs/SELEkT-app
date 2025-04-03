@@ -23,7 +23,7 @@ export class SwiperSelektComponent implements OnInit {
   startY = 0;
   currentTransform = 'none';
   w: string | undefined = undefined;
-  alertShown:boolean=false;
+  alertShown: boolean = false;
 
   router = inject(Router);
   mediatorService = inject(MediatorService);
@@ -32,12 +32,10 @@ export class SwiperSelektComponent implements OnInit {
   ngOnInit(): void {
     this.w = this.mediatorService.getWhichAlbum()?.toString();
     console.log('swiper: ' + this.w);
-    if (this.w==='similar') {
+    if (this.w === 'similar') {
       this.mediatorService.similarPhotos$.subscribe((photos) => {
         if (photos) {
           console.log('Fotos similares recibidas: ', photos);
-          this.cards = [];
-          // Definir el tipo de 'photo' como string y 'index' como number
           this.cards = photos.map((photo: string, index: number) => ({
             id: index + 1,
             title: `Foto ${index + 1}`,
@@ -45,13 +43,13 @@ export class SwiperSelektComponent implements OnInit {
             transform: '',
             opacity: '1',
             zIndex: photos.length - index,
-            imageUrl: photo,
+            imageUrl: `http://localhost:3000${photo}`,
           }));
         } else {
           console.log('No se recibieron fotos similares');
         }
       });
-    } else if (this.w==='duplicate'){
+    } else if (this.w === 'duplicate') {
       this.mediatorService.duplicatePhotos$.subscribe((photos) => {
         if (photos) {
           console.log('Fotos duplicadas recibidas: ', photos);
@@ -62,7 +60,7 @@ export class SwiperSelektComponent implements OnInit {
             transform: '',
             opacity: '1',
             zIndex: photos.length - index,
-            imageUrl: photo,
+            imageUrl: `http://localhost:3000${photo}`,
           }));
         } else {
           console.log('No se recibieron fotos duplicadas');
@@ -70,6 +68,8 @@ export class SwiperSelektComponent implements OnInit {
       });
     }
   }
+
+
   onDragStart(index: number, event: MouseEvent | TouchEvent) {
     this.draggingIndex = index;
     event.preventDefault();
@@ -203,28 +203,28 @@ export class SwiperSelektComponent implements OnInit {
   }
 
   async confirmDelete(imageUrl: string) {
-      try {
-        console.log('Intentando mostrar la alerta');
-        const alert = await this.alertCtrl.create({
-          header: 'Eliminar Imagen',
-          message: '¿Estás seguro de que quieres eliminar esta imagen?',
-          buttons: [
-            {
-              text: 'Cancelar',
-              role: 'cancel',
+    try {
+      console.log('Intentando mostrar la alerta');
+      const alert = await this.alertCtrl.create({
+        header: 'Eliminar Imagen',
+        message: '¿Estás seguro de que quieres eliminar esta imagen?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+          },
+          {
+            text: 'Eliminar',
+            handler: () => {
+              this.deleteImage(imageUrl);
             },
-            {
-              text: 'Eliminar',
-              handler: () => {
-                this.deleteImage(imageUrl);
-              },
-            },
-          ],
-        });
-        await alert.present();
-      } catch (error) {
-        console.error('Error al mostrar la alerta: ', error);
-      }
+          },
+        ],
+      });
+      await alert.present();
+    } catch (error) {
+      console.error('Error al mostrar la alerta: ', error);
+    }
   }
 
   async deleteImage(imageUrl: string) {

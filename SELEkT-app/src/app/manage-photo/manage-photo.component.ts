@@ -22,9 +22,8 @@ export class ManagePhotoComponent implements OnInit {
   alertCtrl = inject(AlertController);
 
   selectedImages: { name: string; base64: string }[] = [];
-  duplicateAlbum: any = null;
-  similarAlbum: any = null;
-  activeAlbum: string | null = null;
+  duplicateAlbums: any[] = [];
+  similarAlbums: any[] = [];
   isProcessing: boolean = false;
   albumsLoaded: boolean = false;
   whichAlbum: string | undefined = undefined;
@@ -63,12 +62,22 @@ export class ManagePhotoComponent implements OnInit {
 
     this.photoService.processImages(base64Images).subscribe(
       (response) => {
+        console.log('Respuesta del backend:', response);
         const albums = response.albums;
-        this.duplicateAlbum = null;
-        this.similarAlbum = null;
+        this.duplicateAlbums = albums.filter((album: any) =>
+          album.name.includes('Duplicados')
+        );
+        this.similarAlbums = albums.filter((album: any) =>
+          album.name.includes('Similares')
+        );
 
-        this.displayDuplicateAlbum(albums);
-        this.displaySimilarAlbum(albums);
+        this.mediatorService.updateDuplicatePhotos(
+          this.duplicateAlbums.flatMap((album) => album.photos)
+        );
+        this.mediatorService.updateSimilarPhotos(
+          this.similarAlbums.flatMap((album) => album.photos)
+        );
+
         this.isProcessing = false;
         this.albumsLoaded = true;
       },
@@ -79,61 +88,19 @@ export class ManagePhotoComponent implements OnInit {
     );
   }
 
-  displayDuplicateAlbum(albums: any): void {
-    const duplicateAlbum = albums.find(
-      (album: any) => album.name === 'Duplicados'
-    );
-    if (duplicateAlbum) {
-      this.duplicateAlbum = duplicateAlbum;
-      this.mediatorService.updateDuplicatePhotos(duplicateAlbum.photos); // Emitir fotos duplicadas
-    }
-  }
-
-  displaySimilarAlbum(albums: any): void {
-    const similarAlbum = albums.find(
-      (album: any) => album.name === 'Similares'
-    );
-    if (similarAlbum) {
-      this.similarAlbum = similarAlbum;
-      this.mediatorService.updateSimilarPhotos(similarAlbum.photos); // Emitir fotos similares
-    }
-  }
-
-  viewAlbum(albumType: string): void {
+  viewAlbum(albumType: string, albumIndex?: number): void {
     if (albumType === 'duplicate') {
-      this.activeAlbum = 'duplicate'; // Muestra el álbum de duplicados
-      console.log('Fotos duplicadas a enviar: ', this.duplicateAlbum?.photos);
       this.whichAlbum = 'duplicate';
       this.mediatorService.setWhichAlbum(this.whichAlbum);
-      this.router.navigate(['/manage/swiper'], {
-        state: { albumType: 'duplicate', photos: this.duplicateAlbum?.photos },
-      });
-    } else if (albumType === 'similar') {
+      const album = this.duplicateAlbums[albumIndex || 0];
+      this.mediatorService.updateDuplicatePhotos(album.photos); // Solo fotos del álbum seleccionado
+    } else if (albumType === 'similar' && albumIndex !== undefined) {
       this.whichAlbum = 'similar';
       this.mediatorService.setWhichAlbum(this.whichAlbum);
-      this.activeAlbum = 'similar'; // Muestra el álbum de similares
-      console.log('Fotos similares a enviar: ', this.similarAlbum?.photos);
-
-      this.router.navigate(['/manage/swiper'], {
-        state: { albumType: 'similar', photos: this.similarAlbum?.photos },
-      });
+      const album = this.similarAlbums[albumIndex];
+      this.mediatorService.updateSimilarPhotos(album.photos); // Solo fotos del álbum seleccionado
     }
-  }
 
-  async showSimpleAlert() {
-    console.log('trying');
-    try {
-      console.log('Creando la alerta...');
-      const alert = await this.alertCtrl.create({
-        header: 'Prueba',
-        message: 'Esta es una alerta de prueba.',
-        buttons: ['OK'],
-      });
-      console.log('Alert creada, presentando...');
-      await alert.present();
-      console.log('Alert presentada');
-    } catch (error) {
-      console.error('Error al mostrar la alerta:', error);
-    }
+    this.router.navigate(['/manage/swiper']);
   }
 }
