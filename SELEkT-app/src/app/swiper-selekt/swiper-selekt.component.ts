@@ -69,6 +69,9 @@ export class SwiperSelektComponent implements OnInit {
     }
   }
 
+  return(){
+    this.router.navigate(['/manage']);
+  }
 
   onDragStart(index: number, event: MouseEvent | TouchEvent) {
     this.draggingIndex = index;

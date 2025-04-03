@@ -31,7 +31,6 @@ export class ManagePhotoComponent implements OnInit {
   ngOnInit(): void {
     this.whichAlbum = undefined;
   }
-
   // Método para seleccionar imágenes desde la galería
   getGalleryPhotos(event: any): void {
     const files = event.target.files;
@@ -100,7 +99,20 @@ export class ManagePhotoComponent implements OnInit {
       const album = this.similarAlbums[albumIndex];
       this.mediatorService.updateSimilarPhotos(album.photos); // Solo fotos del álbum seleccionado
     }
+    this.duplicateAlbums.forEach((album) => {
+      if (album.photos.length > 0) {
+        album.coverPhoto = album.photos[0]; // Primera imagen como cover
+      }
+    });
+
+    this.similarAlbums.forEach((album) => {
+      if (album.photos.length > 0) {
+        album.coverPhoto = album.photos[0];
+      }
+    });
 
     this.router.navigate(['/manage/swiper']);
   }
+
+
 }

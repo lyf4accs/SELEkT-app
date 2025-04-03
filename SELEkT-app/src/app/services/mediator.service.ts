@@ -1,43 +1,55 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MediatorService {
-  private displayNameSubject = new BehaviorSubject<string>(''); // Usamos BehaviorSubject para emitir el nombre
-  displayName$ = this.displayNameSubject.asObservable(); // Observable para otros componentes
+  // Subject para mantener el nombre del dispositivo
+  private displayNameSubject = new BehaviorSubject<string>('');
+  displayName$ = this.displayNameSubject.asObservable();
 
-  // Método para actualizar el nombre del dispositivo
   updateDisplayName(displayName: string): void {
     this.displayNameSubject.next(displayName);
   }
 
-  private duplicatePhotosSubject = new BehaviorSubject<any>(null); // Nuevo subject para duplicados
-  duplicatePhotos$ = this.duplicatePhotosSubject.asObservable(); // Observable para duplicados
+  // Subject para las fotos duplicadas
+  private duplicatePhotosSubject = new BehaviorSubject<any[]>([]); // Cambié el tipo a array vacío
+  duplicatePhotos$ = this.duplicatePhotosSubject.asObservable();
 
-  private similarPhotosSubject = new BehaviorSubject<any>(null); // Nuevo subject para similares
-  similarPhotos$ = this.similarPhotosSubject.asObservable(); // Observable para similares
+  // Subject para las fotos similares
+  private similarPhotosSubject = new BehaviorSubject<any[]>([]); // Cambié el tipo a array vacío
+  similarPhotos$ = this.similarPhotosSubject.asObservable();
 
-  updateDuplicatePhotos(photos: any): void {
-    this.duplicatePhotosSubject.next(null); // Limpiar antes de actualizar
-    this.duplicatePhotosSubject.next(photos);
+  // Método para actualizar las fotos duplicadas
+  updateDuplicatePhotos(photos: any[]): void {
+    this.duplicatePhotosSubject.next(photos); // No es necesario nullificar antes, solo actualizamos
   }
 
-  updateSimilarPhotos(photos: any): void {
-    this.similarPhotosSubject.next(null); // Limpiar antes de actualizar
-    this.similarPhotosSubject.next(photos);
+  // Método para actualizar las fotos similares
+  updateSimilarPhotos(photos: any[]): void {
+    this.similarPhotosSubject.next(photos); // No es necesario nullificar antes, solo actualizamos
   }
 
-  w: string | undefined = undefined;
-  setWhichAlbum(whichAlbum: string | undefined) {
-    this.w= whichAlbum;
-    console.log('set:' + this.w);
+  // Variable para almacenar cuál álbum se está visualizando (duplicado o similar)
+  private whichAlbum: string | undefined = undefined;
+
+  setWhichAlbum(whichAlbum: string | undefined): void {
+    this.whichAlbum = whichAlbum;
+    console.log('setWhichAlbum: ' + this.whichAlbum);
   }
 
   getWhichAlbum(): string | undefined {
-    console.log('get:' + this.w);
-    return this.w;
+    console.log('getWhichAlbum: ' + this.whichAlbum);
+    return this.whichAlbum;
+  }
 
+  // Métodos adicionales para obtener las fotos de duplicados y similares directamente
+  getDuplicatePhotos(): any[] {
+    return this.duplicatePhotosSubject.getValue();
+  }
+
+  getSimilarPhotos(): any[] {
+    return this.similarPhotosSubject.getValue();
   }
 }

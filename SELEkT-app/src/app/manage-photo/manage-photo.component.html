@@ -18,6 +18,7 @@
 </div>
 
 <div *ngIf="albumsLoaded">
+
   <div class="albums-container">
     <div *ngFor="let album of duplicateAlbums; let i = index" class="album" (click)="viewAlbum('duplicate', i)">
       <h2>{{ album.name }}</h2>

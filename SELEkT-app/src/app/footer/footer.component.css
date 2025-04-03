@@ -17,6 +17,7 @@ body {
   align-items: center;
   min-height: 100vh;
   background-color: white;
+  overflow: hidden;
 }
 
 .navigation {
@@ -26,7 +27,8 @@ body {
   align-items: center;
   border-radius: 5px;
   justify-content: space-around;
-  position: absolute;
+  position: fixed;
+  left: 0;
   width: 100%;
   z-index: 1000;
   bottom: 0;
