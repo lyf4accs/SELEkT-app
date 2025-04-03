@@ -10,6 +10,7 @@ import { FooterComponent } from './footer/footer.component';
 import { DropsendComponent } from './dropsend/dropsend.component';
 import { LoginComponent } from './login/login.component';
 import {RegisterComponent} from './register/register.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/upload', pathMatch: 'full' },
@@ -22,5 +23,6 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'footer', component: FooterComponent },
   { path: 'login', component: LoginComponent },
-  {path: 'register', component: RegisterComponent}
+  {path: 'register', component: RegisterComponent},
+  {path: 'changePassword', component: ChangePasswordComponent}
 ];
