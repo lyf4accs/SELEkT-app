@@ -69,7 +69,7 @@ export class SwiperSelektComponent implements OnInit {
     }
   }
 
-  return(){
+  return() {
     this.router.navigate(['/manage']);
   }
 
@@ -200,8 +200,12 @@ export class SwiperSelektComponent implements OnInit {
       });
 
       console.log('Imagen guardada en favoritos');
-    } catch (error) {
-      console.error('Error al guardar en favoritos:', error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Error al guardar en favoritos:', error.message);
+      } else {
+        console.error('Error desconocido al guardar en favoritos:', error);
+      }
     }
   }
 
@@ -236,7 +240,7 @@ export class SwiperSelektComponent implements OnInit {
         path: imageUrl,
         directory: Directory.External,
       });
-      console.log('Imagen eliminada');
+      console.log('Imagen eliminada correctamente');
     } catch (error) {
       console.error('Error al eliminar imagen:', error);
     }
