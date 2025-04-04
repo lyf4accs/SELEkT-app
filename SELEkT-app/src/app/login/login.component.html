@@ -1,37 +1,41 @@
 <div class="login-container">
-  <h4 class="welcome-title">¡Nos encanta tenerte de vuelta!</h4>
-  <form id="f" (submit)="signIn($event)" class="login-form">
-    <input
-      type="text"
-      id="email"
-      name="email"
-      placeholder="Usuario"
-      class="form-input"
-      required
-    />
+  <div class="login-header">
+    <h4>¡Nos encanta tenerte de vuelta!</h4>
+  </div>
 
-    <input
-      type="password"
-      id="password"
-      name="password"
-      placeholder="Contraseña"
-      class="form-input"
-      required
-    />
+  <div class="login-form-wrapper">
+    <form id="f" (submit)="signIn($event)" class="login-form">
+      <input
+        type="text"
+        id="email"
+        name="email"
+        placeholder="Usuario"
+        class="form-input"
+        required
+      />
 
-    @if (errorMessage) {
-      <div class="error-message">
-        {{ errorMessage }}
-      </div>
-    }
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Contraseña"
+        class="form-input"
+        required
+      />
 
-    <button type="submit" class="submit-button">
-      ¡Vamos!
-    </button>
+      @if (errorMessage) {
+        <div class="error-message">
+          {{ errorMessage }}
+        </div>
+      }
+
+      <button type="submit" class="submit-button">
+        ¡Vamos!
+      </button>
+    </form>
 
     <div class="registro">
-    <p><strong>¿NO TIENES UNA CUENTA? <a href="#">REGÍSTRATE!</a></strong></p>
+      <p><strong>¿NO TIENES UNA CUENTA? <a href="#">REGÍSTRATE!</a></strong></p>
+    </div>
   </div>
-  </form>
-
 </div>

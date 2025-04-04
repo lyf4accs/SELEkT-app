@@ -1,3 +1,85 @@
-body{
-  background-color: #1111;
+
+
+/* Contenedor general en columnas */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Sección superior (azul) */
+.login-header {
+  background: linear-gradient(to bottom, #002f4b, #001a29);
+  padding: 2rem 1rem;
+  text-align: center;
+  color: white;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+/* Sección inferior (blanca) */
+.login-form-wrapper {
+  flex: 1;
+  background-color: white;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Formulario */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-input {
+  border: none;
+  border-bottom: 2px solid #003b5c;
+  font-size: 1rem;
+  padding: 0.8rem 0;
+  outline: none;
+  font-weight: 500;
+  color: #003b5c;
+}
+
+/* Botón */
+.submit-button {
+  background-color: #003b5c;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #005a8d;
+}
+
+/* Error */
+.error-message {
+  color: #d32f2f;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Registro */
+.registro {
+  margin-top: 2rem;
+  text-align: center;
+  font-weight: 600;
+  color: #003b5c;
+}
+
+.registro a {
+  text-decoration: none;
+  color: #005a8d;
 }
