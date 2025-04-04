@@ -5,25 +5,37 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins';
+  overflow: hidden;
 }
+
 
 /* Sección superior (azul) */
 .login-header {
+  display: flex;
   background: linear-gradient(to bottom, #002f4b, #001a29);
   padding: 2rem 1rem;
-  text-align: center;
+  text-align: left;
   color: white;
-  font-size: 1.6rem;
-  font-weight: 600;
+  height: 25vh;
+  left: 40vh;
+}
+
+#wellcomeText{
+  font-size: 20px;
+  line-height: 105%;
+  letter-spacing: -3%;
+  top: 18vh;
+  left: 7vh;
+  position: absolute;
+  width: 100%;
 }
 
 /* Sección inferior (blanca) */
 .login-form-wrapper {
   flex: 1;
   background-color: white;
-  border-top-left-radius: 2rem;
-  border-top-right-radius: 2rem;
+  border-radius: 30px;
   padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
@@ -32,9 +44,13 @@
 
 /* Formulario */
 .login-form {
+
+  position: relative;
+  top: 12vh;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  align-items: center;
 }
 
 .form-input {
@@ -45,19 +61,23 @@
   outline: none;
   font-weight: 500;
   color: #003b5c;
+  width: 32vh;
 }
 
 /* Botón */
 .submit-button {
   background-color: #003b5c;
   color: white;
+  top: 15vh;
   font-size: 1rem;
-  font-weight: bold;
+  margin-top: 10vh;
   padding: 0.9rem;
   border: none;
   border-radius: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  width: 32vh;
+  position: absolute;
 }
 
 .submit-button:hover {
