@@ -41,6 +41,7 @@
 }
 
 .login-form {
+  margin-top: 15vh;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -60,7 +61,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
+  position: absolute;
 }
 
 .form-input {
@@ -79,7 +80,7 @@
   background-color: #003b5c;
   color: white;
   font-size: 1rem;
-  margin-top: 3rem;
+  margin-top: 25vh;
   padding: 0.9rem;
   border: none;
   border-radius: 1rem;
@@ -87,7 +88,7 @@
   transition: background-color 0.3s ease;
   width: 100%;
   max-width: 300px;
-  position: static;
+  position: fixed;
   /* quita el absolute */
 }
 
@@ -104,7 +105,8 @@
 
 /* Registro */
 .registro {
-  margin-top: 2rem;
+  position: absolute;
+  margin-top: 50vh;
   text-align: center;
   font-weight: 600;
   color: #003b5c;
