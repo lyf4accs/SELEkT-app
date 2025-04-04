@@ -1,17 +1,14 @@
 <div class="container">
-  <div class="form-container">
-    <div class="title">
-      <p style="color: black; font-size: 30px; margin-bottom: 5px;">
-        <strong>SIGN UP</strong>
-      </p>
+  <div class="title">
+      <p>¡Queremos conocerte!</p>
     </div>
-
+  <div class="form-container">
     <!-- IMPORTANTE: Agrega (submit)="signUp()" en el formulario -->
     <form id="f" (submit)="signUp(); $event.preventDefault();">
-      <input type="text" id="nombre" name="nombre" placeholder="NOMBRE COMPLETO" required>
-      <input type="text" id="correo" name="correo" placeholder="CORREO ELECTRÓNICO" required>
-      <input type="password" id="password" name="password" placeholder="CONTRASEÑA" required>
-      <input type="password" id="rep" name="rep" placeholder="REPETIR CONTRASEÑA" required>
+      <input type="text" id="nombre" name="nombre" placeholder="nombre" required>
+      <input type="text" id="correo" name="correo" placeholder="correo electrónico" required>
+      <input type="password" id="password" name="password" placeholder="contraseña" required>
+      <input type="password" id="rep" name="rep" placeholder="Repite la Contraseña" required>
 
       @if (errorMessage) {
         <div class="error-message-register">
@@ -20,7 +17,7 @@
       }
 
       <!-- IMPORTANTE: Usa type="submit" para que se dispare ngSubmit -->
-      <button class="registrarse" type="submit"><strong>REGISTRAR</strong></button>
+      <button class="registrarse" type="submit"><strong>Comenzar</strong></button>
     </form>
 
     <div class="registro">
