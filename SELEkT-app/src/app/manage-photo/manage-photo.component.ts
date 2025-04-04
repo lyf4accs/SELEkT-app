@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../footer/footer.component';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-manage-photo',

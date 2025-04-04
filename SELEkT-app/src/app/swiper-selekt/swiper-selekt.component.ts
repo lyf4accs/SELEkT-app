@@ -6,6 +6,7 @@ import { Card } from '../models/Card';
 import { MediatorService } from '../services/mediator.service';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { AlertController } from '@ionic/angular';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-swiper-selekt',
@@ -43,7 +44,7 @@ export class SwiperSelektComponent implements OnInit {
             transform: '',
             opacity: '1',
             zIndex: photos.length - index,
-            imageUrl: `http://localhost:3000${photo}`,
+            imageUrl: `${environment.apiUrl}${photo}`,
           }));
         } else {
           console.log('No se recibieron fotos similares');
@@ -60,7 +61,7 @@ export class SwiperSelektComponent implements OnInit {
             transform: '',
             opacity: '1',
             zIndex: photos.length - index,
-            imageUrl: `http://localhost:3000${photo}`,
+            imageUrl: `${environment.apiUrl}${photo}`,
           }));
         } else {
           console.log('No se recibieron fotos duplicadas');
