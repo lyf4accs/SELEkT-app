@@ -1,6 +1,6 @@
 {
-  "/api":{
-    "target":"https://selekt-server-59ndg39ug-lyf4accs-projects.vercel.app/",
+  "/":{
+    "target":"https://selekt-server.vercel.app/",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "info"

@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
-    "build": "ng build --configuration production",
+    "build": "ng build --configuration production ",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "move-files": "xcopy /E /I /Y dist\\selek-t-app\\browser\\* dist\\selek-t-app",
