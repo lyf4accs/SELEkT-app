@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { SupabaseService } from '../services/supabase.service';
 import { SUPABASE_URL } from '../utils/config';
-import { SupabaseClient } from '@supabase/supabase-js';
 
 @Component({
   selector: 'app-manage-photo',
@@ -24,7 +23,6 @@ export class ManagePhotoComponent implements OnInit {
   router = inject(Router);
   alertCtrl = inject(AlertController);
   supabaseService = inject(SupabaseService);
-  supabase = inject(SupabaseClient);
 
   selectedImages: { name: string; base64: string }[] = [];
   duplicateAlbums: any[] = [];
@@ -71,7 +69,6 @@ export class ManagePhotoComponent implements OnInit {
         const base64 = img.base64.split(',')[1];
         const fileName = `img_${Date.now()}_${i}.jpg`;
 
-        // ✅ Convertir base64 a Blob
         const byteCharacters = atob(base64);
         const byteNumbers = new Array(byteCharacters.length);
         for (let j = 0; j < byteCharacters.length; j++) {
@@ -80,20 +77,13 @@ export class ManagePhotoComponent implements OnInit {
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray], { type: 'image/jpeg' });
 
-        const { error } = await this.supabase.storage
-          .from('images')
-          .upload(fileName, blob, {
-            contentType: 'image/jpeg',
-            upsert: true,
-          });
-
+        const { error } = await this.supabaseService.uploadImage(fileName, blob);
         if (error) throw error;
 
         const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/images/${fileName}`;
         uploadedUrls.push(publicUrl);
       }
 
-      // ✅ Enviar las URLs al backend
       this.photoService.processImages(uploadedUrls).subscribe(
         (response) => {
           const albums = response.albums;

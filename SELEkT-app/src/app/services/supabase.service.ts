@@ -213,4 +213,12 @@ export class SupabaseService {
     });
     return { error };
   }
+
+  //MANAGE
+  async uploadImage(fileName: string, blob: Blob) {
+    return await this.supabase.storage.from('images').upload(fileName, blob, {
+      contentType: 'image/jpeg',
+      upsert: true,
+    });
+  }
 }
