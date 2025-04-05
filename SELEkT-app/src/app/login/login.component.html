@@ -1,37 +1,45 @@
 <div class="login-container">
-  <h4 class="welcome-title">¡Nos encanta tenerte de vuelta!</h4>
-  <form id="f" (submit)="signIn($event)" class="login-form">
-    <input
-      type="text"
-      id="email"
-      name="email"
-      placeholder="Usuario"
-      class="form-input"
-      required
-    />
+  <div class="login-header">
+    <div>
+      <p id="wellcomeText">¡Nos encanta tenerte <br> de vuelta!<p>
+    </div>
+  </div>
+  <div class="login-form-wrapper">
+    <div class="login-card">
+    <form id="f" (submit)="signIn($event)" class="login-form">
+      <input
+        type="text"
+        id="email"
+        name="email"
+        placeholder="Usuario"
+        class="form-input"
+        required
+      />
 
-    <input
-      type="password"
-      id="password"
-      name="password"
-      placeholder="Contraseña"
-      class="form-input"
-      required
-    />
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Contraseña"
+        class="form-input"
+        required
+      />
 
-    @if (errorMessage) {
-      <div class="error-message">
-        {{ errorMessage }}
-      </div>
-    }
+      @if (errorMessage) {
+        <div class="error-message">
+          {{ errorMessage }}
+        </div>
+      }
 
-    <button type="submit" class="submit-button">
-      ¡Vamos!
-    </button>
+      <button type="submit" class="submit-button">
+        ¡Vamos!
+      </button>
+    </form>
 
     <div class="registro">
-    <p><strong>¿NO TIENES UNA CUENTA? <a href="#">REGÍSTRATE!</a></strong></p>
+      <p>¿No tienes una cuenta? <a href="register">REGÍSTRATE!</a></p>
+    </div>
   </div>
-  </form>
-
+  </div>
 </div>
+

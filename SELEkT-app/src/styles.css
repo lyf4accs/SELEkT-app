@@ -1,5 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css?family=Poppins:100,2000,300,400,500,600,700,800,900');
+@import url('https://fonts.googleapis.com/css?family=Poppins:20,30,40,50,60,70,80,90,100,200,300,400,500,600,700,800,900');
+
+
+/* 1. Elimina todo margen/padding y fuerza alto/ancho completo */
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  overflow: hidden;
+}
+
 
 :root {
   --blue-gradient: linear-gradient(180deg, #052F50 0%, #121212 100%);
@@ -8,4 +20,5 @@
 .BlueGradient {
   background: var(--blue-gradient);
 }
+
 
