@@ -6,7 +6,8 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../footer/footer.component';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { SupabaseClientService } from '../services/SupabaseClientService';
+import { SupabaseService } from '../services/supabase.service';
+import { SUPABASE_URL } from '../utils/config';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 @Component({
@@ -22,7 +23,7 @@ export class ManagePhotoComponent implements OnInit {
   mediatorService = inject(MediatorService);
   router = inject(Router);
   alertCtrl = inject(AlertController);
-  supabaseService = inject(SupabaseClientService);
+  supabaseService = inject(SupabaseService);
   supabase = inject(SupabaseClient);
 
   selectedImages: { name: string; base64: string }[] = [];
@@ -88,7 +89,7 @@ export class ManagePhotoComponent implements OnInit {
 
         if (error) throw error;
 
-        const publicUrl = `${this.supabaseService.supabaseUrl}/storage/v1/object/public/images/${fileName}`;
+        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/images/${fileName}`;
         uploadedUrls.push(publicUrl);
       }
 
