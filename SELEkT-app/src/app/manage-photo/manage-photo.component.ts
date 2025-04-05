@@ -83,9 +83,14 @@ export class ManagePhotoComponent implements OnInit {
       // Ahora enviar las URLs al backend para procesamiento de duplicados y similares
       this.photoService.processImages(uploadedUrls).subscribe(
         (response) => {
+          console.log('Respuesta del servidor:', response); // Verifica la respuesta
           const albums = response.albums;
-          this.duplicateAlbums = albums.filter((a: any) => a.name.includes('Duplicados'));
-          this.similarAlbums = albums.filter((a: any) => a.name.includes('Similares'));
+          this.duplicateAlbums = albums.filter((a: any) =>
+            a.name.includes('Duplicados')
+          );
+          this.similarAlbums = albums.filter((a: any) =>
+            a.name.includes('Similares')
+          );
           this.isProcessing = false;
         },
         (error) => {
@@ -93,6 +98,7 @@ export class ManagePhotoComponent implements OnInit {
           this.isProcessing = false;
         }
       );
+
     } catch (err) {
       console.error('Error subiendo imágenes:', err);
       this.isProcessing = false;
