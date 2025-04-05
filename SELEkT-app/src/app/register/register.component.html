@@ -1,33 +1,66 @@
-<div class="container">
-  <div class="title">
-      <p>¡Queremos conocerte!</p>
+<div class="register-container">
+  <div class="register-header">
+    <div>
+      <p id="wellcomeText">¡Queremos conocerte!<p>
     </div>
-  <div class="form-container">
-    <!-- IMPORTANTE: Agrega (submit)="signUp()" en el formulario -->
-    <form id="f" (submit)="signUp(); $event.preventDefault();">
-      <input type="text" id="nombre" name="nombre" placeholder="nombre" required>
-      <input type="text" id="correo" name="correo" placeholder="correo electrónico" required>
-      <input type="password" id="password" name="password" placeholder="contraseña" required>
-      <input type="password" id="rep" name="rep" placeholder="Repite la Contraseña" required>
+  </div>
 
-      @if (errorMessage) {
-        <div class="error-message-register">
-          {{ errorMessage }}
-        </div>
-      }
+  <div class="register-form-wrapper">
+    <div class="register-card">
+      <form id="f" (submit)="signUp(); $event.preventDefault();" class="register-form">
+        <input
+          type="text"
+          id="nombre"
+          name="nombre"
+          placeholder="nombre"
+          class="form-input"
+          required
+        />
+        <input
+          type="text"
+          id="correo"
+          name="correo"
+          placeholder="correo electrónico"
+          class="form-input"
+          required
+        />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="contraseña"
+          class="form-input"
+          required
+        />
+        <input
+          type="password"
+          id="rep"
+          name="rep"
+          placeholder="Repite la Contraseña"
+          class="form-input"
+          required
+        />
 
-      <!-- IMPORTANTE: Usa type="submit" para que se dispare ngSubmit -->
-      <button class="registrarse" type="submit"><strong>Comenzar</strong></button>
-    </form>
+        @if (errorMessage) {
+          <div class="error-message">
+            {{ errorMessage }}
+          </div>
+        }
 
-    <div class="registro">
-      <p>
-        <strong>¿YA TIENES CUENTA?
-          <a routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-            INICIAR SESION
-          </a>
-        </strong>
-      </p>
+        <button class="submit-button" type="submit">
+          Comenzar
+        </button>
+      </form>
+
+      <div class="login">
+        <p>
+          ¿Tienes cuenta?
+            <a routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+              INICIA SESIÓN
+            </a>
+
+        </p>
+      </div>
     </div>
   </div>
 </div>

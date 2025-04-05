@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SupabaseService } from '../services/supabase.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-change-password',
@@ -11,7 +12,7 @@ import { SupabaseService } from '../services/supabase.service';
 export class ChangePasswordComponent {
   form: any;
 
-  constructor(private fb: FormBuilder, private supabase: SupabaseService) {
+  constructor(private fb: FormBuilder, private supabase: SupabaseService, private location: Location) {
     this.form = this.fb.group({
       currentPassword: ['', [Validators.required]],
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
@@ -22,7 +23,6 @@ export class ChangePasswordComponent {
   loading = signal(false);
   errorMessage = signal('');
   successMessage = signal('');
-
 
   async changePassword() {
     this.errorMessage.set('');
@@ -52,5 +52,9 @@ export class ChangePasswordComponent {
     } finally {
       this.loading.set(false);
     }
+  }
+
+  goBack() {
+    this.location.back();
   }
 }
