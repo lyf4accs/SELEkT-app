@@ -22,8 +22,8 @@ export class ManagePhotoComponent implements OnInit {
   mediatorService = inject(MediatorService);
   router = inject(Router);
   alertCtrl = inject(AlertController);
-  supabaseService= inject(SupabaseClientService);
-  supabase= inject(SupabaseClient);
+  supabaseService = inject(SupabaseClientService);
+  supabase = inject(SupabaseClient);
 
   selectedImages: { name: string; base64: string }[] = [];
   duplicateAlbums: any[] = [];
@@ -70,9 +70,18 @@ export class ManagePhotoComponent implements OnInit {
         const base64 = img.base64.split(',')[1];
         const fileName = `img_${Date.now()}_${i}.jpg`;
 
+        // ✅ Convertir base64 a Blob
+        const byteCharacters = atob(base64);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let j = 0; j < byteCharacters.length; j++) {
+          byteNumbers[j] = byteCharacters.charCodeAt(j);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'image/jpeg' });
+
         const { error } = await this.supabase.storage
           .from('images')
-          .upload(fileName, Buffer.from(base64, 'base64'), {
+          .upload(fileName, blob, {
             contentType: 'image/jpeg',
             upsert: true,
           });
@@ -83,7 +92,7 @@ export class ManagePhotoComponent implements OnInit {
         uploadedUrls.push(publicUrl);
       }
 
-      // 👇 Enviar solo las URLs al backend
+      // ✅ Enviar las URLs al backend
       this.photoService.processImages(uploadedUrls).subscribe(
         (response) => {
           const albums = response.albums;
