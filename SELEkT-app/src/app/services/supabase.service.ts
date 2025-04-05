@@ -215,10 +215,20 @@ export class SupabaseService {
   }
 
   //MANAGE
-  async uploadImage(fileName: string, blob: Blob) {
-    return await this.supabase.storage.from('images').upload(fileName, blob, {
-      contentType: 'image/jpeg',
-      upsert: true,
-    });
+  async uploadImage(fileName: string, file: Blob): Promise<any> {
+    const { data, error } = await this.supabase.storage
+      .from('images') // Asegúrate de que el nombre del bucket sea correcto
+      .upload(fileName, file);
+
+    if (error) {
+      throw error;
+    }
+
+    // Retornamos la URL pública de la imagen
+    const publicUrl = this.supabase.storage
+      .from('images')
+      .getPublicUrl(fileName);
+
+    return publicUrl;
   }
 }

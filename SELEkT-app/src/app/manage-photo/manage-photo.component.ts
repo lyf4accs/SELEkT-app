@@ -53,14 +53,13 @@ export class ManagePhotoComponent implements OnInit {
   }
 
   // Enviar imágenes al servidor para detectar duplicados y similares
-  async processImages(): Promise<void> {
+   async processImages(): Promise<void> {
     if (this.selectedImages.length === 0) {
       alert('Por favor, selecciona imágenes primero.');
       return;
     }
 
     this.isProcessing = true;
-
     try {
       const uploadedUrls: string[] = [];
 
@@ -77,32 +76,17 @@ export class ManagePhotoComponent implements OnInit {
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray], { type: 'image/jpeg' });
 
-        const { error } = await this.supabaseService.uploadImage(fileName, blob);
-        if (error) throw error;
-
-        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/images/${fileName}`;
+        const publicUrl = await this.supabaseService.uploadImage(fileName, blob);
         uploadedUrls.push(publicUrl);
       }
 
+      // Ahora enviar las URLs al backend para procesamiento de duplicados y similares
       this.photoService.processImages(uploadedUrls).subscribe(
         (response) => {
           const albums = response.albums;
-          this.duplicateAlbums = albums.filter((a: any) =>
-            a.name.includes('Duplicados')
-          );
-          this.similarAlbums = albums.filter((a: any) =>
-            a.name.includes('Similares')
-          );
-
-          this.mediatorService.updateDuplicatePhotos(
-            this.duplicateAlbums.flatMap((a) => a.photos)
-          );
-          this.mediatorService.updateSimilarPhotos(
-            this.similarAlbums.flatMap((a) => a.photos)
-          );
-
+          this.duplicateAlbums = albums.filter((a: any) => a.name.includes('Duplicados'));
+          this.similarAlbums = albums.filter((a: any) => a.name.includes('Similares'));
           this.isProcessing = false;
-          this.albumsLoaded = true;
         },
         (error) => {
           console.error('Error al procesar imágenes:', error);
@@ -114,6 +98,7 @@ export class ManagePhotoComponent implements OnInit {
       this.isProcessing = false;
     }
   }
+
 
   viewAlbum(albumType: string, albumIndex?: number): void {
     if (albumType === 'duplicate') {
