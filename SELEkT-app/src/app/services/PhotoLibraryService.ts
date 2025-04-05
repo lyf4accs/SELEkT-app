@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class PhotoLibraryService {
-  private apiUrl = environment.apiUrl + '/api/processImages';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
