@@ -1,5 +1,5 @@
 import { Component} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent } from "../footer/footer.component";  // Asegúrate de importar FormsModule
 import { Router} from '@angular/router';
@@ -12,7 +12,8 @@ import { Router} from '@angular/router';
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent {
-  constructor(private router: Router) {}
+
+  constructor(private router: Router, private location: Location) {}
 
   user = {
     username: '@juanperez',
@@ -33,5 +34,9 @@ export class ProfileComponent {
 
   goToChange() {
     this.router.navigate(['/changePassword']);
+  }
+
+  goBack(){
+    this.location.back();
   }
 }

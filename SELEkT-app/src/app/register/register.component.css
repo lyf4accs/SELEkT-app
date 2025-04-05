@@ -1,62 +1,84 @@
-/* Fondo azul para la pantalla completa */
-.container {
+/* Contenedor general en columnas */
+.register-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: linear-gradient(to bottom, #002f4b, #001a29);
-  justify-content: flex-start;
-  align-items: center;
   font-family: 'Poppins';
-  padding-top: 6vh;
-  height: 35vh;
-  /* espacio superior para el texto */
+  overflow: hidden;
 }
 
-/* Contenedor blanco con borde redondeado y superposición */
-.form-container {
+
+/* Sección superior (azul) */
+.register-header {
+  display: flex;
+  background: linear-gradient(to bottom, #002f4b, #001a29);
+  text-align: left;
+  color: white;
+  height: 35vh;
+  left: 40vh;
+}
+
+#wellcomeText {
+  font-size: 20px;
+  line-height: 105%;
+  letter-spacing: -3%;
+  top: 15vh;
+  left: 7vh;
+  position: absolute;
+  width: 100%;
+}
+
+/* Sección inferior (blanca) */
+.register-form-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1000;
+  margin-top: -8vh;
+}
+
+.register-form {
+  margin-top: 8vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  width: 100%;
+}
+
+.register-card {
   background-color: white;
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
   width: 100%;
   height: 100%;
   max-width: 400px;
-  padding: 2.5rem 1.5rem;
-  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.15);
-  margin-top: 10.65vh;
-  /* SUPERPOSICIÓN sobre fondo azul */
+  padding: 2rem 1.5rem 4rem 1.5rem;
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
+  position: absolute;
 }
 
-/* Título centrado */
-.title {
-  text-align: left;
-  font-size: 1.3rem;
-  margin-bottom: 1.5rem;
-  color: #ffff;
-  align-items: left;
-}
-
-/* Inputs */
-form input {
+.form-input {
   border: none;
   border-bottom: 2px solid #003b5c;
   font-size: 1rem;
   padding: 0.8rem 0;
-  margin-bottom: 1.5rem;
-  width: 100%;
-  color: #003b5c;
   outline: none;
   font-weight: 500;
+  color: #003b5c;
+  width: 32vh;
 }
 
 /* Botón */
-.registrarse {
+.submit-button {
   background-color: #003b5c;
   color: white;
   font-size: 1rem;
+  margin-top: 32vh;
   padding: 0.9rem;
   border: none;
   border-radius: 1rem;
@@ -64,30 +86,31 @@ form input {
   transition: background-color 0.3s ease;
   width: 100%;
   max-width: 300px;
-  margin-top: 2rem;
+  position: fixed;
+  /* quita el absolute */
 }
 
-.registrarse:hover {
+.submit-button:hover {
   background-color: #005a8d;
 }
 
 /* Error */
-.error-message-register {
+.error-message {
   color: #d32f2f;
   font-size: 0.9rem;
   text-align: center;
-  margin-top: -1rem;
 }
 
-/* Registro link */
-.registro {
-  margin-top: 2rem;
+/* Registro */
+.login {
+  position: absolute;
+  margin-top: 50vh;
   text-align: center;
   font-weight: 600;
   color: #003b5c;
 }
 
-.registro a {
+.login a {
   text-decoration: none;
   color: #005a8d;
 }
