@@ -6,9 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../footer/footer.component';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { SupabaseService } from '../services/supabase.service';
-import { SUPABASE_URL } from '../utils/config';
-import { SupabaseClient } from '@supabase/supabase-js';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-manage-photo',
@@ -23,8 +21,6 @@ export class ManagePhotoComponent implements OnInit {
   mediatorService = inject(MediatorService);
   router = inject(Router);
   alertCtrl = inject(AlertController);
-  supabaseService = inject(SupabaseService);
-  supabase = inject(SupabaseClient);
 
   selectedImages: { name: string; base64: string }[] = [];
   duplicateAlbums: any[] = [];
@@ -55,74 +51,41 @@ export class ManagePhotoComponent implements OnInit {
   }
 
   // Enviar imágenes al servidor para detectar duplicados y similares
-  async processImages(): Promise<void> {
+  processImages(): void {
     if (this.selectedImages.length === 0) {
       alert('Por favor, selecciona imágenes primero.');
       return;
     }
 
     this.isProcessing = true;
+    const base64Images = this.selectedImages.map((img) => img.base64);
 
-    try {
-      const uploadedUrls: string[] = [];
+    this.photoService.processImages(base64Images).subscribe(
+      (response) => {
+        console.log('Respuesta del backend:', response);
+        const albums = response.albums;
+        this.duplicateAlbums = albums.filter((album: any) =>
+          album.name.includes('Duplicados')
+        );
+        this.similarAlbums = albums.filter((album: any) =>
+          album.name.includes('Similares')
+        );
 
-      for (let i = 0; i < this.selectedImages.length; i++) {
-        const img = this.selectedImages[i];
-        const base64 = img.base64.split(',')[1];
-        const fileName = `img_${Date.now()}_${i}.jpg`;
+        this.mediatorService.updateDuplicatePhotos(
+          this.duplicateAlbums.flatMap((album) => album.photos)
+        );
+        this.mediatorService.updateSimilarPhotos(
+          this.similarAlbums.flatMap((album) => album.photos)
+        );
 
-        // ✅ Convertir base64 a Blob
-        const byteCharacters = atob(base64);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let j = 0; j < byteCharacters.length; j++) {
-          byteNumbers[j] = byteCharacters.charCodeAt(j);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'image/jpeg' });
-
-        const { error } = await this.supabase.storage
-          .from('images')
-          .upload(fileName, blob, {
-            contentType: 'image/jpeg',
-            upsert: true,
-          });
-
-        if (error) throw error;
-
-        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/images/${fileName}`;
-        uploadedUrls.push(publicUrl);
+        this.isProcessing = false;
+        this.albumsLoaded = true;
+      },
+      (error) => {
+        console.error('Error al procesar imágenes:', error);
+        this.isProcessing = false;
       }
-
-      // ✅ Enviar las URLs al backend
-      this.photoService.processImages(uploadedUrls).subscribe(
-        (response) => {
-          const albums = response.albums;
-          this.duplicateAlbums = albums.filter((a: any) =>
-            a.name.includes('Duplicados')
-          );
-          this.similarAlbums = albums.filter((a: any) =>
-            a.name.includes('Similares')
-          );
-
-          this.mediatorService.updateDuplicatePhotos(
-            this.duplicateAlbums.flatMap((a) => a.photos)
-          );
-          this.mediatorService.updateSimilarPhotos(
-            this.similarAlbums.flatMap((a) => a.photos)
-          );
-
-          this.isProcessing = false;
-          this.albumsLoaded = true;
-        },
-        (error) => {
-          console.error('Error al procesar imágenes:', error);
-          this.isProcessing = false;
-        }
-      );
-    } catch (err) {
-      console.error('Error subiendo imágenes:', err);
-      this.isProcessing = false;
-    }
+    );
   }
 
   viewAlbum(albumType: string, albumIndex?: number): void {
