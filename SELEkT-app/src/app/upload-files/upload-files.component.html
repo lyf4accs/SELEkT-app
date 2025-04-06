@@ -1,12 +1,41 @@
-<div>
-  <h2>Subir Fotos</h2>
-  <input type="file" (change)="onFileSelected($event)" multiple accept="image/*" />
-  <button (click)="uploadPhotos()">Subir Fotos</button>
+<div class="upload-container">
+  <!-- Área gris con botón "+" -->
+  <div class="upload-box">
+    <input
+      #fileInput
+      type="file"
+      (change)="onFileSelected($event)"
+      multiple
+      accept="image/*"
+      hidden
+    />
+    <button class="add-button" (click)="openFileSelector()">
+      +
+    </button>
+  </div>
 
-  @if(albumLink){
-    <h3>Enlace al Álbum:</h3>
-    <a [href]="albumLink" target="_blank">{{ albumLink }}</a>
-    <button (click)="copyLink()">Copiar enlace</button>
+  <!-- Lista de archivos seleccionados -->
+  @if (files.length > 0) {
+    <div class="preview-grid">
+      @for (img of files; track img) {
+        <img [src]="img.url" alt="preview" class="preview-img" />
+      }
+    </div>
+  }
+
+  <!-- Botón subir -->
+  <button class="upload-button" (click)="uploadPhotos()">
+    Subir Archivos
+  </button>
+
+  <!-- Enlace al álbum -->
+  @if (albumLink) {
+    <div class="album-link-box">
+      <h3>Enlace al Álbum:</h3>
+      <a [href]="albumLink" target="_blank">{{ albumLink }}</a>
+      <button (click)="copyLink()">Copiar enlace</button>
+    </div>
   }
 </div>
-<app-footer></app-footer>
+
+<app-footer />

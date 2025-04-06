@@ -1,0 +1,99 @@
+.upload-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.upload-container::before {
+  content: '';
+  background-image: url('../../assets/fondo_selekt.png');
+  background-size: 170%;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.15;
+  position: absolute;
+  top: 40vh;
+  left: 0;
+  right: 0vh;
+  bottom: 0;
+}
+
+.upload-box {
+  width: 160px;
+  height: 160px;
+  background-color: transparent;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-top: 10rem;
+}
+
+.add-button {
+  width: 5vh;
+  height: 5vh;
+  font-size: 32px;
+  border: none;
+  border-radius: 50%;
+  background-color: #003b5c;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.file-list {
+  margin-top: 1rem;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  color: #003b5c;
+}
+
+.upload-button {
+  background-color: #003b5c;
+  color: white;
+  font-weight: 400;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  position: fixed;
+  bottom: 27vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+.album-link-box {
+  margin-bottom: 10vh;
+  text-align: center;
+}
+
+.album-link-box a {
+  color: #003b5c;
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.preview-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+  gap: 8px;
+}
+
+.preview-img {
+  width: 130px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
