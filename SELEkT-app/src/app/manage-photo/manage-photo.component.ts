@@ -60,7 +60,7 @@ export class ManagePhotoComponent implements OnInit {
     this.isProcessing = true;
     const base64Images = this.selectedImages.map((img) => img.base64);
 
-    this.photoService.processImages(base64Images).subscribe(
+    this.photoService.handleImages(base64Images).subscribe(
       (response) => {
         console.log('Respuesta del backend:', response);
         const albums = response.albums;
