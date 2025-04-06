@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
 import { FooterComponent } from '../footer/footer.component';
 import { Router } from '@angular/router';
 import { Card } from '../models/Card';
@@ -7,11 +7,13 @@ import { MediatorService } from '../services/mediator.service';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { AlertController } from '@ionic/angular';
 import { environment } from '../../environments/environment';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-swiper-selekt',
   standalone: true,
-  imports: [CommonModule, FooterComponent],
+  imports: [CommonModule, FooterComponent, IonicModule],
+  schemas:[CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './swiper-selekt.component.html',
   styleUrls: ['./swiper-selekt.component.css'],
 })
@@ -25,53 +27,69 @@ export class SwiperSelektComponent implements OnInit {
   currentTransform = 'none';
   w: string | undefined = undefined;
   alertShown: boolean = false;
+  isLoading: boolean = true;
 
   router = inject(Router);
   mediatorService = inject(MediatorService);
   alertCtrl = inject(AlertController);
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.w = this.mediatorService.getWhichAlbum()?.toString();
     console.log('swiper: ' + this.w);
+
     if (this.w === 'similar') {
-      this.mediatorService.similarPhotos$.subscribe((photos) => {
-        if (photos) {
-          console.log('Fotos similares recibidas: ', photos);
-          this.cards = photos.map((photo: string, index: number) => ({
-            id: index + 1,
-            title: `Foto ${index + 1}`,
-            description: `Imagen del álbum similar`,
-            transform: '',
-            opacity: '1',
-            zIndex: photos.length - index,
-            imageUrl: `${environment.apiUrl}${photo}`,
-          }));
-        } else {
-          console.log('No se recibieron fotos similares');
+      this.mediatorService.similarPhotos$.subscribe(async (photos) => {
+        if (photos && photos.length > 0) {
+          await this.processPhotos(photos, 'similar');
         }
       });
     } else if (this.w === 'duplicate') {
-      this.mediatorService.duplicatePhotos$.subscribe((photos) => {
-        if (photos) {
-          console.log('Fotos duplicadas recibidas: ', photos);
-          this.cards = photos.map((photo: string, index: number) => ({
-            id: index + 1,
-            title: `Foto ${index + 1}`,
-            description: `Imagen del álbum duplicado`,
-            transform: '',
-            opacity: '1',
-            zIndex: photos.length - index,
-            imageUrl: `${environment.apiUrl}${photo}`,
-          }));
-        } else {
-          console.log('No se recibieron fotos duplicadas');
+      this.mediatorService.duplicatePhotos$.subscribe(async (photos) => {
+        if (photos && photos.length > 0) {
+          await this.processPhotos(photos, 'duplicate');
         }
       });
     }
   }
 
+  async processPhotos(photos: string[], albumType: 'similar' | 'duplicate') {
+    this.isLoading = true;
+
+    const validatedPhotos: string[] = [];
+
+    for (const photo of photos) {
+      const imageUrl = photo.startsWith('http')
+        ? photo
+        : `${environment.apiUrl}${photo}`;
+      const isValid = await this.waitForImageToLoad(imageUrl);
+      if (isValid) validatedPhotos.push(imageUrl);
+      else console.warn('Imagen aún no disponible:', imageUrl);
+    }
+
+    this.cards = validatedPhotos.map((url, index) => ({
+      id: index + 1,
+      title: `Foto ${index + 1}`,
+      description: `Imagen del álbum ${albumType}`,
+      transform: '',
+      opacity: '1',
+      zIndex: validatedPhotos.length - index,
+      imageUrl: url,
+    }));
+
+    this.isLoading = false;
+  }
+
   return() {
     this.router.navigate(['/manage']);
+  }
+
+  async waitForImageToLoad(url: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = url;
+    });
   }
 
   onDragStart(index: number, event: MouseEvent | TouchEvent) {

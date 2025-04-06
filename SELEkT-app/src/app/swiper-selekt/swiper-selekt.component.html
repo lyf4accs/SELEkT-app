@@ -1,4 +1,8 @@
-<div class="swiper-container">
+<div *ngIf="isLoading" class="loading-container">
+  <p>Cargando fotos...</p>
+  <ion-spinner name="crescent"></ion-spinner>
+</div>
+<div *ngIf="!isLoading" class="swiper-container">
   <button (click)="return()">back</button>
   <div
     *ngFor="let card of cards; let i = index"
