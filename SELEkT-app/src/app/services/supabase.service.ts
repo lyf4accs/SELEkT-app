@@ -213,4 +213,30 @@ export class SupabaseService {
     });
     return { error };
   }
+
+  //MANAGE
+  // En supabase.service.ts
+  async uploadImage(fileName: string, blob: Blob): Promise<string> {
+    // Subir la imagen al bucket 'images'
+    const { data, error } = await this.supabase.storage
+      .from('images') // Asumiendo que el bucket es 'images'
+      .upload(fileName, blob);
+
+    if (error) {
+      console.error('Error al subir la imagen:', error);
+      throw error;
+    }
+
+    // Obtener la URL pública usando el 'path' del archivo subido
+    const { data: urlData} = this.supabase.storage
+      .from('images')
+      .getPublicUrl(data.path);
+
+    if (error) {
+      console.error('Error al obtener la URL pública:', error);
+      throw error;
+    }
+
+    return urlData.publicUrl; // Ahora accedemos correctamente a publicUrl
+  }
 }

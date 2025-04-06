@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { SupabaseService } from '../services/supabase.service';
 import { SUPABASE_URL } from '../utils/config';
-import { SupabaseClient } from '@supabase/supabase-js';
 
 @Component({
   selector: 'app-manage-photo',
@@ -24,7 +23,6 @@ export class ManagePhotoComponent implements OnInit {
   router = inject(Router);
   alertCtrl = inject(AlertController);
   supabaseService = inject(SupabaseService);
-  supabase = inject(SupabaseClient);
 
   selectedImages: { name: string; base64: string }[] = [];
   duplicateAlbums: any[] = [];
@@ -55,14 +53,13 @@ export class ManagePhotoComponent implements OnInit {
   }
 
   // Enviar imágenes al servidor para detectar duplicados y similares
-  async processImages(): Promise<void> {
+   async processImages(): Promise<void> {
     if (this.selectedImages.length === 0) {
       alert('Por favor, selecciona imágenes primero.');
       return;
     }
 
     this.isProcessing = true;
-
     try {
       const uploadedUrls: string[] = [];
 
@@ -71,7 +68,6 @@ export class ManagePhotoComponent implements OnInit {
         const base64 = img.base64.split(',')[1];
         const fileName = `img_${Date.now()}_${i}.jpg`;
 
-        // ✅ Convertir base64 a Blob
         const byteCharacters = atob(base64);
         const byteNumbers = new Array(byteCharacters.length);
         for (let j = 0; j < byteCharacters.length; j++) {
@@ -80,22 +76,14 @@ export class ManagePhotoComponent implements OnInit {
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray], { type: 'image/jpeg' });
 
-        const { error } = await this.supabase.storage
-          .from('images')
-          .upload(fileName, blob, {
-            contentType: 'image/jpeg',
-            upsert: true,
-          });
-
-        if (error) throw error;
-
-        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/images/${fileName}`;
+        const publicUrl = await this.supabaseService.uploadImage(fileName, blob);
         uploadedUrls.push(publicUrl);
       }
 
-      // ✅ Enviar las URLs al backend
+      // Ahora enviar las URLs al backend para procesamiento de duplicados y similares
       this.photoService.processImages(uploadedUrls).subscribe(
         (response) => {
+          console.log('Respuesta del servidor:', response); // Verifica la respuesta
           const albums = response.albums;
           this.duplicateAlbums = albums.filter((a: any) =>
             a.name.includes('Duplicados')
@@ -103,27 +91,20 @@ export class ManagePhotoComponent implements OnInit {
           this.similarAlbums = albums.filter((a: any) =>
             a.name.includes('Similares')
           );
-
-          this.mediatorService.updateDuplicatePhotos(
-            this.duplicateAlbums.flatMap((a) => a.photos)
-          );
-          this.mediatorService.updateSimilarPhotos(
-            this.similarAlbums.flatMap((a) => a.photos)
-          );
-
           this.isProcessing = false;
-          this.albumsLoaded = true;
         },
         (error) => {
           console.error('Error al procesar imágenes:', error);
           this.isProcessing = false;
         }
       );
+
     } catch (err) {
       console.error('Error subiendo imágenes:', err);
       this.isProcessing = false;
     }
   }
+
 
   viewAlbum(albumType: string, albumIndex?: number): void {
     if (albumType === 'duplicate') {
