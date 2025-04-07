@@ -6,6 +6,9 @@
   "background_color": "#ffffff",
   "theme_color": "#003049",
   "orientation": "portrait",
+  "scope": "/",
+  "pursue": "maskable any",
+  "description": "SELEkT is a web application that allows users to manage their photos",
   "icons": [
     {
       "src": "assets/icons/icon-192x192.png",
