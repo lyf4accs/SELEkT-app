@@ -12,7 +12,6 @@ import { Router} from '@angular/router';
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent {
-
   constructor(private router: Router, private location: Location) {}
 
   user = {
@@ -36,7 +35,11 @@ export class ProfileComponent {
     this.router.navigate(['/changePassword']);
   }
 
-  goBack(){
+  goToLink() {
+    this.router.navigate(['/links']);
+  }
+
+  goBack() {
     this.location.back();
   }
 }

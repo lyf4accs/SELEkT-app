@@ -20,6 +20,7 @@
               "src/assets",
               "src/favicon.ico",
               "src/_redirects",
+              "src/manifest.json",
               {
                 "glob": "**/*",
                 "input": "public"

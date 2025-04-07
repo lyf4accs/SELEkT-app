@@ -121,7 +121,7 @@
 
 .colores-button {
   width: 290px;
-  height: 130px;
+  height: 100px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -197,7 +197,7 @@
 }
 
 .profile-form {
-  margin-top: 7vh;
+  margin-top: 3vh;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -231,21 +231,6 @@
   width: 32vh;
 }
 
-/* Botón */
-.submit-button {
-  background-color: #003b5c;
-  color: white;
-  font-size: 1rem;
-  margin-top: 35vh;
-  padding: 0.9rem;
-  border: none;
-  border-radius: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
-  max-width: 300px;
-  position: fixed;
-  /* quita el absolute */
-}
+
 
 
