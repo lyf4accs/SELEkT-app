@@ -1,36 +1,36 @@
 :host {
   display: block;
   background: linear-gradient(360deg, #021321 0%, #052F50 100%);
-  padding: 2rem 1rem;
-  height: 120%;
+  padding: 1.5rem 0.75rem;
+  height: 100%;
+  font-family: 'Poppins';
 }
 
 .album-card {
   background: white;
-  border-radius: 15px;
-  width: 312px;
-  height: 161px;
-  margin: 1.2rem auto;
+  border-radius: 12px;
+  width: 280px;
+  height: 135px;
+  margin: 2rem auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  border: none;
-  cursor: pointer;
+  padding: 0.8rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
   position: relative;
+  cursor: default;
 }
 
 .thumbnail {
-  width: 70px;
-  height: 70px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 .album-info {
   flex-grow: 1;
-  margin-left: 1rem;
+  margin-left: 0.75rem;
   text-align: left;
 }
 
@@ -39,29 +39,30 @@
   font-weight: 600;
   text-decoration: none;
   display: block;
-  margin-bottom: 0.3rem;
-  max-width: 140px;
+  margin-bottom: 0.2rem;
+  font-size: 0.85rem;
+  max-width: 120px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .album-date {
-  color: #555;
-  font-size: 0.9rem;
+  color: #052f50b2;
+  font-size: 0.8rem;
   line-height: 1.2;
 }
 
-.download-button {
+.copyLink {
   background: #052f50;
   border: none;
   border-radius: 5px;
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   position: absolute;
-  right: 10px;
+  right: 20px;
 }
