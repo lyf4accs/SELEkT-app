@@ -1,5 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://selekt-server.onrender.com',
+  apiUrl: 'https://selekt-server.vercel.app',
 };
-//https://selekt-server.vercel.app
