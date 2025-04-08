@@ -1,20 +1,49 @@
-@if (photos.length > 0 ) {
+@if (photos.length > 0) {
   <div class="album-container">
-      <h2>Fotos del Álbum</h2>
+
+    <button (click)="goBack()" class="back-button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="9" height="16" viewBox="0 0 9 16" fill="none">
+      <path d="M8 15L1 8L8 1" stroke="#003b5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+
+    <h2 class="album-title">Fotos del Álbum</h2>
+
     <div class="photos-grid">
-    @for(photo of photos; track photo.id){
-      <div class="photo-card">
-        <img [src]="photo.url" [alt]="photo.filename" class="photo" />
-        <p>{{ photo.filename }}</p>
+      @for(photo of photos; track photo.id) {
+        <div class="photo-card">
+          <img [src]="photo.url" [alt]="photo.filename" class="photo" />
+          <p class="photo-name">{{ photo.filename }}</p>
+        </div>
+      }
+    </div>
+
+    <div class="album-actions">
+      <div class="colores-border">
+        <button class="colores-button" (click)="downloadAll()">
+          Descargar todas
+          <span class="colores-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" stroke="#052F50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
       </div>
-    }
-    <button (click)="downloadAll()" class="download-btn">Descargar todas</button>
+
+      <div class="colores-border">
+        <button class="colores-button" (click)="copyLink($event, { code: albumCode})">
+          Copiar enlace
+          <span class="colores-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M4 13v-2a3 3 0 013-3h4m6 6v2a3 3 0 01-3 3h-4m-4-4h8m4-6H8a3 3 0 00-3 3v6a3 3 0 003 3h8a3 3 0 003-3v-6a3 3 0 00-3-3z" stroke="#052F50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
     </div>
   </div>
 }
-@else{
-  <ng-template #noPhotos>
-    <p class="no-photos">No se encontraron fotos para este álbum.</p>
-  </ng-template>
+@else {
+  <p class="no-photos">No se encontraron fotos para este álbum.</p>
 }
-
+<app-footer></app-footer>
