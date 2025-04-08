@@ -8,3 +8,13 @@
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET, POST, OPTIONS, PUT, DELETE"
     Access-Control-Allow-Headers = "Content-Type, Authorization, Accept"
+
+[build]
+  command = "npm run build"
+  publish = "dist/selek-t-app"
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS, PUT, DELETE"
+    Access-Control-Allow-Headers = "Content-Type, Authorization, Accept"
