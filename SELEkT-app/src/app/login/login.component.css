@@ -1,14 +1,11 @@
-
-
 /* Contenedor general en columnas */
 .login-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
   font-family: 'Poppins';
-    overflow: hidden;
+  overflow: hidden;
 }
-
 
 /* Sección superior (azul) */
 .login-header {
@@ -20,12 +17,12 @@
   left: 40vh;
 }
 
-#wellcomeText{
+#wellcomeText {
   font-size: 20px;
   line-height: 105%;
   letter-spacing: -3%;
   top: 15vh;
-  left: 7vh;
+  left: 6vh;
   position: absolute;
   width: 100%;
 }
@@ -41,7 +38,7 @@
 }
 
 .login-form {
-  margin-top: 15vh;
+  margin-top: 10vh;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -61,7 +58,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
+  position: relative;
 }
 
 .form-input {
@@ -75,21 +72,26 @@
   width: 32vh;
 }
 
+/* Placeholder azul */
+.form-input::placeholder {
+  color: #052F50;
+  opacity: 1;
+}
+
 /* Botón */
 .submit-button {
-  background-color: #003b5c;
+  background-color: #052F50;
   color: white;
   font-size: 1rem;
-  margin-top: 25vh;
+  margin-top: 28vh;
   padding: 0.9rem;
   border: none;
   border-radius: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  width: 100%;
+  width: 75%;
   max-width: 300px;
   position: fixed;
-  /* quita el absolute */
 }
 
 .submit-button:hover {
@@ -99,17 +101,19 @@
 /* Error */
 .error-message {
   color: #d32f2f;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   text-align: center;
+  bottom: 5px;
+  position: relative;
 }
 
 /* Registro */
 .registro {
   position: absolute;
-  margin-top: 50vh;
+  margin-top: 46vh;
   text-align: center;
-  font-weight: 600;
   color: #003b5c;
+  font-size: 15px;
 }
 
 .registro a {

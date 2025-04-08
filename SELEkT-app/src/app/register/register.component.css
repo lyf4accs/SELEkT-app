@@ -23,7 +23,7 @@
   line-height: 105%;
   letter-spacing: -3%;
   top: 15vh;
-  left: 7vh;
+  left: 6vh;
   position: absolute;
   width: 100%;
 }
@@ -39,7 +39,7 @@
 }
 
 .register-form {
-  margin-top: 8vh;
+  margin-top: 1vh;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -51,7 +51,7 @@
   background-color: white;
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
-  width: 100%;
+  width: 100vh;
   height: 100%;
   max-width: 400px;
   padding: 2rem 1.5rem 4rem 1.5rem;
@@ -59,36 +59,43 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
+  position: relative;
 }
 
 .form-input {
   border: none;
   border-bottom: 2px solid #003b5c;
-  font-size: 1rem;
-  padding: 0.8rem 0;
+  font-size: 0.9rem;
+  padding: 0.4rem 0;
   outline: none;
-  font-weight: 500;
+  font-weight: 100;
   color: #003b5c;
   width: 32vh;
 }
 
 /* Botón */
 .submit-button {
-  background-color: #003b5c;
+  background-color: #052F50;
   color: white;
   font-size: 1rem;
-  margin-top: 32vh;
+  margin-top: 37vh;
   padding: 0.9rem;
   border: none;
   border-radius: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  width: 100%;
+  width: 75%;
   max-width: 300px;
   position: fixed;
   /* quita el absolute */
 }
+
+.form-input::placeholder {
+  color: #052F50;
+  opacity: 1;
+}
+
+
 
 .submit-button:hover {
   background-color: #005a8d;
@@ -97,17 +104,19 @@
 /* Error */
 .error-message {
   color: #d32f2f;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   text-align: center;
+  bottom: 5px;
+  position: relative;
 }
 
 /* Registro */
 .login {
   position: absolute;
-  margin-top: 50vh;
+  margin-top: 46vh;
   text-align: center;
-  font-weight: 600;
   color: #003b5c;
+  font-size: 15px;
 }
 
 .login a {
