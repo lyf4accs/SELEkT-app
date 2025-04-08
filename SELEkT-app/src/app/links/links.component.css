@@ -4,6 +4,7 @@
   padding: 1.5rem 0.75rem;
   height: 100%;
   font-family: 'Poppins';
+  overflow-y: auto;
 }
 
 .album-card {
@@ -11,7 +12,7 @@
   border-radius: 12px;
   width: 280px;
   height: 135px;
-  margin: 2rem auto;
+  margin: 5rem auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -35,7 +36,7 @@
 }
 
 .album-link {
-  color: #003b5c;
+  color: #0c5b89;
   font-weight: 600;
   text-decoration: none;
   display: block;
@@ -53,8 +54,17 @@
   line-height: 1.2;
 }
 
-.copyLink {
-  background: #052f50;
+.back-button {
+  position: absolute;
+  background-color: transparent;
+  border: none;
+  left: 5%;
+  z-index: 1000;
+  color: white;
+}
+
+.deleteAlbum {
+  background: #722328;
   border: none;
   border-radius: 5px;
   width: 36px;

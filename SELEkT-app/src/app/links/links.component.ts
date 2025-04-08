@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 
 @Component({
   selector: 'app-links',
@@ -10,6 +10,11 @@ import { CommonModule } from '@angular/common';
   styleUrl: './links.component.css',
 })
 export class LinksComponent implements OnInit {
+
+
+  goBack() {
+    this.location.back();
+  }
 
   copyLink(event: MouseEvent, album: any) {
     event.stopPropagation();
@@ -32,9 +37,27 @@ export class LinksComponent implements OnInit {
 
   user_id = '8b504335-3181-4507-92c1-25a63345150b'; // Cambia esto por el ID del usuario actual
 
+  async deleteAlbum(album: any) {
+    const confirmed = confirm(
+      '¿Estás seguro de que deseas eliminar este álbum?'
+    );
+    if (!confirmed) return;
+
+    const success = await this.supabaseService.deleteAlbum(
+      album.id,
+      album.code
+    );
+    if (success) {
+      this.albums = this.albums.filter((a: { id: any }) => a.id !== album.id);
+    } else {
+      console.error('Error al eliminar el álbum');
+    }
+  }
+
   constructor(
     private supabaseService: SupabaseService,
-    private router: RouterModule
+    private router: RouterModule,
+    private location: Location
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -42,10 +65,8 @@ export class LinksComponent implements OnInit {
 
     for (const album of this.albums) {
       const fotos = await this.supabaseService.getPhotosByAlbumId(album.id); // <--- esto es correcto
-      album.previewUrl = fotos.length > 0 ? fotos[0].url : 'assets/placeholder.png';
+      album.previewUrl =
+        fotos.length > 0 ? fotos[0].url : 'assets/placeholder.png';
     }
-
-
   }
-
 }

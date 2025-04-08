@@ -3,9 +3,9 @@
 .profile-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   font-family: 'Poppins';
-  overflow: hidden;
+  position: relative;
 }
 
 .back-button {
@@ -210,14 +210,15 @@
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   max-width: 400px;
   padding: 2rem 1.5rem 4rem 1.5rem;
   box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
+  position: relative;
+  overflow-y: auto;
 }
 
 .form-input {
