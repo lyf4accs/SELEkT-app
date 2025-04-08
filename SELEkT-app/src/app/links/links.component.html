@@ -1,13 +1,32 @@
-<h1>LINKS COMPARTIDOS</h1>
-@if(albums.length > 0){
-    @for(album of albums; track album.id){
-  <div class="album-card">
-          <p><strong>Código:</strong> {{ album.code }}</p>
-          <p><strong>Fecha de Creación:</strong> {{ album.created_at}}</p>
-          <a [routerLink]="['/album', album.code]">Ver álbum</a>
-          <button (click)="deleteAlbum(album)">Eliminar</button>
-        </div>
-    }
-}@else{
-  <p>No tienes links compartidos</p>
+
+@if (albums.length > 0) {
+  @for (album of albums; track album.id) {
+    <button class="album-card" (click)="goToAlbum(album.code)">
+      <img class="thumbnail" [src]="album.previewUrl" alt="preview" />
+      <div class="album-info">
+        <p class="album-date">
+          {{ album.created_at | date: 'dd/MM/yy' }}<br />
+          {{ album.created_at | date: 'HH:mm' }}
+        </p>
+      </div>
+
+      <button class="download-button" (click)="downloadAlbum($event, album)">
+        <svg
+          width="23"
+          height="21"
+          viewBox="0 0 23 21"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M11.5 8.25V15M11.5 15L14.875 12.75M11.5 15L8.125 12.75M1.375 3.75V15.9C1.375 17.1601 1.375 17.7897 1.62024 18.271C1.83595 18.6944 2.17991 19.0393 2.60327 19.255C3.0841 19.5 3.71387 19.5 4.97152 19.5H18.0285C19.2861 19.5 19.915 19.5 20.3958 19.255C20.8192 19.0393 21.1643 18.6946 21.38 18.2713C21.6252 17.79 21.6252 17.1599 21.6252 15.8998L21.6252 7.34975C21.6252 6.08963 21.6252 5.45957 21.38 4.97827C21.1643 4.55491 20.8194 4.21095 20.396 3.99524C19.9147 3.75 19.2851 3.75 18.025 3.75H11.5M1.375 3.75H11.5M1.375 3.75C1.375 2.50736 2.38236 1.5 3.625 1.5H7.75883C8.30916 1.5 8.58497 1.5 8.84392 1.56217C9.0735 1.61729 9.29258 1.70842 9.4939 1.83179C9.72089 1.97089 9.91579 2.16579 10.3047 2.55469L11.5 3.75"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </button>
+  }
 }

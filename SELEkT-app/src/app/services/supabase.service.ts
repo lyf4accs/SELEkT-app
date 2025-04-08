@@ -28,7 +28,7 @@ export class SupabaseService {
       const albumCode = Math.random().toString(36).substring(7);
       const albumData = {
         code: albumCode,
-        user_id: 1,
+        user_id: '8b504335-3181-4507-92c1-25a63345150b',
         created_at: new Date().toISOString(),
       };
 
@@ -138,7 +138,7 @@ export class SupabaseService {
     }
   }
 
-  async getUserAlbums(userId: number): Promise<any[]> {
+  async getUserAlbums(userId: String): Promise<any[]> {
     const { data, error } = await this.supabase
       .from('Album')
       .select('*')

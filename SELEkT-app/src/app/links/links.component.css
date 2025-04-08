@@ -1,23 +1,67 @@
+:host {
+  display: block;
+  background: linear-gradient(360deg, #021321 0%, #052F50 100%);
+  padding: 2rem 1rem;
+  height: 120%;
+}
+
 .album-card {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  background: #f9f9f9;
+  background: white;
+  border-radius: 15px;
+  width: 312px;
+  height: 161px;
+  margin: 1.2rem auto;
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-button {
-  background-color: red;
-  color: white;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   border: none;
-  padding: 5px 10px;
   cursor: pointer;
-  width: fit-content;
+  position: relative;
 }
 
-button:hover {
-  background-color: darkred;
+.thumbnail {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.album-info {
+  flex-grow: 1;
+  margin-left: 1rem;
+  text-align: left;
+}
+
+.album-link {
+  color: #003b5c;
+  font-weight: 600;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.3rem;
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.album-date {
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+
+.download-button {
+  background: #052f50;
+  border: none;
+  border-radius: 5px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
 }
