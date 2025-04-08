@@ -8,8 +8,9 @@ import { environment } from '../../environments/environment';
 })
 export class PhotoLibraryService {
   private apiUrl = environment.apiUrl;
-
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    console.log('[API] Usando endpoint:', this.apiUrl);
+  }
 
   processImages(images: string[]): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/upload`, { images });
