@@ -1,8 +1,15 @@
 {
   "/api":{
-    "target":"https://selekt-server.vercel.app",
+    "target":"http://localhost:3000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "info"
+  },
+    "/":{
+    "target":"http://localhost:3000",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "info"
   }
+
 }
