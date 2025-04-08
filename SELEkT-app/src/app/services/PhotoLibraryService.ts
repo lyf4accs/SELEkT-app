@@ -12,6 +12,14 @@ export class PhotoLibraryService {
   constructor(private http: HttpClient) {}
 
   processImages(images: string[]): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}`, { images });
+    return this.http.post<any>(`${this.apiUrl}/upload`, { images });
+  }
+
+  hashImage(url: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/hash`, { url });
+  }
+
+  compareHashes(hashes: { hash: string; url: string }[]): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/compare`, { hashes });
   }
 }

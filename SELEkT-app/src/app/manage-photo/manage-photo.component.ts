@@ -7,6 +7,8 @@ import { FooterComponent } from '../footer/footer.component';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { environment } from '../../environments/environment';
+import { forkJoin } from 'rxjs';
+
 
 @Component({
   selector: 'app-manage-photo',
@@ -60,33 +62,43 @@ export class ManagePhotoComponent implements OnInit {
     this.isProcessing = true;
     const base64Images = this.selectedImages.map((img) => img.base64);
 
-    this.photoService.processImages(base64Images).subscribe(
-      (response) => {
-        console.log('Respuesta del backend:', response);
-        const albums = response.albums;
-        this.duplicateAlbums = albums.filter((album: any) =>
-          album.name.includes('Duplicados')
-        );
-        this.similarAlbums = albums.filter((album: any) =>
-          album.name.includes('Similares')
-        );
+    this.photoService.processImages(base64Images).subscribe((uploadRes) => {
+      const urls = uploadRes.urls;
 
-        this.mediatorService.updateDuplicatePhotos(
-          this.duplicateAlbums.flatMap((album) => album.photos)
-        );
-        this.mediatorService.updateSimilarPhotos(
-          this.similarAlbums.flatMap((album) => album.photos)
-        );
+      // Hash cada imagen
+      const hashRequests = urls.map((url: string) =>
+        this.photoService.hashImage(url)
+      );
 
-        this.isProcessing = false;
-        this.albumsLoaded = true;
-      },
-      (error) => {
-        console.error('Error al procesar imágenes:', error);
-        this.isProcessing = false;
-      }
-    );
-  }
+      forkJoin<string[]>(hashRequests).subscribe((hashes: string[]) => {
+        const hashUrlPairs = hashes.map((hash, index) => ({
+          hash,
+          url: urls[index],
+        }));
+
+        this.photoService
+          .compareHashes(hashUrlPairs)
+          .subscribe((compareRes) => {
+            this.duplicateAlbums = compareRes.albums.filter((a: any) =>
+              a.name.includes('Duplicados')
+            );
+            this.similarAlbums = compareRes.albums.filter((a: any) =>
+              a.name.includes('Similares')
+            );
+
+            this.mediatorService.updateDuplicatePhotos(
+              this.duplicateAlbums.flatMap((a) => a.photos)
+            );
+            this.mediatorService.updateSimilarPhotos(
+              this.similarAlbums.flatMap((a) => a.photos)
+            );
+
+            this.isProcessing = false;
+            this.albumsLoaded = true;
+          });
+      });
+    });
+}
 
   viewAlbum(albumType: string, albumIndex?: number): void {
     if (albumType === 'duplicate') {
