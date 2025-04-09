@@ -24,18 +24,10 @@
   }
 
   <!-- Botón subir -->
-  <button class="upload-button" (click)="uploadPhotos()">
-    Subir Archivos
-  </button>
+<button class="upload-button" (click)="uploadPhotos()" [disabled]="isUploading">
+  {{ isUploading ? 'Subiendo...' : 'Subir Archivos' }}
+</button>
 
-  <!-- Enlace al álbum -->
-  @if (albumLink) {
-    <div class="album-link-box">
-      <h3>Enlace al Álbum:</h3>
-      <a [href]="albumLink" target="_blank">{{ albumLink }}</a>
-      <button (click)="copyLink()">Copiar enlace</button>
-    </div>
-  }
-</div>
+
 
 <app-footer />
