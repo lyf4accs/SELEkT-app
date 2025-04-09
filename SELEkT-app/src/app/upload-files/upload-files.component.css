@@ -16,6 +16,23 @@
   overflow: hidden;
 }
 
+.white-background-image {
+  position: absolute;
+  inset: 0;
+  background-image: url('../../assets/fondo_selekt.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  z-index: 0;
+  min-width: 160%;
+  opacity: 0.2;
+  left: 0;
+  margin-left: -25%;
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+
+}
+
 .upload-container::before {
   content: '';
   position: absolute;
@@ -23,12 +40,6 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('../../assets/fondo_selekt.png');
-  background-size: contain;
-  /* Muestra la imagen entera */
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.12;
   z-index: 0;
 }
 
