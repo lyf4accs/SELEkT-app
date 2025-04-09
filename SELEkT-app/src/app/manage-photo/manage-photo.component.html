@@ -35,6 +35,7 @@
 <div *ngIf="albumsLoaded">
 
   <div class="albums-container">
+    <div class="white-background-image"></div>
     <div *ngFor="let album of duplicateAlbums; let i = index" class="album" (click)="viewAlbum('duplicate', i)">
       <h2>{{ album.name }}</h2>
       <img [src]="album.coverPhoto" alt="Cover Photo" class="album-cover" />
@@ -52,4 +53,4 @@
     </div>
   </div>
 </div>
-<app-footer  [darkBackground]="albumsLoaded"></app-footer>
+<app-footer></app-footer>

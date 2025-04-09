@@ -2,22 +2,29 @@
   <p>Cargando fotos...</p>
   <ion-spinner name="crescent"></ion-spinner>
 </div>
-<div *ngIf="!isLoading" class="swiper-container">
-  <button (click)="return()">back</button>
-  <div
-    *ngFor="let card of cards; let i = index"
-    class="card"
-    [style.backgroundImage]="'url(' + card.imageUrl + ')'"
-    [style.transform]="card.transform"
-    [style.opacity]="card.opacity"
-    [style.zIndex]="card.zIndex"
-    (mousedown)="onDragStart(i, $event)"
-    (touchstart)="onDragStart(i, $event)"
-  >
-    <div class="card-content">
-      <h3>{{ card.title }}</h3>
-      <p>{{ card.description }}</p>
+
+<div class="container">
+  <div *ngIf="!isLoading" class="swiper-container">
+      <button (click)="return()" class="back-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M8 15L1 8L8 1" stroke="#052F50" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    </button>
+    <div
+      *ngFor="let card of cards; let i = index"
+      class="card"
+      [style.backgroundImage]="'url(' + card.imageUrl + ')'"
+      [style.transform]="card.transform"
+      [style.opacity]="card.opacity"
+      [style.zIndex]="card.zIndex"
+      (mousedown)="onDragStart(i, $event)"
+      (touchstart)="onDragStart(i, $event)"
+    >
+      <!-- <div class="card-content">
+        <h3>{{ card.title }}</h3>
+        <p>{{ card.description }}</p>
+      </div> -->
     </div>
   </div>
 </div>
-<app-footer></app-footer>
+  <div class="white-background-image"></div>

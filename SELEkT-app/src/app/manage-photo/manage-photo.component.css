@@ -74,7 +74,7 @@
   padding-right: 13%;
 }
 
-/* Fondo decorativo detrás */
+
 .white-background-image {
   position: absolute;
   inset: 0;
@@ -153,30 +153,32 @@ li {
   flex-wrap: wrap;
   justify-content: center;
   gap: 16px;
-  background: linear-gradient(180deg, #052F50 0%, #000 47.16%);
+  background-color: white;
   min-height: 100vh;
   min-width: 100vw;
   padding-top: 20%;
 }
 
 .album {
-  width: 55%;
-  min-width: 270px;
-  max-height:320px;
+  width: 45%;
+  height: 30%;
+  max-height:370px;
   max-width: 180px;
-  background: #f7f7f7;
+  background-color: white;
   padding: 12px;
   border-radius: 12px;
   text-align: center;
-  font-family:'Poppins', sans-serif;
-  font-weight: 100;
+  z-index: 10;
   font-size: small;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .album-cover {
-  width: 220px;
-  height: 220px;
+  width: 100%;
   border-radius: 8px;
   object-fit: fill;
+}
+
+h2{
+  font-weight: normal;
 }
