@@ -4,46 +4,53 @@
   flex-direction: column;
   align-items: center;
   font-family: 'Poppins', sans-serif;
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
 }
 
 .upload-container::before {
   content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-image: url('../../assets/fondo_selekt.png');
-  background-size: 170%;
+  background-size: contain;
+  /* Muestra la imagen entera */
   background-repeat: no-repeat;
   background-position: center;
-  opacity: 0.15;
-  position: absolute;
-  top: 40vh;
-  left: 0;
-  right: 0vh;
-  bottom: 0;
+  opacity: 0.12;
+  z-index: 0;
 }
 
+/* Caja que envuelve el botón "+" */
 .upload-box {
-  width: 160px;
-  height: 160px;
-  background-color: transparent;
-  border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
   margin-top: 10rem;
+  position: relative;
+  z-index: 1;
 }
 
+/* Botón "+" circular siempre */
 .add-button {
-  width: 45px;
-  height: 45px;
-  font-size: 32px;
+  width: 4rem;
+  aspect-ratio: 1 / 1;
+  /* asegura proporción 1:1 */
+  font-size: 2rem;
   border: none;
   border-radius: 50%;
   background-color: #003b5c;
   color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
+  z-index: 1;
 }
 
+/* Lista de archivos seleccionados */
 .file-list {
   margin-top: 1rem;
   max-height: 150px;
@@ -52,8 +59,10 @@
   text-align: center;
   font-size: 14px;
   color: #003b5c;
+  z-index: 1;
 }
 
+/* Botón para subir archivos */
 .upload-button {
   background-color: #003b5c;
   color: white;
@@ -70,17 +79,21 @@
   z-index: 1000;
 }
 
+/* Enlace al álbum generado */
 .album-link-box {
   margin-bottom: 10vh;
   text-align: center;
+  z-index: 1;
 }
 
 .album-link-box a {
   color: #003b5c;
   font-weight: 500;
-  word-break: break-all;
+  word-break: break-word;
+  text-decoration: none;
 }
 
+/* Vista previa de imágenes */
 .preview-grid {
   display: flex;
   flex-wrap: wrap;
@@ -88,6 +101,7 @@
   margin-bottom: 2rem;
   justify-content: center;
   gap: 8px;
+  z-index: 1;
 }
 
 .preview-img {
@@ -96,4 +110,5 @@
   object-fit: cover;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }

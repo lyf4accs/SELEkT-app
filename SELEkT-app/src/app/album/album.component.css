@@ -2,8 +2,11 @@
   display: block;
   font-family: 'Poppins';
   height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
+/* Botón de volver */
 .back-button {
   position: absolute;
   background-color: transparent;
@@ -12,10 +15,10 @@
   right: 40vh;
 }
 
-/* Contenedor que ocupa toda la pantalla */
+/* Contenedor principal del álbum */
 .album-container {
   background-color: white;
-  height: 100vh;
+  min-height: 100vh;
   padding: 2rem 1rem;
   text-align: center;
   font-family: 'Poppins';
@@ -24,23 +27,29 @@
   align-items: center;
   justify-content: flex-start;
   box-shadow: none;
+  position: relative;
+  z-index: 1;
 }
 
+/* Fondo adaptado a todas las resoluciones */
 .album-container::before {
   content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-image: url('../../assets/fondo_selekt.png');
-  background-size: 170%;
+  background-size: contain;
+  /* 🔥 Ajuste que asegura visibilidad completa */
   background-repeat: no-repeat;
   background-position: center;
-  opacity: 0.15;
-  position: absolute;
-  top: 40vh;
-  left: 0;
-  right: 0vh;
-  bottom: 0;
+  opacity: 0.12;
+  z-index: 0;
   pointer-events: none;
 }
 
+/* Título del álbum */
 .album-title {
   font-family: 'Poppins';
   color: #003b5c;
@@ -49,18 +58,22 @@
   margin-bottom: 2rem;
 }
 
+/* Grid de fotos */
 .photos-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 1.5rem;
+  z-index: 1;
 }
 
+/* Tarjeta de foto */
 .photo-card {
   background: transparent;
   padding: 1rem;
   border-radius: 15px;
   width: 160px;
+  z-index: 1;
 }
 
 .photo {
@@ -68,6 +81,7 @@
   height: 110px;
   object-fit: cover;
   border-radius: 10px;
+  z-index: 1;
 }
 
 .photo-name {
@@ -76,17 +90,20 @@
   color: #003b5c;
   font-weight: 500;
   word-break: break-word;
+  z-index: 1;
 }
 
+/* Contenedor de acciones */
 .album-actions {
   margin-top: 13rem;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
   align-items: center;
+  z-index: 1;
 }
 
-/* Estilo para los botones normales */
+/* Contorno con degradado */
 .colores-border {
   padding: 3px;
   border-radius: 15px;
@@ -96,8 +113,10 @@
       rgba(5, 47, 80, 0.7) 100%);
   box-shadow: 0px 4px 10px 2px rgba(0, 0, 0, 0.25);
   display: inline-block;
+  z-index: 1;
 }
 
+/* Botón interno del contorno */
 .colores-button {
   width: 270px;
   height: 65px;
@@ -114,6 +133,7 @@
   cursor: pointer;
   text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
   transition: transform 0.2s ease;
+  z-index: 1;
 }
 
 .colores-button:hover {
@@ -124,12 +144,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 }
 
-
+/* Texto de "sin fotos" */
 .no-photos {
   font-family: 'Poppins';
   color: #003b5c;
   text-align: center;
   margin-top: 3rem;
+  z-index: 1;
 }
