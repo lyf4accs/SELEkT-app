@@ -191,6 +191,7 @@ export class SwiperSelektComponent implements OnInit {
       if (direction === 'top') {
         await this.addToFavorites(card.imageUrl);
       } else if (direction === 'left') {
+        console.log("esperando confirmación de borrado")
         await this.confirmDelete(card.imageUrl);
       }
 
@@ -200,21 +201,24 @@ export class SwiperSelektComponent implements OnInit {
   }
 
   async addToFavorites(imageUrl: string) {
-    const fileName = imageUrl.split('/').pop();
+    const fileName = this.getFileNameFromUrl(imageUrl);
+    if (!fileName) {
+      console.error('No se pudo obtener el nombre de archivo.');
+      return;
+    }
+
     try {
-      await Filesystem.stat({
-        path: imageUrl,
-        directory: Directory.External,
-      });
       const fileData = await Filesystem.readFile({
-        path: imageUrl,
+        path: fileName,
         directory: Directory.External,
       });
+
       await Filesystem.writeFile({
         path: `DCIM/Favoritos/${fileName}`,
         data: fileData.data,
         directory: Directory.External,
       });
+
       console.log('Imagen guardada en favoritos');
     } catch (error) {
       console.error('Error al guardar en favoritos:', error);
@@ -234,9 +238,15 @@ export class SwiperSelektComponent implements OnInit {
   }
 
   async deleteImage(imageUrl: string) {
+    const fileName = this.getFileNameFromUrl(imageUrl);
+    if (!fileName) {
+      console.error('No se pudo obtener el nombre de archivo.');
+      return;
+    }
+
     try {
       await Filesystem.deleteFile({
-        path: imageUrl,
+        path: fileName,
         directory: Directory.External,
       });
       console.log('Imagen eliminada correctamente');
@@ -260,5 +270,13 @@ export class SwiperSelektComponent implements OnInit {
       c.zIndex = this.cards.length - i;
     });
     this.draggingIndex = null;
+  }
+
+  //helper
+  getFileNameFromUrl(url: string): string | undefined {
+    const match = this.mediatorService
+      .getHashes()
+      .find((item) => item.url === url);
+    return match?.fileName;
   }
 }

@@ -218,7 +218,7 @@ export class SupabaseService {
   async uploadImageForAnalysis(
     base64: string,
     index: number
-  ): Promise<string | null> {
+  ): Promise<{ fileName: string; url: string } | null> {
     try {
       const fileName = `image_${Date.now()}_${index}.jpg`;
       const base64Data = base64.split(',')[1];
@@ -229,7 +229,7 @@ export class SupabaseService {
       }
 
       const { data, error } = await this.supabase.storage
-        .from('images') // Bucket de análisis
+        .from('images')
         .upload(fileName, buffer, {
           contentType: 'image/jpeg',
           upsert: true,
@@ -244,7 +244,10 @@ export class SupabaseService {
         .from('images')
         .getPublicUrl(data.path);
 
-      return publicUrlData?.publicUrl ?? null;
+      return {
+        fileName,
+        url: publicUrlData?.publicUrl ?? '',
+      };
     } catch (err) {
       console.error('Error inesperado subiendo imagen:', err);
       return null;

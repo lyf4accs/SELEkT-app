@@ -26,7 +26,8 @@ export class MediatorService {
   private similarAlbums: any[] = [];
 
   // Hashes temporales
-  private lastHashUrlPairs: { hash: string; url: string }[] = [];
+  private lastHashUrlPairs: { hash: string; url: string; fileName: string }[] =
+    [];
 
   // Variable para almacenar cuál álbum se está visualizando (duplicado o similar)
   private whichAlbum: string | undefined = undefined;
@@ -67,11 +68,12 @@ export class MediatorService {
   }
 
   // Manejo de hashes
-  setHashes(pairs: { hash: string; url: string }[]): void {
+
+  setHashes(pairs: { hash: string; url: string; fileName: string }[]): void {
     this.lastHashUrlPairs = pairs;
   }
 
-  getHashes(): { hash: string; url: string }[] {
+  getHashes(): { hash: string; url: string; fileName: string }[] {
     return this.lastHashUrlPairs;
   }
 

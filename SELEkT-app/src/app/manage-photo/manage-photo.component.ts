@@ -76,21 +76,20 @@ export class ManagePhotoComponent implements OnInit {
         base64Images.map((base64, i) =>
           this.supabaseService.uploadImageForAnalysis(base64, i)
         )
-      ).then((urls: (string | null)[]) => {
-        const validUrls = urls.filter((url): url is string => url !== null);
+      ).then((uploads) => {
+        const valid = uploads.filter(
+          (u): u is { fileName: string; url: string } => !!u
+        );
 
-        const hashRequests = validUrls.map((url) =>
+        const hashRequests = valid.map(({ url }) =>
           this.photoService.hashImage(url)
         );
 
-        forkJoin(
-          hashRequests as Observable<{ hash: string; url: string }>[]
-        ).subscribe((hashResponses) => {
-          console.log('Hashes recibidos:', hashResponses);
-
-          const hashUrlPairs = hashResponses.map((res) => ({
+        forkJoin(hashRequests).subscribe((hashResponses) => {
+          const hashUrlPairs = hashResponses.map((res, i) => ({
             hash: String(res.hash),
             url: res.url,
+            fileName: valid[i].fileName,
           }));
 
           this.mediatorService.setHashes(hashUrlPairs); // 💾 Guardar los hashes
