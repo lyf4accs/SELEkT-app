@@ -31,29 +31,33 @@ export class UploadFilesComponent {
     }
   }
 
+  isUploading = false;
+
   async uploadPhotos() {
+    if (this.isUploading) return; // Bloquea si ya está subiendo
+
+    this.isUploading = true;
+
     if (this.files.length === 0) {
       alert('Por favor, selecciona un archivo');
+      this.isUploading = false;
+      return;
     }
-    console.log('llanado a uploadAlbum');
+
+    console.log('⏫ Subiendo álbum...');
     const soloArchivos = this.files.map((f) => f.file);
     this.albumLink = await this.supabaseService.uploadAlbum(soloArchivos);
+
     if (this.albumLink) {
-      alert(`Álbum creado: ${this.albumLink}`);
+      const goToAlbum = confirm('✅ Álbum creado. ¿Quieres ir ahora?');
+      if (goToAlbum) {
+        window.location.href = this.albumLink;
+      }
     }
+
+    this.isUploading = false;
   }
 
-  copyLink() {
-    if (this.albumLink) {
-      navigator.clipboard
-        .writeText(this.albumLink)
-        .then(() => {
-          alert('Enlace copiado al portapapeles.');
-        })
-        .catch((err) => {
-          console.error('Error al copiar el enlace: ', err);
-        });
-    }
-  }
+
 }
 
