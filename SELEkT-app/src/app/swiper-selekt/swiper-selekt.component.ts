@@ -18,7 +18,7 @@ import { IonicModule } from '@ionic/angular';
   selector: 'app-swiper-selekt',
   standalone: true,
   imports: [CommonModule, FooterComponent, IonicModule],
-  providers:[AlertController],
+  providers: [AlertController],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './swiper-selekt.component.html',
   styleUrls: ['./swiper-selekt.component.css'],
@@ -192,7 +192,7 @@ export class SwiperSelektComponent implements OnInit {
       if (direction === 'top') {
         await this.addToFavorites(card.imageUrl);
       } else if (direction === 'left') {
-        console.log("esperando confirmación de borrado")
+        console.log('esperando confirmación de borrado');
         await this.confirmDelete(card.imageUrl);
       }
 
@@ -227,15 +227,14 @@ export class SwiperSelektComponent implements OnInit {
   }
 
   async confirmDelete(imageUrl: string) {
-    const alert = await this.alertCtrl.create({
-      header: 'Eliminar Imagen',
-      message: '¿Estás seguro de que quieres eliminar esta imagen?',
-      buttons: [
-        { text: 'Cancelar', role: 'cancel' },
-        { text: 'Eliminar', handler: () => this.deleteImage(imageUrl) },
-      ],
-    });
-    await alert.present();
+    const confirmed = window.confirm(
+      'Esta acción es irreversible'
+    );
+    if (confirmed) {
+      this.deleteImage(imageUrl);
+    } else {
+      console.log('Cancelado');
+    }
   }
 
   async deleteImage(imageUrl: string) {
