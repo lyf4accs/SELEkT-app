@@ -12,6 +12,7 @@ export class PhotoLibraryService {
     console.log('[API] Usando endpoint:', this.apiUrl);
   }
 
+
   processImages(images: string[]): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/upload`, { images });
   }

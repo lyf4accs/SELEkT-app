@@ -7,7 +7,7 @@ import { FooterComponent } from '../footer/footer.component';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { environment } from '../../environments/environment';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 
 
 @Component({
@@ -70,33 +70,44 @@ export class ManagePhotoComponent implements OnInit {
         this.photoService.hashImage(url)
       );
 
-      forkJoin<string[]>(hashRequests).subscribe((hashes: string[]) => {
-        const hashUrlPairs = hashes.map((hash, index) => ({
-          hash,
-          url: urls[index],
-        }));
+   forkJoin(
+     hashRequests as Observable<{ hash: string; url: string }>[]
+   ).subscribe({
+     next: (hashResponses) => {
+       console.log('Hashes recibidos:', hashResponses);
 
-        this.photoService
-          .compareHashes(hashUrlPairs)
-          .subscribe((compareRes) => {
-            this.duplicateAlbums = compareRes.albums.filter((a: any) =>
-              a.name.includes('Duplicados')
-            );
-            this.similarAlbums = compareRes.albums.filter((a: any) =>
-              a.name.includes('Similares')
-            );
+       const hashUrlPairs = hashResponses.map((res) => ({
+         hash: String(res.hash), // ← aseguramos string
+         url: res.url,
+       }));
 
-            this.mediatorService.updateDuplicatePhotos(
-              this.duplicateAlbums.flatMap((a) => a.photos)
-            );
-            this.mediatorService.updateSimilarPhotos(
-              this.similarAlbums.flatMap((a) => a.photos)
-            );
+       this.photoService.compareHashes(hashUrlPairs).subscribe((compareRes) => {
+         this.duplicateAlbums = compareRes.albums.filter((a: any) =>
+           a.name.includes('Duplicados')
+         );
+         this.similarAlbums = compareRes.albums.filter((a: any) =>
+           a.name.includes('Similares')
+         );
 
-            this.isProcessing = false;
-            this.albumsLoaded = true;
-          });
-      });
+         this.mediatorService.updateDuplicatePhotos(
+           this.duplicateAlbums.flatMap((a) => a.photos)
+         );
+         this.mediatorService.updateSimilarPhotos(
+           this.similarAlbums.flatMap((a) => a.photos)
+         );
+
+         this.isProcessing = false;
+         this.albumsLoaded = true;
+       });
+     },
+     error: (err) => {
+       console.error('❌ Error en hashRequests (forkJoin):', err);
+       this.isProcessing = false;
+     },
+   });
+
+
+
     });
 }
 
