@@ -214,5 +214,40 @@ export class SupabaseService {
     return { error };
   }
 
+  //laura
+  async uploadImageForAnalysis(
+    base64: string,
+    index: number
+  ): Promise<string | null> {
+    try {
+      const fileName = `image_${Date.now()}_${index}.jpg`;
+      const base64Data = base64.split(',')[1];
+      const binary = atob(base64Data);
+      const buffer = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        buffer[i] = binary.charCodeAt(i);
+      }
 
+      const { data, error } = await this.supabase.storage
+        .from('images') // Bucket de análisis
+        .upload(fileName, buffer, {
+          contentType: 'image/jpeg',
+          upsert: true,
+        });
+
+      if (error || !data) {
+        console.error(`Error subiendo la imagen ${index}:`, error);
+        return null;
+      }
+
+      const { data: publicUrlData } = this.supabase.storage
+        .from('images')
+        .getPublicUrl(data.path);
+
+      return publicUrlData?.publicUrl ?? null;
+    } catch (err) {
+      console.error('Error inesperado subiendo imagen:', err);
+      return null;
+    }
+  }
 }

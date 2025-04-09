@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { environment } from '../../environments/environment';
 import { forkJoin, Observable } from 'rxjs';
-
+import { SupabaseService } from '../services/supabase.service';
 
 @Component({
   selector: 'app-manage-photo',
@@ -23,6 +23,7 @@ export class ManagePhotoComponent implements OnInit {
   mediatorService = inject(MediatorService);
   router = inject(Router);
   alertCtrl = inject(AlertController);
+  supabaseService=inject(SupabaseService);
 
   selectedImages: { name: string; base64: string }[] = [];
   duplicateAlbums: any[] = [];
@@ -61,54 +62,46 @@ export class ManagePhotoComponent implements OnInit {
 
     this.isProcessing = true;
     const base64Images = this.selectedImages.map((img) => img.base64);
+Promise.all(
+  base64Images.map((base64, i) =>
+    this.supabaseService.uploadImageForAnalysis(base64, i)
+  )
+).then((urls: (string | null)[]) => {
+  const validUrls = urls.filter((url): url is string => url !== null);
 
-    this.photoService.processImages(base64Images).subscribe((uploadRes) => {
-      const urls = uploadRes.urls;
+  const hashRequests = validUrls.map((url) =>
+    this.photoService.hashImage(url)
+  );
 
-      // Hash cada imagen
-      const hashRequests = urls.map((url: string) =>
-        this.photoService.hashImage(url)
+  forkJoin(
+    hashRequests as Observable<{ hash: string; url: string }>[]
+  ).subscribe((hashResponses) => {
+    console.log('Hashes recibidos:', hashResponses);
+    const hashUrlPairs = hashResponses.map((res) => ({
+      hash: String(res.hash),
+      url: res.url,
+    }));
+
+    this.photoService.compareHashes(hashUrlPairs).subscribe((compareRes) => {
+      this.duplicateAlbums = compareRes.albums.filter((a: any) =>
+        a.name.includes('Duplicados')
+      );
+      this.similarAlbums = compareRes.albums.filter((a: any) =>
+        a.name.includes('Similares')
       );
 
-   forkJoin(
-     hashRequests as Observable<{ hash: string; url: string }>[]
-   ).subscribe({
-     next: (hashResponses) => {
-       console.log('Hashes recibidos:', hashResponses);
+      this.mediatorService.updateDuplicatePhotos(
+        this.duplicateAlbums.flatMap((a) => a.photos)
+      );
+      this.mediatorService.updateSimilarPhotos(
+        this.similarAlbums.flatMap((a) => a.photos)
+      );
 
-       const hashUrlPairs = hashResponses.map((res) => ({
-         hash: String(res.hash), // ← aseguramos string
-         url: res.url,
-       }));
-
-       this.photoService.compareHashes(hashUrlPairs).subscribe((compareRes) => {
-         this.duplicateAlbums = compareRes.albums.filter((a: any) =>
-           a.name.includes('Duplicados')
-         );
-         this.similarAlbums = compareRes.albums.filter((a: any) =>
-           a.name.includes('Similares')
-         );
-
-         this.mediatorService.updateDuplicatePhotos(
-           this.duplicateAlbums.flatMap((a) => a.photos)
-         );
-         this.mediatorService.updateSimilarPhotos(
-           this.similarAlbums.flatMap((a) => a.photos)
-         );
-
-         this.isProcessing = false;
-         this.albumsLoaded = true;
-       });
-     },
-     error: (err) => {
-       console.error('❌ Error en hashRequests (forkJoin):', err);
-       this.isProcessing = false;
-     },
-   });
-
-
-
+      this.isProcessing = false;
+      this.albumsLoaded = true;
     });
+  });
+   });
 }
 
   viewAlbum(albumType: string, albumIndex?: number): void {
