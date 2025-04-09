@@ -1,20 +1,27 @@
 <div *ngIf="!albumsLoaded">
-  <div>
-    <label for="file">Selecciona imágenes a procesar:</label>
-    <input id="file" type="file" (change)="getGalleryPhotos($event)" multiple />
-    <button (click)="processImages()" [disabled]="isProcessing">Procesar imágenes</button>
-  </div>
+  <div class="upload-container">
 
-  <div *ngIf="isProcessing" class="processing-message">
-    <p>Procesando...</p>
-  </div>
-
-  <div *ngIf="selectedImages.length > 0">
-    <h3>Imágenes seleccionadas:</h3>
-    <div class="image-container">
-      <img *ngFor="let img of selectedImages" [src]="img.base64" [alt]="img.name" class="thumbnail" />
+    <!-- ZONA AZUL -->
+    <div class="header-section">
+      <p class="header-title">Selecciona imágenes a procesar</p>
+      <input id="file" type="file" (change)="getGalleryPhotos($event)" multiple class="file-input" />
     </div>
-  </div>
+
+    <!-- ZONA BLANCA CURVA -->
+    <div class="white-section">
+      <div class="white-background-image"></div>
+      <div *ngIf="!albumsLoaded" class="main-area">
+        <div *ngIf="selectedImages.length > 0">
+          <div class="image-container">
+            <img *ngFor="let img of selectedImages" [src]="img.base64" [alt]="img.name" class="thumbnail" />
+          </div>
+        </div>
+        <button class="main-button" (click)="processImages()" [disabled]="isProcessing">
+          {{ isProcessing ? 'Procesando...' : 'Procesar Imágenes' }}
+        </button>
+      </div>
+      </div>
+    </div>
 </div>
 
 <div *ngIf="albumsLoaded">
@@ -37,4 +44,4 @@
     </div>
   </div>
 </div>
-<app-footer></app-footer>
+<app-footer  [darkBackground]="albumsLoaded"></app-footer>

@@ -1,25 +1,109 @@
-.processing-message {
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
+* {
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.upload-container {
+  font-family: 'Poppins', sans-serif;
+  height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  margin-top: 10px;
-  color: #333;
-  font-weight: bold;
-  font-size: 1.2em;
-}
-html, body{
+  flex-direction: column;
+  background-color: #041929;
   overflow: hidden;
-  height: 80%;
-  margin: 0;
 }
+
+/* HEADER AZUL */
+.header-section {
+  background: linear-gradient(180deg, #052F50 0%, #041929 76.57%);
+  color: white;
+  text-align: center;
+  padding: 7rem 1rem 1rem;
+  min-height: 26%;
+}
+
+.header-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  justify-self: left;
+}
+
+/* Botón Examinar */
+.file-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.custom-file-button {
+  background-color: white;
+  color: #0d2542;
+  padding: 6px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.file-name {
+  font-size: 12px;
+  color: #ccc;
+  text-align: center;
+  max-width: 80%;
+  word-break: break-word;
+}
+
+.white-section {
+  position: relative;
+  background-color: white;
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+  margin-top: -16px;
+  flex: 1;
+  overflow-y: auto;
+  z-index: 1;
+  min-height: 72%;
+  min-width: 100%;
+  justify-content: center;
+  padding-top: 20%;
+  padding-left: 12%;
+  padding-right: 13%;
+}
+
+/* Fondo decorativo detrás */
+.white-background-image {
+  position: absolute;
+  inset: 0;
+  background-image: url('../../assets/fondo_selekt.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  z-index: 0;
+  min-width: 160%;
+  opacity: 0.2;
+  left:0;
+  margin-left: -25%;
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+
+}
+
+/* Asegurarse que el contenido esté por encima */
+.white-section>*:not(.white-background-image) {
+  position: relative;
+  z-index: 1;
+}
+
 .image-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 10px;
+  justify-self: center;
+  min-width: 100%;
 }
 
 .thumbnail {
@@ -34,50 +118,59 @@ li {
   list-style: none;
 }
 
-/* Nuevo estilo para los álbumes */
-.albums-container {
-  justify-content: space-between;
-  gap: 20px;
-  margin-top: 20px;
-  overflow-y: auto;
+/* Botón principal */
+.main-area {
   display: flex;
-    flex-wrap: wrap;
-    /* Permite que los álbumes se ajusten en varias filas */
-    justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-button {
+  background-color: #0d2542;
+  color: white;
+  border: none;
+  padding: 14px 40px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top:100%;
+  position:fixed;
+  min-width: 273px;
+  min-height: 50px;
+}
+
+
+/* Álbumes */
+.albums-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  background: linear-gradient(180deg, #052F50 0%, #000 47.16%);
+  min-height: 100vh;
+  min-width: 100vw;
+  padding-top: 20%;
 }
 
 .album {
-  width: calc(45% - 20px);
-    /* Cada álbum ocupa el 50% del ancho con espacio entre ellos */
-    max-width: 400px;
-    /* Para evitar que sean demasiado grandes en pantallas grandes */
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 10px;
-  background-color: #f9f9f9;
+  width: 55%;
+  min-width: 270px;
+  max-height:320px;
+  max-width: 180px;
+  background: #f7f7f7;
+  padding: 12px;
+  border-radius: 12px;
+  text-align: center;
+  font-family:'Poppins', sans-serif;
+  font-weight: 100;
+  font-size: small;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .album-cover {
-  width: 100%;
-  height: auto;
-  border-radius: 5px;
-  object-fit: cover;
-}
-
-.album-photo {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 5px;
-  margin-right: 10px;
-}
-
-h2 {
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-h3 {
-  font-size: 1.2em;
-  margin-bottom: 10px;
+  width: 220px;
+  height: 220px;
+  border-radius: 8px;
+  object-fit: fill;
 }

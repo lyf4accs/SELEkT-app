@@ -108,6 +108,18 @@ body {
   transform: translateX(0);
 }
 
+.indicator.dark-border {
+  border: 6px solid black;
+}
+
+.indicator.dark-border::after {
+  box-shadow: 1px -10px 0 0 black;
+}
+
+.indicator.dark-border::before {
+  box-shadow: 1px -10px 0 0 black;
+}
+
 .indicator::before {
   content: '';
   position: absolute;

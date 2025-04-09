@@ -59,6 +59,10 @@ export class ManagePhotoComponent implements OnInit {
       };
     }
   }
+  triggerFileUpload() {
+    const input = document.getElementById('file') as HTMLInputElement;
+    input?.click();
+  }
 
   processImages(): void {
     if (this.selectedImages.length === 0) {

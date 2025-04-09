@@ -1,9 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
+
+* {
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
 :host {
   display: block;
   background: linear-gradient(360deg, #021321 0%, #052F50 100%);
   padding: 1.5rem 0.75rem;
   height: 100%;
-  font-family: 'Poppins';
   overflow-y: auto;
 }
 

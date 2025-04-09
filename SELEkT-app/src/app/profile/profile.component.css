@@ -1,10 +1,16 @@
 /* Contenedor general en columnas */
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
+
+* {
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
 
 .profile-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: 'Poppins';
   position: relative;
 }
 
@@ -54,7 +60,6 @@
   background-color: white;
   border: none;
   border-radius: 15px;
-  font-family: 'Poppins', sans-serif;
   color: #7F682C;
   font-size: 16px;
   cursor: pointer;
@@ -91,7 +96,6 @@
   background-color: white;
   border: none;
   border-radius: 12px;
-  font-family: 'Poppins', sans-serif;
   color: rgba(5, 47, 80, 0.9);
   font-size: 16px;
   cursor: pointer;
@@ -129,7 +133,6 @@
   background-color: white;
   border: none;
   border-radius: 12px;
-  font-family: 'Poppins', sans-serif;
   color: #052F50;
   font-size: 16px;
   cursor: pointer;
