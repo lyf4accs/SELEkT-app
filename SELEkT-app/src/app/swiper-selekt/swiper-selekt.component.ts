@@ -18,6 +18,7 @@ import { IonicModule } from '@ionic/angular';
   selector: 'app-swiper-selekt',
   standalone: true,
   imports: [CommonModule, FooterComponent, IonicModule],
+  providers:[AlertController],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './swiper-selekt.component.html',
   styleUrls: ['./swiper-selekt.component.css'],
