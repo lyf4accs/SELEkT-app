@@ -23,7 +23,7 @@ export class ManagePhotoComponent implements OnInit {
   mediatorService = inject(MediatorService);
   router = inject(Router);
   alertCtrl = inject(AlertController);
-  supabaseService=inject(SupabaseService);
+  supabaseService = inject(SupabaseService);
 
   selectedImages: { name: string; base64: string }[] = [];
   duplicateAlbums: any[] = [];
@@ -33,8 +33,16 @@ export class ManagePhotoComponent implements OnInit {
   whichAlbum: string | undefined = undefined;
 
   ngOnInit(): void {
-    this.whichAlbum = undefined;
+    const duplicates = this.mediatorService.getDuplicatePhotos();
+    const similars = this.mediatorService.getSimilarPhotos();
+
+    if (duplicates.length > 0 || similars.length > 0) {
+      this.duplicateAlbums = [{ name: 'Duplicados', photos: duplicates }];
+      this.similarAlbums = [{ name: 'Similares', photos: similars }];
+      this.albumsLoaded = true;
+    }
   }
+
   // Método para seleccionar imágenes desde la galería
   getGalleryPhotos(event: any): void {
     const files = event.target.files;
@@ -62,47 +70,51 @@ export class ManagePhotoComponent implements OnInit {
 
     this.isProcessing = true;
     const base64Images = this.selectedImages.map((img) => img.base64);
-Promise.all(
-  base64Images.map((base64, i) =>
-    this.supabaseService.uploadImageForAnalysis(base64, i)
-  )
-).then((urls: (string | null)[]) => {
-  const validUrls = urls.filter((url): url is string => url !== null);
+    this.supabaseService.clearAnalysisBucket().then(() => {
+      Promise.all(
+        base64Images.map((base64, i) =>
+          this.supabaseService.uploadImageForAnalysis(base64, i)
+        )
+      ).then((urls: (string | null)[]) => {
+        const validUrls = urls.filter((url): url is string => url !== null);
 
-  const hashRequests = validUrls.map((url) =>
-    this.photoService.hashImage(url)
-  );
+        const hashRequests = validUrls.map((url) =>
+          this.photoService.hashImage(url)
+        );
 
-  forkJoin(
-    hashRequests as Observable<{ hash: string; url: string }>[]
-  ).subscribe((hashResponses) => {
-    console.log('Hashes recibidos:', hashResponses);
-    const hashUrlPairs = hashResponses.map((res) => ({
-      hash: String(res.hash),
-      url: res.url,
-    }));
+        forkJoin(
+          hashRequests as Observable<{ hash: string; url: string }>[]
+        ).subscribe((hashResponses) => {
+          console.log('Hashes recibidos:', hashResponses);
+          const hashUrlPairs = hashResponses.map((res) => ({
+            hash: String(res.hash),
+            url: res.url,
+          }));
 
-    this.photoService.compareHashes(hashUrlPairs).subscribe((compareRes) => {
-      this.duplicateAlbums = compareRes.albums.filter((a: any) =>
-        a.name.includes('Duplicados')
-      );
-      this.similarAlbums = compareRes.albums.filter((a: any) =>
-        a.name.includes('Similares')
-      );
+          this.photoService
+            .compareHashes(hashUrlPairs)
+            .subscribe((compareRes) => {
+              this.duplicateAlbums = compareRes.albums.filter((a: any) =>
+                a.name.includes('Duplicados')
+              );
+              this.similarAlbums = compareRes.albums.filter((a: any) =>
+                a.name.includes('Similares')
+              );
 
-      this.mediatorService.updateDuplicatePhotos(
-        this.duplicateAlbums.flatMap((a) => a.photos)
-      );
-      this.mediatorService.updateSimilarPhotos(
-        this.similarAlbums.flatMap((a) => a.photos)
-      );
+              this.mediatorService.updateDuplicatePhotos(
+                this.duplicateAlbums.flatMap((a) => a.photos)
+              );
+              this.mediatorService.updateSimilarPhotos(
+                this.similarAlbums.flatMap((a) => a.photos)
+              );
 
-      this.isProcessing = false;
-      this.albumsLoaded = true;
+              this.isProcessing = false;
+              this.albumsLoaded = true;
+            });
+        });
+      });
     });
-  });
-   });
-}
+  }
 
   viewAlbum(albumType: string, albumIndex?: number): void {
     if (albumType === 'duplicate') {

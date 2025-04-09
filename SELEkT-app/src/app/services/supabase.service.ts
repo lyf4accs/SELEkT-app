@@ -250,4 +250,28 @@ export class SupabaseService {
       return null;
     }
   }
+
+  async clearAnalysisBucket(): Promise<void> {
+    const { data, error } = await this.supabase.storage
+      .from('images')
+      .list('', {
+        limit: 1000,
+      });
+
+    if (error || !data) {
+      console.error('Error listando imágenes en el bucket:', error);
+      return;
+    }
+
+    const fileNames = data.map((file) => file.name);
+    if (fileNames.length > 0) {
+      const { error: deleteError } = await this.supabase.storage
+        .from('images')
+        .remove(fileNames);
+
+      if (deleteError) {
+        console.error('Error al borrar imágenes:', deleteError);
+      }
+    }
+  }
 }
