@@ -16,9 +16,17 @@
             <img *ngFor="let img of selectedImages" [src]="img.base64" [alt]="img.name" class="thumbnail" />
           </div>
         </div>
-        <button class="main-button" (click)="processImages()" [disabled]="isProcessing">
-          {{ isProcessing ? 'Procesando...' : 'Procesar Imágenes' }}
-        </button>
+       <button
+        class="main-button"
+        (click)="processImages()"
+        [disabled]="isProcessing || isButtonDisabled"
+        [ngClass]="{
+          'disabled-by-condition': isButtonDisabled && !isProcessing
+        }"
+      >
+        {{ isProcessing ? 'Procesando...' : 'Procesar Imágenes' }}
+      </button>
+
       </div>
       </div>
     </div>

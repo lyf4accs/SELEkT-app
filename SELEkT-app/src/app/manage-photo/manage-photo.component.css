@@ -140,6 +140,12 @@ li {
   min-height: 50px;
 }
 
+.main-button.disabled-by-condition {
+  background-color: #dbdbdb;
+  color: #e5e5e5;
+  cursor: not-allowed;
+}
+
 
 /* Álbumes */
 .albums-container {

@@ -43,6 +43,10 @@ export class ManagePhotoComponent implements OnInit {
     }
   }
 
+  get isButtonDisabled(): boolean {
+    return this.selectedImages.length === 0 && !this.isProcessing;
+  }
+
   getGalleryPhotos(event: any): void {
     const files = event.target.files;
     this.selectedImages = [];
