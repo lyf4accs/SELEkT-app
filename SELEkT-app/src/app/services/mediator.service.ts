@@ -14,22 +14,19 @@ export class MediatorService {
   }
 
   // Subject para las fotos duplicadas
-  private duplicatePhotosSubject = new BehaviorSubject<any[]>([]); // Cambié el tipo a array vacío
+  private duplicatePhotosSubject = new BehaviorSubject<any[]>([]);
   duplicatePhotos$ = this.duplicatePhotosSubject.asObservable();
 
   // Subject para las fotos similares
-  private similarPhotosSubject = new BehaviorSubject<any[]>([]); // Cambié el tipo a array vacío
+  private similarPhotosSubject = new BehaviorSubject<any[]>([]);
   similarPhotos$ = this.similarPhotosSubject.asObservable();
 
-  // Método para actualizar las fotos duplicadas
-  updateDuplicatePhotos(photos: any[]): void {
-    this.duplicatePhotosSubject.next(photos); // No es necesario nullificar antes, solo actualizamos
-  }
+  // Álbumes completos para duplicados y similares
+  private duplicateAlbums: any[] = [];
+  private similarAlbums: any[] = [];
 
-  // Método para actualizar las fotos similares
-  updateSimilarPhotos(photos: any[]): void {
-    this.similarPhotosSubject.next(photos); // No es necesario nullificar antes, solo actualizamos
-  }
+  // Hashes temporales
+  private lastHashUrlPairs: { hash: string; url: string }[] = [];
 
   // Variable para almacenar cuál álbum se está visualizando (duplicado o similar)
   private whichAlbum: string | undefined = undefined;
@@ -44,12 +41,41 @@ export class MediatorService {
     return this.whichAlbum;
   }
 
-  // Métodos adicionales para obtener las fotos de duplicados y similares directamente
+  // Actualizar fotos y guardar álbumes completos
+  updateDuplicatePhotos(photos: any[], albums?: any[]): void {
+    this.duplicatePhotosSubject.next(photos);
+    if (albums) this.duplicateAlbums = albums;
+  }
+
+  updateSimilarPhotos(photos: any[], albums?: any[]): void {
+    this.similarPhotosSubject.next(photos);
+    if (albums) this.similarAlbums = albums;
+  }
+
+  // Obtener fotos actuales
   getDuplicatePhotos(): any[] {
     return this.duplicatePhotosSubject.getValue();
   }
 
   getSimilarPhotos(): any[] {
     return this.similarPhotosSubject.getValue();
+  }
+
+  // Obtener álbumes guardados
+  getAlbums(type: 'duplicate' | 'similar'): any[] {
+    return type === 'duplicate' ? this.duplicateAlbums : this.similarAlbums;
+  }
+
+  // Manejo de hashes
+  setHashes(pairs: { hash: string; url: string }[]): void {
+    this.lastHashUrlPairs = pairs;
+  }
+
+  getHashes(): { hash: string; url: string }[] {
+    return this.lastHashUrlPairs;
+  }
+
+  clearHashes(): void {
+    this.lastHashUrlPairs = [];
   }
 }

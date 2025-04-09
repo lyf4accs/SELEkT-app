@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { PhotoLibraryService } from '../services/PhotoLibraryService';
-import { MediatorService } from '../services/mediator.service'; // Importar MediatorService
+import { MediatorService } from '../services/mediator.service';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../footer/footer.component';
 import { Router } from '@angular/router';
@@ -33,17 +33,16 @@ export class ManagePhotoComponent implements OnInit {
   whichAlbum: string | undefined = undefined;
 
   ngOnInit(): void {
-    const duplicates = this.mediatorService.getDuplicatePhotos();
-    const similars = this.mediatorService.getSimilarPhotos();
-
-    if (duplicates.length > 0 || similars.length > 0) {
-      this.duplicateAlbums = [{ name: 'Duplicados', photos: duplicates }];
-      this.similarAlbums = [{ name: 'Similares', photos: similars }];
+    if (
+      this.mediatorService.getDuplicatePhotos().length > 0 ||
+      this.mediatorService.getSimilarPhotos().length > 0
+    ) {
+      this.duplicateAlbums = this.mediatorService.getAlbums('duplicate');
+      this.similarAlbums = this.mediatorService.getAlbums('similar');
       this.albumsLoaded = true;
     }
   }
 
-  // Método para seleccionar imágenes desde la galería
   getGalleryPhotos(event: any): void {
     const files = event.target.files;
     this.selectedImages = [];
@@ -61,7 +60,6 @@ export class ManagePhotoComponent implements OnInit {
     }
   }
 
-  // Enviar imágenes al servidor para detectar duplicados y similares
   processImages(): void {
     if (this.selectedImages.length === 0) {
       alert('Por favor, selecciona imágenes primero.');
@@ -69,7 +67,10 @@ export class ManagePhotoComponent implements OnInit {
     }
 
     this.isProcessing = true;
+    this.mediatorService.clearHashes(); // 🧹 limpiar hashes anteriores
+
     const base64Images = this.selectedImages.map((img) => img.base64);
+
     this.supabaseService.clearAnalysisBucket().then(() => {
       Promise.all(
         base64Images.map((base64, i) =>
@@ -86,10 +87,13 @@ export class ManagePhotoComponent implements OnInit {
           hashRequests as Observable<{ hash: string; url: string }>[]
         ).subscribe((hashResponses) => {
           console.log('Hashes recibidos:', hashResponses);
+
           const hashUrlPairs = hashResponses.map((res) => ({
             hash: String(res.hash),
             url: res.url,
           }));
+
+          this.mediatorService.setHashes(hashUrlPairs); // 💾 Guardar los hashes
 
           this.photoService
             .compareHashes(hashUrlPairs)
@@ -102,10 +106,13 @@ export class ManagePhotoComponent implements OnInit {
               );
 
               this.mediatorService.updateDuplicatePhotos(
-                this.duplicateAlbums.flatMap((a) => a.photos)
+                this.duplicateAlbums.flatMap((a) => a.photos),
+                this.duplicateAlbums // 💾 guardar álbumes
               );
+
               this.mediatorService.updateSimilarPhotos(
-                this.similarAlbums.flatMap((a) => a.photos)
+                this.similarAlbums.flatMap((a) => a.photos),
+                this.similarAlbums
               );
 
               this.isProcessing = false;
@@ -121,16 +128,18 @@ export class ManagePhotoComponent implements OnInit {
       this.whichAlbum = 'duplicate';
       this.mediatorService.setWhichAlbum(this.whichAlbum);
       const album = this.duplicateAlbums[albumIndex || 0];
-      this.mediatorService.updateDuplicatePhotos(album.photos); // Solo fotos del álbum seleccionado
+      this.mediatorService.updateDuplicatePhotos(album.photos);
     } else if (albumType === 'similar' && albumIndex !== undefined) {
       this.whichAlbum = 'similar';
       this.mediatorService.setWhichAlbum(this.whichAlbum);
       const album = this.similarAlbums[albumIndex];
-      this.mediatorService.updateSimilarPhotos(album.photos); // Solo fotos del álbum seleccionado
+      this.mediatorService.updateSimilarPhotos(album.photos);
     }
+
+    // Cover photos
     this.duplicateAlbums.forEach((album) => {
       if (album.photos.length > 0) {
-        album.coverPhoto = album.photos[0]; // Primera imagen como cover
+        album.coverPhoto = album.photos[0];
       }
     });
 
