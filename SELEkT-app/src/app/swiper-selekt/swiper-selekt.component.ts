@@ -12,12 +12,12 @@ import { MediatorService } from '../services/mediator.service';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { AlertController } from '@ionic/angular';
 import { environment } from '../../environments/environment';
-import { IonicModule } from '@ionic/angular';
+import { Dialog } from '@capacitor/dialog';
 
 @Component({
   selector: 'app-swiper-selekt',
   standalone: true,
-  imports: [CommonModule, FooterComponent, IonicModule],
+  imports: [CommonModule, FooterComponent],
   providers: [AlertController],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './swiper-selekt.component.html',
@@ -190,7 +190,7 @@ export class SwiperSelektComponent implements OnInit {
 
     setTimeout(async () => {
       if (direction === 'top') {
-        await this.addToFavorites(card.imageUrl);
+        await this.confirmFavorite(card.imageUrl);
       } else if (direction === 'left') {
         console.log('esperando confirmación de borrado');
         await this.confirmDelete(card.imageUrl);
@@ -227,11 +227,32 @@ export class SwiperSelektComponent implements OnInit {
   }
 
   async confirmDelete(imageUrl: string) {
-    const confirmed = window.confirm(
-      'Esta acción es irreversible'
-    );
-    if (confirmed) {
+    console.log('Esperando confirmación nativa...');
+    const { value } = await Dialog.confirm({
+      title: 'Eliminar Imagen',
+      message: 'Esta acción es irreversible. ¿Deseas continuar?',
+      okButtonTitle: 'Eliminar',
+      cancelButtonTitle: 'Cancelar',
+    });
+
+    if (value) {
       this.deleteImage(imageUrl);
+    } else {
+      console.log('Cancelado');
+    }
+  }
+
+  async confirmFavorite(imageUrl: string) {
+    console.log('Esperando confirmación nativa...');
+    const { value } = await Dialog.confirm({
+      title: 'Añadir a Favoritos',
+      message: '¿Quieres agregar esta foto a tu album destacado?',
+      okButtonTitle: 'Aceptar',
+      cancelButtonTitle: 'Cancelar',
+    });
+
+    if (value) {
+      this.addToFavorites(imageUrl);
     } else {
       console.log('Cancelado');
     }
