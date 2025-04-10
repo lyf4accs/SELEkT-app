@@ -1,64 +1,71 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
 
-* {
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+.peers-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  /* permite salto de línea si no caben */
+  justify-content: center;
+  align-items: flex-start;
+  /* Alinea los items en la parte superior para alinear nombres */
+  gap: 24px;
+  position: relative;
+  z-index: 2;
+  margin-top: 100px;
+  padding: 0 16px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .peer {
   display: flex;
-  padding: 10px;
-  background-color: #f9f9f9;
-  margin: 10px 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 50px;
+  flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  gap: 2px;
+  margin-bottom: 12vh;
+  box-sizing: border-box;
 }
 
-.peer:hover {
-  background-color: #eaeaea;
-}
-
-.peer-icon {
+.peer-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #6296bf;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  /* Esto crea el círculo */
-  background-color: #007bff;
-  /* Color del círculo */
-  color: white;
-  /* Color del texto dentro del círculo */
-  font-size: 20px;
-  /* Tamaño del texto (puedes poner un ícono dentro si lo deseas) */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0,1);
+  transition: transform 0.2s ease;
 }
 
-.peer-info {
-  margin-left: 10px;
+.peer-circle:hover {
+  transform: scale(1.05);
+}
+
+.peer-circle svg {
+  width: 40px;
+  height: 40px;
+  fill: white;
 }
 
 .peer-name {
-  font-weight: bold;
-}
-
-.peer-device {
-  font-size: 0.9em;
-  color: #666;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #052F50;
+  text-align: center;
+  width: 100px;
+  line-height: 1.2;
+  background: none;
 }
 
 .no-peers {
+  margin-top: 10vh;
+  font-family: 'Poppins';
+  font-weight: 400;
+  font-size: 1.1rem;
   text-align: center;
-  padding: 20px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.no-peers h2 {
-  margin: 0;
-  color: #333;
+  color: #052F50;
 }

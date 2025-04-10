@@ -1,13 +1,24 @@
 @if (peers.length === 0) {
   <div class="no-peers">
-    <h2>No se encuentran dispositivos cercanos a tu alrededor</h2>
+    <p>No se encuentran dispositivos cercanos a tu alrededor</p>
   </div>
 }
 
-@for (peer of peers; track peer.id) {
-  <div class="peer" (click)="selectPeer(peer)">
-    <div class="peer-info">
+<div class="peers-wrapper">
+  @for (peer of peers; track peer.id) {
+    <div class="peer" (click)="selectPeer(peer)">
+      <div class="peer-circle">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="32" fill="#6296bf"/>
+          <path d="M20 18 Q32 4 44 18 Z" fill="white"/>
+          <circle cx="32" cy="4" r="2.5" fill="white"/>
+          <rect x="18" y="22" width="28" height="22" rx="6" fill="white"/>
+          <circle cx="26" cy="33" r="3" fill="#6296bf"/>
+          <circle cx="38" cy="33" r="3" fill="#6296bf"/>
+          <path d="M26 39 Q32 44 38 39" stroke="#6296bf" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
       <div class="peer-name">{{ peer.displayName }}</div>
     </div>
-  </div>
-}
+  }
+</div>

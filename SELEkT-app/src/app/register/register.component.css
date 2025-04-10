@@ -1,99 +1,89 @@
-/* Contenedor general en columnas */
 @import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
 
 * {
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
 .register-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  background-color: #003b5c;
 }
 
-
-/* Sección superior (azul) */
+/* Sección azul superior */
 .register-header {
   display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
   background: linear-gradient(to bottom, #002f4b, #001a29);
-  text-align: left;
+  padding: 2rem;
+  height: 28vh;
   color: white;
-  height: 35vh;
-  left: 40vh;
+  position: relative;
 }
 
 #wellcomeText {
-  font-size: 20px;
-  line-height: 105%;
-  letter-spacing: -3%;
-  top: 15vh;
-  left: 6vh;
+  font-size: clamp(1.3rem, 2.3vw, 1.8rem);
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  margin: 0;
   position: absolute;
-  width: 100%;
+  bottom: 4rem;
+  left: 2.1rem;
 }
 
-/* Sección inferior (blanca) */
+/* Sección blanca */
 .register-form-wrapper {
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  z-index: 1000;
-  margin-top: -8vh;
-}
-
-.register-form {
-  margin-top: 1vh;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  align-items: center;
   width: 100%;
+  position: relative;
+  margin-top: -30px;
 }
 
 .register-card {
   background-color: white;
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
-  width: 100vh;
-  height: 100%;
-  max-width: 400px;
-  padding: 2rem 1.5rem 4rem 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  padding: 3rem 1.5rem 4rem;
   box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
+}
+
+/* Formulario */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 84%;
+  margin-top: 0,2rem;
 }
 
 .form-input {
   border: none;
   border-bottom: 2px solid #003b5c;
-  font-size: 0.9rem;
-  padding: 0.4rem 0;
-  outline: none;
-  font-weight: 100;
-  color: #003b5c;
-  width: 32vh;
-}
-
-/* Botón */
-.submit-button {
-  background-color: #052F50;
-  color: white;
   font-size: 1rem;
-  margin-top: 37vh;
-  padding: 0.9rem;
-  border: none;
-  border-radius: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 75%;
-  max-width: 300px;
-  position: fixed;
-  /* quita el absolute */
+  padding: 0.8rem 0;
+  outline: none;
+  font-weight: 500;
+  color: #003b5c;
+  width: 100%;
 }
 
 .form-input::placeholder {
@@ -101,7 +91,23 @@
   opacity: 1;
 }
 
-
+/* Botón */
+.submit-button {
+  background-color: #052F50;
+  color: white;
+  font-size: 1rem;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 1rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .submit-button:hover {
   background-color: #005a8d;
@@ -110,22 +116,41 @@
 /* Error */
 .error-message {
   color: #d32f2f;
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   text-align: center;
-  bottom: 5px;
-  position: relative;
 }
 
-/* Registro */
+/* ¿Ya tienes cuenta? */
 .login {
-  position: absolute;
-  margin-top: 46vh;
+  margin-top: 1.5rem;
   text-align: center;
+  font-size: 0.9rem;
   color: #003b5c;
-  font-size: 15px;
 }
 
 .login a {
   text-decoration: none;
   color: #005a8d;
+}
+
+/* 📱 Responsive */
+@media (max-width: 480px) {
+  .register-header {
+    height: 28vh;
+    padding: 1.5rem;
+  }
+
+  .register-card {
+    padding: 2rem 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  #wellcomeText {
+    font-size: 2rem;
+  }
+
+  .register-card {
+    padding: 3rem;
+  }
 }
