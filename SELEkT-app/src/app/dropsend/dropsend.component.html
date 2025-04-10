@@ -7,14 +7,26 @@
     </button>
   }
 </header>
+
+<div class="dropsend-main">
+  <div class="circles-background">
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+</div>
+
 <app-peerscomponent></app-peerscomponent>
-<footer class="column">
-  <svg class="icon logo">
-    <use xlink:href="#wifi-tethering"></use>
-  </svg>
-  <div id="displayName">{{ displayName }}</div>
-  <div class="font-body2">
-    Puedes ser descubierto por cualquiera que esté en esta red
+
+
+  <div class="user-info">
+    <div id="displayName">{{ displayName }}</div>
+    <div class="discovery-info">
+      Puedes ser descubierto por cualquiera que esté en esta red
+    </div>
   </div>
-</footer>
+
+</div>
+
 <app-footer></app-footer>

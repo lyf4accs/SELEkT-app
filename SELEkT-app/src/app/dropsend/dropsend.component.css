@@ -1,103 +1,64 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
 
-* {
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
 
-html,
-body {
-  margin: 0;
-  padding: 0;
+.dropsend-main {
+  position: relative;
   width: 100%;
-  height: 100%;
-  background-color: #e7eaf0;
-  color: white;
+  height: 100vh;
+  background-color: white;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 }
 
-header {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  padding: 10px;
-  background-color: #eadede;
+/* Círculos concéntricos */
+.circles-background::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 36%;
+  transform: translate(-50%, -50%);
+  width: 1600px;
+  height: 1600px;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at center, transparent 58px, rgba(43, 74, 142, 0.15) 59px, transparent 62px),
+    radial-gradient(circle at center, transparent 108px, rgba(43, 74, 142, 0.12) 109px, transparent 112px),
+    radial-gradient(circle at center, transparent 158px, rgba(43, 74, 142, 0.10) 159px, transparent 162px),
+    radial-gradient(circle at center, transparent 208px, rgba(43, 74, 142, 0.08) 209px, transparent 212px),
+    radial-gradient(circle at center, transparent 258px, rgba(43, 74, 142, 0.06) 259px, transparent 262px),
+    radial-gradient(circle at center, transparent 308px, rgba(43, 74, 142, 0.05) 309px, transparent 312px),
+    radial-gradient(circle at center, transparent 358px, rgba(43, 74, 142, 0.04) 359px, transparent 362px),
+    radial-gradient(circle at center, transparent 408px, rgba(43, 74, 142, 0.03) 409px, transparent 412px),
+    radial-gradient(circle at center, transparent 458px, rgba(43, 74, 142, 0.02) 459px, transparent 462px);
+  background-repeat: no-repeat;
+  background-position: center;
 }
-
-header button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 10px;
-}
-
-.icon {
-  width: 24px;
-  height: 24px;
-  fill: white;
-}
-
-.no-peers {
-  text-align: center;
-  margin-top: 20px;
-}
-
-footer {
+/* Contenedor del nombre y subtítulo */
+.user-info {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-  background-color: #f0e4e4;
-  width: 100%;
-}
-
-footer .logo {
-  width: 40px;
-  height: 40px;
-  margin-bottom: 10px;
+  margin-bottom: 11rem;
+  z-index: 2;
+  position: relative;
+  bottom: 5%;
 }
 
 #displayName {
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-family: 'Poppins';
+  font-weight: 600;
+  font-size: 16px;
+  color: #052F50;
 }
 
-.font-body2 {
-  font-size: 0.9em;
-  opacity: 0.8;
-}
-
-.peer {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  margin: 10px;
-  background-color: #444;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.peer:hover {
-  background-color: #555;
-}
-
-.peer-icon {
-  margin-right: 10px;
-}
-
-.peer-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.peer-name {
-  font-weight: bold;
-}
-
-.peer-device {
-  font-size: 0.9em;
-  opacity: 0.8;
+.discovery-info {
+  font-family: 'Poppins';
+  font-size: 13px;
+  color: #003b5c;
+  text-align: center;
+  margin-top: 0.5rem;
 }
