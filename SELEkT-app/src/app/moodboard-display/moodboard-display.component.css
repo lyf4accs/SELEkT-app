@@ -1,4 +1,11 @@
 /* moodboard-display.component.css */
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
+
+* {
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
 .moodboard-display {
   padding: 1.5rem;
   font-family: 'Arial', sans-serif;

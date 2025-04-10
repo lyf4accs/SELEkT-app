@@ -1,6 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
+
+* {
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
 .moodboard-container {
   padding: 1rem;
-  font-family: 'Arial', sans-serif;
+ overflow: scroll;
+  height: 100vh;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 h1 {
