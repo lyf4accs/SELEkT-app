@@ -1,29 +1,35 @@
 <div class="moodboard-container">
   <h1>Moodboards</h1>
 
-  <div *ngIf="albums.length === 0" class="empty-message">
+  <div *ngIf="isLoading" class="loading-message">
+    <p>Procesando fotos...</p>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    <p>Ocurrió un error. Intenta subir las fotos de nuevo.</p>
+  </div>
+
+  <div *ngIf="albums.length === 0 && !isLoading && !error" class="empty-message">
     <p>Sube tus fotos, estamos listos para empezar</p>
   </div>
 
-  <div class="album-grid">
-   <div
-  class="album-card"
-  *ngFor="let album of albums; let i = index"
-  [routerLink]="['/moodboard', i]"
->
-  <div
-    class="cover"
-    *ngIf="album.coverPhoto"
-    [style.backgroundImage]="'url(' + album.coverPhoto + ')'"
-  ></div>
-  <p class="album-title">{{ album.name }}</p>
-</div>
-
-
+  <div class="album-grid" *ngIf="albums.length && !isLoading">
+    <div
+      class="album-card"
+      *ngFor="let album of albums; let i = index"
+      [routerLink]="['/moodboard', i]"
+    >
+      <div
+        class="cover"
+        *ngIf="album.coverPhoto"
+        [style.backgroundImage]="'url(' + album.coverPhoto + ')'"
+      ></div>
+      <p class="album-title">{{ album.name }}</p>
+    </div>
   </div>
-<div class="upload-button">
-  <input type="file" (change)="onAddPhotos($event)" accept="image/*" multiple hidden #fileInput />
-  <button (click)="fileInput.click()">+</button>
-</div>
 
+  <div class="upload-button">
+    <input type="file" (change)="onAddPhotos($event)" accept="image/*" multiple hidden #fileInput />
+    <button (click)="fileInput.click()">+</button>
+  </div>
 </div>

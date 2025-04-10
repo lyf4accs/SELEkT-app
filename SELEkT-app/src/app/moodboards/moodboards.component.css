@@ -121,3 +121,16 @@ h1 {
 .upload-button button:hover {
   background-color: #233959;
 }
+
+
+.loading-message,
+.error-message {
+  text-align: center;
+  font-size: 1rem;
+  color: #888;
+  margin-top: 2rem;
+}
+
+.error-message {
+  color: #c0392b;
+}

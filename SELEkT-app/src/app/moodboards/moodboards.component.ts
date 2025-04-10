@@ -19,64 +19,66 @@ export class MoodboardsComponent implements OnInit {
   supabase = inject(SupabaseService);
   photoService = inject(PhotoLibraryService);
   cdr = inject(ChangeDetectorRef);
+  isLoading = false;
+  error = false;
 
   ngOnInit() {
-   this.albums = this.mediator.getColorMoodboards() || [];
-
+    this.albums = this.mediator.getColorMoodboards() || [];
   }
 
   async onAddPhotos(event: any) {
+    this.isLoading = true;
+    this.error = false;
+
     const files: File[] = Array.from(event.target.files as File[]);
     const base64Images = await Promise.all(files.map(this.toBase64));
-
     const urls: string[] = [];
+
     for (let i = 0; i < base64Images.length; i++) {
       const url = await this.supabase.uploadToColorBucket(base64Images[i], i);
       if (url) urls.push(url);
     }
-console.log('URLs subidas:', urls);
 
-try {
-  const colorRes = await this.photoService.getDominantColors(urls).toPromise();
-  console.log('Resultado /api/color:', colorRes);
+    try {
+      const colorRes = await this.photoService
+        .getDominantColors(urls)
+        .toPromise();
+      const paletteRes = await this.photoService
+        .groupByPalette(colorRes.results)
+        .toPromise();
 
-  const paletteRes = await this.photoService
-    .groupByPalette(colorRes.results)
-    .toPromise();
-  console.log('Resultado /api/palettes:', paletteRes);
+      const existingAlbums = [...this.albums];
 
-  const existingAlbums = [...this.albums];
+      for (const newAlbum of paletteRes.albums || []) {
+        const match = existingAlbums.find(
+          (a) => a.colorKey === newAlbum.colorKey
+        );
 
-  for (const newAlbum of paletteRes.albums || []) {
-    const match = existingAlbums.find((a) => a.colorKey === newAlbum.colorKey);
-
-    if (match) {
-      // Añade fotos nuevas si no están ya
-      newAlbum.photos.forEach((photo:string) => {
-        if (!match.photos.includes(photo)) {
-          match.photos.push(photo);
+        if (match) {
+          newAlbum.photos.forEach((photo: string) => {
+            if (!match.photos.includes(photo)) {
+              match.photos.push(photo);
+            }
+          });
+          if (!match.coverPhoto && newAlbum.coverPhoto) {
+            match.coverPhoto = newAlbum.coverPhoto;
+          }
+        } else {
+          existingAlbums.push(newAlbum);
         }
-      });
-
-      // Cambia la portada si se desea actualizar (opcional)
-      if (!match.coverPhoto && newAlbum.coverPhoto) {
-        match.coverPhoto = newAlbum.coverPhoto;
       }
-    } else {
-      existingAlbums.push(newAlbum); // nuevo moodboard
+
+      this.albums = existingAlbums;
+      this.mediator.setColorMoodboards(this.albums);
+      this.cdr.detectChanges();
+    } catch (err) {
+      console.error('Error procesando colores:', err);
+      this.error = true;
+      this.albums = [];
+      this.mediator.setColorMoodboards([]);
+    } finally {
+      this.isLoading = false;
     }
-  }
-
-  this.albums = existingAlbums;
-  this.mediator.setColorMoodboards(this.albums);
-  this.cdr.detectChanges();
-
-
-  this.mediator.setColorMoodboards(this.albums);
-  this.cdr.detectChanges();
-} catch (err) {
-  console.error('Error procesando colores:', err);
-}
   }
 
   toBase64(file: File): Promise<string> {
