@@ -12,7 +12,6 @@ export class PhotoLibraryService {
     console.log('[API] Usando endpoint:', this.apiUrl);
   }
 
-
   processImages(images: string[]): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/upload`, { images });
   }
@@ -23,5 +22,13 @@ export class PhotoLibraryService {
 
   compareHashes(hashes: { hash: string; url: string }[]): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/compare`, { hashes });
+  }
+
+  getDominantColors(urls: string[]): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/color`, { urls });
+  }
+
+  groupByPalette(colors: { url: string; color: string }[]): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/palettes`, { data: colors });
   }
 }

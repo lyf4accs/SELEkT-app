@@ -80,4 +80,12 @@ export class MediatorService {
   clearHashes(): void {
     this.lastHashUrlPairs = [];
   }
+
+  private colorMoodboards: any[] = [];
+  getColorMoodboards() {
+    return this.colorMoodboards;
+  }
+  setColorMoodboards(albums: any[]) {
+    this.colorMoodboards = albums;
+  }
 }

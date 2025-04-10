@@ -277,4 +277,40 @@ export class SupabaseService {
       }
     }
   }
+
+  async uploadToColorBucket(
+    base64: string,
+    index: number
+  ): Promise<string | null> {
+    const fileName = `color_${Date.now()}_${index}.jpg`;
+    const base64Data = base64.split(',')[1];
+    const binary = atob(base64Data);
+    const buffer = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) buffer[i] = binary.charCodeAt(i);
+
+    const { data, error } = await this.supabase.storage
+      .from('colors')
+      .upload(fileName, buffer, {
+        contentType: 'image/jpeg',
+        upsert: true,
+      });
+
+    if (error || !data) return null;
+
+    const { data: publicUrlData } = this.supabase.storage
+      .from('colors')
+      .getPublicUrl(data.path);
+
+    return publicUrlData?.publicUrl ?? null;
+  }
+
+  async clearColorBucket(): Promise<void> {
+    const { data, error } = await this.supabase.storage
+      .from('colors')
+      .list('', { limit: 1000 });
+    if (error) return;
+
+    const fileNames = data.map((file) => file.name);
+    await this.supabase.storage.from('colors').remove(fileNames);
+  }
 }

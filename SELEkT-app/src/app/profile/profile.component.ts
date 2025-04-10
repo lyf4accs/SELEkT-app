@@ -28,7 +28,7 @@ export class ProfileComponent {
   }
 
   goToColores() {
-    this.router.navigate(['/upload']);
+    this.router.navigate(['/moodboards']);
   }
 
   goToChange() {

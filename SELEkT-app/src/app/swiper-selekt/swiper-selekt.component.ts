@@ -5,7 +5,6 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { FooterComponent } from '../footer/footer.component';
 import { Router } from '@angular/router';
 import { Card } from '../models/Card';
 import { MediatorService } from '../services/mediator.service';
@@ -17,7 +16,7 @@ import { Dialog } from '@capacitor/dialog';
 @Component({
   selector: 'app-swiper-selekt',
   standalone: true,
-  imports: [CommonModule, FooterComponent],
+  imports: [CommonModule],
   providers: [AlertController],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './swiper-selekt.component.html',

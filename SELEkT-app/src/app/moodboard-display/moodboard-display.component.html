@@ -1,1 +1,18 @@
-<p>moodboard-display works!</p>
+<div class="moodboard-display">
+  <button class="back" (click)="goBack()">← Volver</button>
+  <h2>{{ album?.name }}</h2>
+
+  <div class="masonry">
+    <div
+      class="photo"
+      *ngFor="let photo of album?.photos"
+      [style.backgroundImage]="'url(' + photo + ')'"
+      (click)="openPhoto(photo)"
+    ></div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" *ngIf="selectedPhoto" (click)="selectedPhoto = null">
+    <img [src]="selectedPhoto" alt="Vista previa" />
+  </div>
+</div>

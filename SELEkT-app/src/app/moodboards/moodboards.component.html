@@ -1,1 +1,29 @@
-<p>moodboards works!</p>
+<div class="moodboard-container">
+  <h1>Moodboards</h1>
+
+  <div *ngIf="albums.length === 0" class="empty-message">
+    <p>Sube tus fotos, estamos listos para empezar</p>
+  </div>
+
+  <div class="album-grid">
+   <div
+  class="album-card"
+  *ngFor="let album of albums; let i = index"
+  [routerLink]="['/moodboard', i]"
+>
+  <div
+    class="cover"
+    *ngIf="album.coverPhoto"
+    [style.backgroundImage]="'url(' + album.coverPhoto + ')'"
+  ></div>
+  <p class="album-title">{{ album.name }}</p>
+</div>
+
+
+  </div>
+
+  <div class="upload-button">
+    <input type="file" (change)="onAddPhotos($event)" accept="image/*" multiple hidden #fileInput />
+    <button (click)="fileInput.click()">Añadir fotos</button>
+  </div>
+</div>

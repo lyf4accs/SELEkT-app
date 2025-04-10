@@ -11,6 +11,9 @@ import { DropsendComponent } from './dropsend/dropsend.component';
 import { LoginComponent } from './login/login.component';
 import {RegisterComponent} from './register/register.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ConfigComponent } from './config/config.component';
+import { MoodboardDisplayComponent } from './moodboard-display/moodboard-display.component';
+import { MoodboardsComponent } from './moodboards/moodboards.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/upload', pathMatch: 'full' },
@@ -23,6 +26,16 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'footer', component: FooterComponent },
   { path: 'login', component: LoginComponent },
-  {path: 'register', component: RegisterComponent},
-  {path: 'changePassword', component: ChangePasswordComponent}
+  { path: 'register', component: RegisterComponent },
+  { path: 'changePassword', component: ChangePasswordComponent },
+  { path: 'moodboards', component: MoodboardsComponent },
+  { path: 'display', component: MoodboardDisplayComponent },
+  { path: 'config', component: ConfigComponent },
+  {
+    path: 'moodboard/:id',
+    loadComponent: () =>
+      import('./moodboard-display/moodboard-display.component').then(
+        (m) => m.MoodboardDisplayComponent
+      ),
+  },
 ];
