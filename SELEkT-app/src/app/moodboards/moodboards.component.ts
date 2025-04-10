@@ -15,12 +15,13 @@ import { RouterModule } from '@angular/router';
 })
 export class MoodboardsComponent implements OnInit {
   albums: Moodboard[] = [];
+  isLoading = false;
+  error = false;
+
   mediator = inject(MediatorService);
   supabase = inject(SupabaseService);
   photoService = inject(PhotoLibraryService);
   cdr = inject(ChangeDetectorRef);
-  isLoading = false;
-  error = false;
 
   ngOnInit() {
     this.albums = this.mediator.getColorMoodboards() || [];
@@ -60,6 +61,7 @@ export class MoodboardsComponent implements OnInit {
               match.photos.push(photo);
             }
           });
+
           if (!match.coverPhoto && newAlbum.coverPhoto) {
             match.coverPhoto = newAlbum.coverPhoto;
           }
@@ -70,14 +72,12 @@ export class MoodboardsComponent implements OnInit {
 
       this.albums = existingAlbums;
       this.mediator.setColorMoodboards(this.albums);
-      this.cdr.detectChanges();
     } catch (err) {
       console.error('Error procesando colores:', err);
       this.error = true;
-      this.albums = [];
-      this.mediator.setColorMoodboards([]);
     } finally {
       this.isLoading = false;
+      this.cdr.detectChanges();
     }
   }
 
