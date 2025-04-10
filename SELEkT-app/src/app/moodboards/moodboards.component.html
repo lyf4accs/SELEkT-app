@@ -21,9 +21,9 @@
 
 
   </div>
+<div class="upload-button">
+  <input type="file" (change)="onAddPhotos($event)" accept="image/*" multiple hidden #fileInput />
+  <button (click)="fileInput.click()">+</button>
+</div>
 
-  <div class="upload-button">
-    <input type="file" (change)="onAddPhotos($event)" accept="image/*" multiple hidden #fileInput />
-    <button (click)="fileInput.click()">Añadir fotos</button>
-  </div>
 </div>

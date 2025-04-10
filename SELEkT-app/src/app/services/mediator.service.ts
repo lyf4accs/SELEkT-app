@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Moodboard } from '../models/Moodboard';
 
 @Injectable({
   providedIn: 'root',
@@ -82,10 +83,15 @@ export class MediatorService {
   }
 
   private colorMoodboards: any[] = [];
-  getColorMoodboards() {
-    return this.colorMoodboards;
-  }
-  setColorMoodboards(albums: any[]) {
+  // En MediatorService:
+  setColorMoodboards(albums: Moodboard[]) {
     this.colorMoodboards = albums;
+    localStorage.setItem('colorMoodboards', JSON.stringify(albums));
+  }
+
+  getColorMoodboards(): Moodboard[] {
+    const fromStorage = localStorage.getItem('colorMoodboards');
+    if (fromStorage) this.colorMoodboards = JSON.parse(fromStorage);
+    return this.colorMoodboards;
   }
 }

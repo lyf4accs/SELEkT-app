@@ -10,9 +10,15 @@
       (click)="openPhoto(photo)"
     ></div>
   </div>
-
-  <!-- Modal -->
-  <div class="modal" *ngIf="selectedPhoto" (click)="selectedPhoto = null">
+<!-- Modal -->
+<div class="modal" *ngIf="selectedPhoto" (click)="selectedPhoto = null">
+  <div class="modal-content" (click)="$event.stopPropagation()">
     <img [src]="selectedPhoto" alt="Vista previa" />
+    <div class="actions">
+      <button class="close" (click)="selectedPhoto = null">Cerrar</button>
+      <button class="delete" (click)="deletePhoto(selectedPhoto)">Eliminar</button>
+    </div>
   </div>
+</div>
+
 </div>
