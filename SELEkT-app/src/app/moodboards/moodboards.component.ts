@@ -21,7 +21,8 @@ export class MoodboardsComponent implements OnInit {
   cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
-    this.albums = this.mediator.getColorMoodboards();
+   this.albums = this.mediator.getColorMoodboards() || [];
+
   }
 
   async onAddPhotos(event: any) {
@@ -44,12 +45,32 @@ try {
     .toPromise();
   console.log('Resultado /api/palettes:', paletteRes);
 
-  this.albums = (paletteRes.albums || []).filter(
-    (album: Moodboard) =>
-      typeof album.coverPhoto === 'string' &&
-      Array.isArray(album.photos) &&
-      album.photos.length > 0
-  );
+  const existingAlbums = [...this.albums];
+
+  for (const newAlbum of paletteRes.albums || []) {
+    const match = existingAlbums.find((a) => a.colorKey === newAlbum.colorKey);
+
+    if (match) {
+      // Añade fotos nuevas si no están ya
+      newAlbum.photos.forEach((photo:string) => {
+        if (!match.photos.includes(photo)) {
+          match.photos.push(photo);
+        }
+      });
+
+      // Cambia la portada si se desea actualizar (opcional)
+      if (!match.coverPhoto && newAlbum.coverPhoto) {
+        match.coverPhoto = newAlbum.coverPhoto;
+      }
+    } else {
+      existingAlbums.push(newAlbum); // nuevo moodboard
+    }
+  }
+
+  this.albums = existingAlbums;
+  this.mediator.setColorMoodboards(this.albums);
+  this.cdr.detectChanges();
+
 
   this.mediator.setColorMoodboards(this.albums);
   this.cdr.detectChanges();
