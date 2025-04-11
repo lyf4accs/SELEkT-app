@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { PhotoFacadeService } from '../services/photoFacade.service';
-import { SupabaseService } from '../services/supabase.service';
-import { PhotoLibraryService } from '../services/PhotoLibraryService';
 import { CommonModule } from '@angular/common';
 import { Moodboard } from '../models/Moodboard';
 import { Router, RouterModule } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { SupabaseService } from '../services/supabase.service';
+import { PhotoLibraryService } from '../services/PhotoLibraryService';
 
 @Component({
   selector: 'app-moodboards',
@@ -19,7 +20,7 @@ export class MoodboardsComponent implements OnInit {
   error = false;
 
   photofacade = inject(PhotoFacadeService);
-  router=inject(Router);
+  router = inject(Router);
   supabase = inject(SupabaseService);
   photoService = inject(PhotoLibraryService);
   cdr = inject(ChangeDetectorRef);
@@ -37,17 +38,20 @@ export class MoodboardsComponent implements OnInit {
     const urls: string[] = [];
 
     for (let i = 0; i < base64Images.length; i++) {
-      const url = await this.supabase.uploadToColorBucket(base64Images[i], i);
+      const url = await this.photofacade.uploadToColorBucket(
+        base64Images[i],
+        i
+      );
       if (url) urls.push(url);
     }
 
     try {
-      const colorRes = await this.photoService
-        .getDominantColors(urls)
-        .toPromise();
-      const paletteRes = await this.photoService
-        .groupByPalette(colorRes.results)
-        .toPromise();
+      const colorRes = await firstValueFrom(
+        this.photofacade.getDominantColors(urls)
+      );
+      const paletteRes = await firstValueFrom(
+        this.photofacade.groupByPalette(colorRes.results)
+      );
 
       const existingAlbums = [...this.albums];
 

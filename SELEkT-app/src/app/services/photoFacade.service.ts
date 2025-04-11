@@ -11,6 +11,9 @@ import { HashService } from './hash.service';
 import { PhotoLibraryService } from './PhotoLibraryService';
 import { SupabaseService } from './supabase.service';
 import { ClipboardService } from './clip-board.service';
+import { NameGeneratorService } from './name-generator.service';
+import { DropsendService } from './dropsend.service';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -28,6 +31,8 @@ export class PhotoFacadeService {
     private duplicatePhotoService: DuplicatePhotoService,
     private similarPhotoService: SimilarPhotoService,
     private hashService: HashService,
+    private dropSendService: DropsendService,
+    private nameGeneratorService: NameGeneratorService,
     private photoLibraryService: PhotoLibraryService,
     private supabaseService: SupabaseService,
     private clipboardService: ClipboardService
@@ -53,6 +58,10 @@ export class PhotoFacadeService {
   // Delegaciones claras a los nuevos servicios
   updateDuplicatePhotos(photos: any[], albums?: any[]) {
     this.duplicatePhotoService.updateDuplicatePhotos(photos, albums);
+  }
+
+  getAlbumByCode(albumCode: string): Promise<number | null> {
+    return this.supabaseService.getAlbumByCode(albumCode);
   }
 
   updateSimilarPhotos(photos: any[], albums?: any[]) {
@@ -90,12 +99,43 @@ export class PhotoFacadeService {
     return this.supabaseService.uploadAlbum(files);
   }
 
+  getUserAlbums(userId: string): Promise<any[]> {
+    return this.supabaseService.getUserAlbums(userId);
+  }
+
+  deleteAlbum(albumId: number, albumCode: string): Promise<boolean> {
+    return this.supabaseService.deleteAlbum(albumId, albumCode);
+  }
+
+  getPhotosByAlbumId(albumId: number): Promise<any[]> {
+    return this.supabaseService.getPhotosByAlbumId(albumId);
+  }
+
+  clearAnalysisBucket(): Promise<void> {
+    return this.supabaseService.clearAnalysisBucket();
+  }
+
+  uploadImageForAnalysis(
+    base64: string,
+    index: number
+  ): Promise<{ fileName: string; url: string } | null> {
+    return this.supabaseService.uploadImageForAnalysis(base64, index);
+  }
+
   copyAlbumLink(link: string): Promise<void> {
     return this.clipboardService.writeText(link);
   }
 
   processImages(images: string[]) {
     return this.photoLibraryService.processImages(images);
+  }
+
+  hashImage(url: string) {
+    return this.photoLibraryService.hashImage(url);
+  }
+
+  compareHashes(hashes: { hash: string; url: string }[]) {
+    return this.photoLibraryService.compareHashes(hashes);
   }
 
   // Gestión específica de Moodboards
@@ -108,5 +148,63 @@ export class PhotoFacadeService {
     const fromStorage = localStorage.getItem('colorMoodboards');
     if (fromStorage) this.colorMoodboards = JSON.parse(fromStorage);
     return this.colorMoodboards;
+  }
+
+  updatePassword(currentPassword: string, newPassword: string) {
+    return this.supabaseService.updatePassword(currentPassword, newPassword);
+  }
+
+  generateName(seed: string): { displayName: string; deviceName: string } {
+    return this.nameGeneratorService.generateName(seed);
+  }
+
+  uploadToColorBucket(base64: string, index: number): Promise<string | null> {
+    return this.supabaseService.uploadToColorBucket(base64, index);
+  }
+
+  getDominantColors(urls: string[]) {
+    return this.photoLibraryService.getDominantColors(urls);
+  }
+
+  groupByPalette(colors: { url: string; color: string }[]) {
+    return this.photoLibraryService.groupByPalette(colors);
+  }
+
+  // Conexión y desconexión
+  disconnectDropsend(): void {
+    this.dropSendService.disconnect();
+  }
+
+  sendFile(buffer: ArrayBuffer, fileName: string, peer: any): void {
+    this.dropSendService.sendFile(buffer, fileName, peer);
+  }
+
+  // Observables
+  getMyPeerId(): Observable<string | null> {
+    return this.dropSendService.getMyPeerId();
+  }
+
+  getPeers(): Observable<any[]> {
+    return this.dropSendService.getPeers();
+  }
+
+  getPeerJoined(): Observable<any> {
+    return this.dropSendService.getPeerJoined();
+  }
+
+  getPeerLeft(): Observable<string> {
+    return this.dropSendService.getPeerLeft();
+  }
+
+  getSignal(): Observable<any> {
+    return this.dropSendService.getSignal();
+  }
+
+  getDisplayNameSignal(): Observable<string> {
+    return this.dropSendService.getDisplayName();
+  }
+
+  getNotifications(): Observable<string> {
+    return this.dropSendService.getNotifications();
   }
 }

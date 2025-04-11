@@ -1,8 +1,7 @@
-// src/app/components/album/album.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SupabaseService } from '../services/supabase.service';
-import { FooterComponent } from "../footer/footer.component";
+import { PhotoFacadeService } from '../services/photoFacade.service';
+import { FooterComponent } from '../footer/footer.component';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -19,22 +18,18 @@ export class AlbumComponent implements OnInit {
   public albumCode: string | null = null;
   public albumId: number | null = null;
 
-  constructor(
-    private route: ActivatedRoute,
-    private supabaseService: SupabaseService,
-    private router: Router,
-    private location: Location,
-  ) {}
+  private route = inject(ActivatedRoute);
+  private photoFacade = inject(PhotoFacadeService);
+  private router = inject(Router);
+  private location = inject(Location);
 
   async ngOnInit() {
     this.albumCode = this.route.snapshot.paramMap.get('code');
     if (this.albumCode) {
-      this.albumId = await this.supabaseService.getAlbumByCode(this.albumCode);
+      this.albumId = await this.photoFacade.getAlbumByCode(this.albumCode);
 
       if (this.albumId) {
-        this.photos = await this.supabaseService.getPhotosByAlbumId(
-          this.albumId
-        );
+        this.photos = await this.photoFacade.getPhotosByAlbumId(this.albumId);
         console.log(this.photos);
       }
     }
@@ -48,16 +43,14 @@ export class AlbumComponent implements OnInit {
     this.location.back();
   }
 
-  copyLink(event: MouseEvent, album: any) {
+  async copyLink(event: MouseEvent, album: any) {
     event.stopPropagation();
     const url = `${window.location.origin}/album/${album.code}`;
-    navigator.clipboard
-      .writeText(url)
-      .then(() => {
-        alert('Enlace copiado al portapapeles');
-      })
-      .catch((err) => {
-        console.error('Error al copiar el enlace: ', err);
-      });
+    try {
+      await this.photoFacade.copyAlbumLink(url);
+      alert('Enlace copiado al portapapeles');
+    } catch (err) {
+      console.error('Error al copiar el enlace: ', err);
+    }
   }
 }

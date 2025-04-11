@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
+import { PhotoFacadeService } from '../services/photoFacade.service';
 
 @Component({
   selector: 'app-links',
@@ -43,7 +44,7 @@ export class LinksComponent implements OnInit {
     );
     if (!confirmed) return;
 
-    const success = await this.supabaseService.deleteAlbum(
+    const success = await this.photoFacade.deleteAlbum(
       album.id,
       album.code
     );
@@ -55,16 +56,15 @@ export class LinksComponent implements OnInit {
   }
 
   constructor(
-    private supabaseService: SupabaseService,
-    private router: RouterModule,
+    private photoFacade: PhotoFacadeService,
     private location: Location
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.albums = await this.supabaseService.getUserAlbums(this.user_id);
+    this.albums = await this.photoFacade.getUserAlbums(this.user_id);
 
     for (const album of this.albums) {
-      const fotos = await this.supabaseService.getPhotosByAlbumId(album.id); // <--- esto es correcto
+      const fotos = await this.photoFacade.getPhotosByAlbumId(album.id); // <--- esto es correcto
       album.previewUrl =
         fotos.length > 0 ? fotos[0].url : 'assets/placeholder.png';
     }

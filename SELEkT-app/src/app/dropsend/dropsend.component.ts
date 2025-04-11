@@ -1,7 +1,5 @@
 // Importamos los módulos y servicios necesarios de Angular y de nuestra aplicación.
 import { Component, OnInit } from '@angular/core';
-import { NameGeneratorService } from '../services/name-generator.service';
-import { DropsendService } from '../services/dropsend.service';
 import { PeersComponent } from '../peerscomponent/peerscomponent.component';
 import { FooterComponent } from '../footer/footer.component';
 import { PhotoFacadeService } from '../services/photoFacade.service';
@@ -20,8 +18,7 @@ export class DropsendComponent implements OnInit {
   displayName: string = ''; // Nombre de usuario que se mostrará
   // Constructor del componente, inyectando los servicios necesarios.
   constructor(
-    private dropSendService: DropsendService, // Servicio para manejar la lógica de Dropsend.
-    private nameGen: NameGeneratorService, // Servicio para generar nombres únicos.
+// Servicio para generar nombres únicos.
     private photofacade: PhotoFacadeService
   ) {}
 

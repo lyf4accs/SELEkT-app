@@ -18,7 +18,7 @@ export class DropsendService {
   private displayNameSubject = new Subject<any>();
   private notificationSubject = new Subject<string>();
 
-  constructor(private photoFacade: PhotoFacadeService) {
+  constructor() {
     this.connect();
     window.addEventListener('beforeunload', () => this.disconnect());
     document.addEventListener('visibilitychange', () =>
@@ -120,7 +120,8 @@ export class DropsendService {
         if (!this.myPeerIdSubject.getValue() && msg.devices.length > 0) {
           // Buscamos el dispositivo actual entre los dispositivos para asignar el myPeerId
           const currentDevice = msg.devices.find(
-            (device: { peerId: string | null; }) => device.peerId === this.myPeerIdSubject.getValue()
+            (device: { peerId: string | null }) =>
+              device.peerId === this.myPeerIdSubject.getValue()
           );
 
           if (currentDevice) {
@@ -144,7 +145,7 @@ export class DropsendService {
       case 'display-name':
         this.displayNameSubject.next(msg);
         // Cuando recibimos el display-name, lo pasamos al mediador
-        this.photoFacade.updateDisplayName(msg.displayName);
+        this.displayNameSubject.next(msg.displayName);
         console.log(`Dispositivo conectado con nombre: ${msg.displayName}`);
         break;
 
@@ -259,9 +260,8 @@ export class DropsendService {
 
   // Creamos una función async que devolverá el peerId cuando esté disponible
 
-
   // Métodos para exponer observables a los componentes:
-  getMyPeerId(): Observable<string |null> {
+  getMyPeerId(): Observable<string | null> {
     return this.myPeerIdSubject.asObservable();
   }
 
