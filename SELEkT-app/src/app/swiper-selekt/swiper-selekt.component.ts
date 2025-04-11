@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Card } from '../models/Card';
-import { MediatorService } from '../services/mediator.service';
+import { PhotoFacadeService } from '../services/photoFacade.service';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { AlertController } from '@ionic/angular';
 import { environment } from '../../environments/environment';
@@ -35,21 +35,21 @@ export class SwiperSelektComponent implements OnInit {
   isLoading: boolean = true;
 
   router = inject(Router);
-  mediatorService = inject(MediatorService);
+  photoFacade = inject(PhotoFacadeService);
   alertCtrl = inject(AlertController);
 
   async ngOnInit(): Promise<void> {
-    this.w = this.mediatorService.getWhichAlbum()?.toString();
+    this.w = this.photoFacade.getWhichAlbum()?.toString();
     console.log('swiper: ' + this.w);
 
     if (this.w === 'similar') {
-      this.mediatorService.similarPhotos$.subscribe(async (photos) => {
+      this.photoFacade.similarPhotos$.subscribe(async (photos) => {
         if (photos && photos.length > 0) {
           await this.processPhotos(photos, 'similar');
         }
       });
     } else if (this.w === 'duplicate') {
-      this.mediatorService.duplicatePhotos$.subscribe(async (photos) => {
+      this.photoFacade.duplicatePhotos$.subscribe(async (photos) => {
         if (photos && photos.length > 0) {
           await this.processPhotos(photos, 'duplicate');
         }
@@ -294,7 +294,7 @@ export class SwiperSelektComponent implements OnInit {
 
   //helper
   getFileNameFromUrl(url: string): string | undefined {
-    const match = this.mediatorService
+    const match = this.photoFacade
       .getHashes()
       .find((item) => item.url === url);
     return match?.fileName;

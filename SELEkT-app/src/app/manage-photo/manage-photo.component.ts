@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { PhotoLibraryService } from '../services/PhotoLibraryService';
-import { MediatorService } from '../services/mediator.service';
+import { PhotoFacadeService } from '../services/photoFacade.service';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../footer/footer.component';
 import { Router } from '@angular/router';
@@ -20,7 +20,7 @@ import { SupabaseService } from '../services/supabase.service';
 export class ManagePhotoComponent implements OnInit {
   cdr = inject(ChangeDetectorRef);
   photoService = inject(PhotoLibraryService);
-  mediatorService = inject(MediatorService);
+  photofacade = inject(PhotoFacadeService);
   router = inject(Router);
   alertCtrl = inject(AlertController);
   supabaseService = inject(SupabaseService);
@@ -34,11 +34,11 @@ export class ManagePhotoComponent implements OnInit {
 
   ngOnInit(): void {
     if (
-      this.mediatorService.getDuplicatePhotos().length > 0 ||
-      this.mediatorService.getSimilarPhotos().length > 0
+      this.photofacade.getDuplicatePhotos().length > 0 ||
+      this.photofacade.getSimilarPhotos().length > 0
     ) {
-      this.duplicateAlbums = this.mediatorService.getAlbums('duplicate');
-      this.similarAlbums = this.mediatorService.getAlbums('similar');
+      this.duplicateAlbums = this.photofacade.getAlbums('duplicate');
+      this.similarAlbums = this.photofacade.getAlbums('similar');
       this.albumsLoaded = true;
     }
   }
@@ -75,7 +75,7 @@ export class ManagePhotoComponent implements OnInit {
     }
 
     this.isProcessing = true;
-    this.mediatorService.clearHashes(); // 🧹 limpiar hashes anteriores
+    this.photofacade.clearHashes(); // 🧹 limpiar hashes anteriores
 
     const base64Images = this.selectedImages.map((img) => img.base64);
 
@@ -100,7 +100,7 @@ export class ManagePhotoComponent implements OnInit {
             fileName: valid[i].fileName,
           }));
 
-          this.mediatorService.setHashes(hashUrlPairs); // 💾 Guardar los hashes
+          this.photofacade.setHashes(hashUrlPairs); // 💾 Guardar los hashes
 
           this.photoService
             .compareHashes(hashUrlPairs)
@@ -112,12 +112,12 @@ export class ManagePhotoComponent implements OnInit {
                 a.name.includes('Similares')
               );
 
-              this.mediatorService.updateDuplicatePhotos(
+              this.photofacade.updateDuplicatePhotos(
                 this.duplicateAlbums.flatMap((a) => a.photos),
                 this.duplicateAlbums // 💾 guardar álbumes
               );
 
-              this.mediatorService.updateSimilarPhotos(
+              this.photofacade.updateSimilarPhotos(
                 this.similarAlbums.flatMap((a) => a.photos),
                 this.similarAlbums
               );
@@ -133,14 +133,14 @@ export class ManagePhotoComponent implements OnInit {
   viewAlbum(albumType: string, albumIndex?: number): void {
     if (albumType === 'duplicate') {
       this.whichAlbum = 'duplicate';
-      this.mediatorService.setWhichAlbum(this.whichAlbum);
+      this.photofacade .setWhichAlbum(this.whichAlbum);
       const album = this.duplicateAlbums[albumIndex || 0];
-      this.mediatorService.updateDuplicatePhotos(album.photos);
+      this.photofacade.updateDuplicatePhotos(album.photos);
     } else if (albumType === 'similar' && albumIndex !== undefined) {
       this.whichAlbum = 'similar';
-      this.mediatorService.setWhichAlbum(this.whichAlbum);
+      this.photofacade.setWhichAlbum(this.whichAlbum);
       const album = this.similarAlbums[albumIndex];
-      this.mediatorService.updateSimilarPhotos(album.photos);
+      this.photofacade.updateSimilarPhotos(album.photos);
     }
 
     // Cover photos

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MediatorService } from './mediator.service';
+import { HashService } from './hash.service';
 
-describe('MediatorService', () => {
-  let service: MediatorService;
+describe('HashService', () => {
+  let service: HashService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MediatorService);
+    service = TestBed.inject(HashService);
   });
 
   it('should be created', () => {

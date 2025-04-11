@@ -4,7 +4,7 @@ import { NameGeneratorService } from '../services/name-generator.service';
 import { DropsendService } from '../services/dropsend.service';
 import { PeersComponent } from '../peerscomponent/peerscomponent.component';
 import { FooterComponent } from '../footer/footer.component';
-import { MediatorService } from '../services/mediator.service';
+import { PhotoFacadeService } from '../services/photoFacade.service';
 
 // Decorador Component para definir el componente Dropsend.
 @Component({
@@ -22,13 +22,13 @@ export class DropsendComponent implements OnInit {
   constructor(
     private dropSendService: DropsendService, // Servicio para manejar la lógica de Dropsend.
     private nameGen: NameGeneratorService, // Servicio para generar nombres únicos.
-    private mediatorService: MediatorService
+    private photofacade: PhotoFacadeService
   ) {}
 
   // Método del ciclo de vida de Angular, llamado al inicializar el componente.
   ngOnInit(): void {
     // Nos suscribimos al Mediator para recibir el nombre
-    this.mediatorService.displayName$.subscribe((name) => {
+    this.photofacade.displayName$.subscribe((name) => {
       if (name) {
         this.displayName = name; // Asignamos el nombre recibido al displayName
       }

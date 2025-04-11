@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { MediatorService } from '../services/mediator.service';
+import { PhotoFacadeService } from '../services/photoFacade.service';
 import { SupabaseService } from '../services/supabase.service';
 import { PhotoLibraryService } from '../services/PhotoLibraryService';
 import { CommonModule } from '@angular/common';
@@ -18,13 +18,13 @@ export class MoodboardsComponent implements OnInit {
   isLoading = false;
   error = false;
 
-  mediator = inject(MediatorService);
+  photofacade = inject(PhotoFacadeService);
   supabase = inject(SupabaseService);
   photoService = inject(PhotoLibraryService);
   cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
-    this.albums = this.mediator.getColorMoodboards() || [];
+    this.albums = this.photofacade.getColorMoodboards() || [];
   }
 
   async onAddPhotos(event: any) {
@@ -71,7 +71,7 @@ export class MoodboardsComponent implements OnInit {
       }
 
       this.albums = existingAlbums;
-      this.mediator.setColorMoodboards(this.albums);
+      this.photofacade.setColorMoodboards(this.albums);
     } catch (err) {
       console.error('Error procesando colores:', err);
       this.error = true;

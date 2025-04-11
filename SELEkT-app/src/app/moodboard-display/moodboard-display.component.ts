@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MediatorService } from '../services/mediator.service';
+import { PhotoFacadeService } from '../services/photoFacade.service';
 import { RouterModule } from '@angular/router';
 import { Moodboard } from '../models/Moodboard';
 
@@ -17,14 +17,14 @@ export class MoodboardDisplayComponent implements OnInit {
   selectedPhoto: string | null = null;
   route = inject(ActivatedRoute);
   router = inject(Router);
-  mediator = inject(MediatorService);
+  photofacade = inject(PhotoFacadeService);
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    const allAlbums = this.mediator.getColorMoodboards();
+    const allAlbums = this.photofacade.getColorMoodboards();
     this.album = allAlbums[id];
     const index = Number(this.route.snapshot.paramMap.get('id'));
-    const albums = this.mediator.getColorMoodboards();
+    const albums = this.photofacade.getColorMoodboards();
     this.album = albums[index];
   }
 
@@ -47,12 +47,12 @@ export class MoodboardDisplayComponent implements OnInit {
       this.album.coverPhoto = this.album.photos[0] || '';
     }
 
-    // Actualiza en Mediator (si hace falta persistencia)
-    const albums = this.mediator.getColorMoodboards();
+    // Actualiza en photofacade (si hace falta persistencia)
+    const albums = this.photofacade.getColorMoodboards();
     const index = albums.findIndex((a) => a.colorKey === this.album?.colorKey);
     if (index !== -1) {
       albums[index] = this.album;
-      this.mediator.setColorMoodboards(albums);
+      this.photofacade.setColorMoodboards(albums);
     }
 
     // Cierra el modal

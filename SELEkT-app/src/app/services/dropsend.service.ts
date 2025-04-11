@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { MediatorService } from './mediator.service';
+import { PhotoFacadeService } from './photoFacade.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +18,7 @@ export class DropsendService {
   private displayNameSubject = new Subject<any>();
   private notificationSubject = new Subject<string>();
 
-  constructor(private mediatorService: MediatorService) {
+  constructor(private photoFacade: PhotoFacadeService) {
     this.connect();
     window.addEventListener('beforeunload', () => this.disconnect());
     document.addEventListener('visibilitychange', () =>
@@ -144,7 +144,7 @@ export class DropsendService {
       case 'display-name':
         this.displayNameSubject.next(msg);
         // Cuando recibimos el display-name, lo pasamos al mediador
-        this.mediatorService.updateDisplayName(msg.displayName);
+        this.photoFacade.updateDisplayName(msg.displayName);
         console.log(`Dispositivo conectado con nombre: ${msg.displayName}`);
         break;
 

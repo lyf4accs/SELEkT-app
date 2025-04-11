@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DropsendService } from '../services/dropsend.service';
-import { MediatorService } from '../services/mediator.service';
+import { PhotoFacadeService } from '../services/photoFacade.service';
 
 @Component({
   selector: 'app-peerscomponent',
@@ -16,7 +16,7 @@ export class PeersComponent implements OnInit {
 
   constructor(
     private dropSendService: DropsendService,
-    private mediatorService: MediatorService
+    private photoFacade: PhotoFacadeService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -34,7 +34,7 @@ export class PeersComponent implements OnInit {
         }
       });
     // Obtener el display name
-    this.mediatorService.displayName$.subscribe((name) => {
+    this.photoFacade.displayName$.subscribe((name) => {
       this.displayName = name;
     });
 
