@@ -36,6 +36,10 @@ export class MoodboardsComponent implements OnInit {
     const files: File[] = Array.from(event.target.files as File[]);
     const base64Images = await Promise.all(files.map(this.toBase64));
     const urls: string[] = [];
+    if (files.length > 6) {
+      alert('Sube como máximo 6 imágenes a la vez por rendimiento.');
+      return;
+    }
 
     for (let i = 0; i < base64Images.length; i++) {
       const url = await this.photofacade.uploadToColorBucket(
