@@ -36,6 +36,26 @@ export class MoodboardDisplayComponent implements OnInit {
     this.selectedPhoto = url;
   }
 
+  shufflePhotos() {
+    if (!this.album || !this.album.photos.length) return;
+
+    for (let i = this.album.photos.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.album.photos[i], this.album.photos[j]] = [
+        this.album.photos[j],
+        this.album.photos[i],
+      ];
+    }
+
+    // Actualiza en photofacade
+    const albums = this.photofacade.getColorMoodboards();
+    const index = albums.findIndex((a) => a.colorKey === this.album?.colorKey);
+    if (index !== -1) {
+      albums[index] = this.album;
+      this.photofacade.setColorMoodboards(albums);
+    }
+  }
+
   deletePhoto(photoUrl: string) {
     if (!this.album) return;
 

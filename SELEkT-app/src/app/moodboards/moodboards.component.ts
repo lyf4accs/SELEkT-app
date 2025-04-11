@@ -123,6 +123,8 @@ export class MoodboardsComponent implements OnInit {
     }
   }
 
+
+
   goBack() {
     this.router.navigate(['/profile']);
   }
