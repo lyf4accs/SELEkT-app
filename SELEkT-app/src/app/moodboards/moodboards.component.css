@@ -6,10 +6,24 @@
   font-family: 'Poppins', sans-serif;
 }
 
+button{
+  border-color: transparent;
+}
+.back {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.back:hover {
+  opacity: 0.6;
+}
 .moodboard-container {
   padding: 1rem;
  overflow: scroll;
-  height: 100vh;
+  height: 90vh;
     overflow-y: auto;
     box-sizing: border-box;
 }
@@ -18,7 +32,7 @@ h1 {
   font-size: 1.8rem;
   font-weight: bold;
   margin-bottom: 1rem;
-  color: #1a2b45;
+  color: #052F50;
 }
 
 .empty-message {
@@ -41,7 +55,7 @@ h1 {
   background: #f2f2f2;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .cover {
@@ -58,11 +72,12 @@ h1 {
 }
 
 .album-title {
-  padding: 0.6rem 0.8rem;
+  padding: 0.6rem 0.6rem;
   font-size: 0.9rem;
   background-color: rgba(255, 255, 255, 0.95);
-  color: #333;
+  color: #052F50;
   font-weight: bold;
+  height: 10px;
 }
 
 @media (min-width: 768px) {
@@ -103,19 +118,45 @@ h1 {
   grid-row: span 1;
 }
 
+.album-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  background: #fff;
+  border-top: 1px solid #e0e0e0;
+}
+
+.album-actions button {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.album-actions button:hover {
+  color: #c0392b;
+}
+
 .upload-button {
-  margin-top: 2rem;
-  text-align: center;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  height: 60px;
+  width: 60px;
 }
 
 .upload-button button {
-  background-color: #1a2b45;
+  background-color: #052F50;
   color: #fff;
-  padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 50%;
   border: none;
+  font-size: 2rem;
   cursor: pointer;
-  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  height:100%;
+  width:100%;
 }
 
 .upload-button button:hover {

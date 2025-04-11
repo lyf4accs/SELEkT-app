@@ -16,11 +16,9 @@
 }
 
 .back {
-  margin-bottom: 1rem;
   background: none;
   border: none;
   font-size: 1rem;
-  color: #1a2b45;
   cursor: pointer;
   transition: opacity 0.2s;
 }

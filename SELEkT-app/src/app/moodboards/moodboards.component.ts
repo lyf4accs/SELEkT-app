@@ -4,7 +4,7 @@ import { SupabaseService } from '../services/supabase.service';
 import { PhotoLibraryService } from '../services/PhotoLibraryService';
 import { CommonModule } from '@angular/common';
 import { Moodboard } from '../models/Moodboard';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-moodboards',
@@ -19,6 +19,7 @@ export class MoodboardsComponent implements OnInit {
   error = false;
 
   photofacade = inject(PhotoFacadeService);
+  router=inject(Router);
   supabase = inject(SupabaseService);
   photoService = inject(PhotoLibraryService);
   cdr = inject(ChangeDetectorRef);
@@ -87,5 +88,38 @@ export class MoodboardsComponent implements OnInit {
       reader.onload = () => res(reader.result as string);
       reader.readAsDataURL(file);
     });
+  }
+
+  renameMoodboard(album: Moodboard) {
+    const newName = prompt('Nuevo nombre del moodboard:', album.name);
+    if (newName) {
+      album.name = newName;
+      this.photofacade.setColorMoodboards(this.albums);
+      this.cdr.detectChanges();
+    }
+  }
+
+  deleteMoodboard(index: number) {
+    if (confirm('¿Eliminar este moodboard completo?')) {
+      this.albums.splice(index, 1);
+      this.photofacade.setColorMoodboards(this.albums);
+      this.cdr.detectChanges();
+    }
+  }
+
+  removePhotoFromMoodboard(photo: string, albumIndex: number) {
+    const album = this.albums[albumIndex];
+    album.photos = album.photos.filter((p) => p !== photo);
+
+    if (album.photos.length === 0) {
+      this.deleteMoodboard(albumIndex); // Eliminar si queda vacío
+    } else {
+      this.photofacade.setColorMoodboards(this.albums);
+      this.cdr.detectChanges();
+    }
+  }
+
+  goBack() {
+    this.router.navigate(['/profile']);
   }
 }
