@@ -15,47 +15,70 @@ import { RouterModule } from '@angular/router';
 })
 export class MoodboardsComponent implements OnInit {
   albums: Moodboard[] = [];
+  isLoading = false;
+  error = false;
+
   mediator = inject(MediatorService);
   supabase = inject(SupabaseService);
   photoService = inject(PhotoLibraryService);
   cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
-    this.albums = this.mediator.getColorMoodboards();
+    this.albums = this.mediator.getColorMoodboards() || [];
   }
 
   async onAddPhotos(event: any) {
+    this.isLoading = true;
+    this.error = false;
+
     const files: File[] = Array.from(event.target.files as File[]);
     const base64Images = await Promise.all(files.map(this.toBase64));
-
     const urls: string[] = [];
+
     for (let i = 0; i < base64Images.length; i++) {
       const url = await this.supabase.uploadToColorBucket(base64Images[i], i);
       if (url) urls.push(url);
     }
-console.log('URLs subidas:', urls);
 
-try {
-  const colorRes = await this.photoService.getDominantColors(urls).toPromise();
-  console.log('Resultado /api/color:', colorRes);
+    try {
+      const colorRes = await this.photoService
+        .getDominantColors(urls)
+        .toPromise();
+      const paletteRes = await this.photoService
+        .groupByPalette(colorRes.results)
+        .toPromise();
 
-  const paletteRes = await this.photoService
-    .groupByPalette(colorRes.results)
-    .toPromise();
-  console.log('Resultado /api/palettes:', paletteRes);
+      const existingAlbums = [...this.albums];
 
-  this.albums = (paletteRes.albums || []).filter(
-    (album: Moodboard) =>
-      typeof album.coverPhoto === 'string' &&
-      Array.isArray(album.photos) &&
-      album.photos.length > 0
-  );
+      for (const newAlbum of paletteRes.albums || []) {
+        const match = existingAlbums.find(
+          (a) => a.colorKey === newAlbum.colorKey
+        );
 
-  this.mediator.setColorMoodboards(this.albums);
-  this.cdr.detectChanges();
-} catch (err) {
-  console.error('Error procesando colores:', err);
-}
+        if (match) {
+          newAlbum.photos.forEach((photo: string) => {
+            if (!match.photos.includes(photo)) {
+              match.photos.push(photo);
+            }
+          });
+
+          if (!match.coverPhoto && newAlbum.coverPhoto) {
+            match.coverPhoto = newAlbum.coverPhoto;
+          }
+        } else {
+          existingAlbums.push(newAlbum);
+        }
+      }
+
+      this.albums = existingAlbums;
+      this.mediator.setColorMoodboards(this.albums);
+    } catch (err) {
+      console.error('Error procesando colores:', err);
+      this.error = true;
+    } finally {
+      this.isLoading = false;
+      this.cdr.detectChanges();
+    }
   }
 
   toBase64(file: File): Promise<string> {
