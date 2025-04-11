@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DropsendService } from '../services/dropsend.service';
 import { PhotoFacadeService } from '../services/photoFacade.service';
 
 @Component({
@@ -15,42 +14,43 @@ export class PeersComponent implements OnInit {
   displayName: string = '';
 
   constructor(
-    private dropSendService: DropsendService,
     private photoFacade: PhotoFacadeService
   ) {}
 
   async ngOnInit(): Promise<void> {
     // Obtener el Peer ID
 
-      this.dropSendService.getMyPeerId().subscribe((peerId) => {
+      this.photoFacade.getMyPeerId().subscribe((peerId) => {
         this.myPeerId = peerId;
         console.log('Mi Peer ID:', this.myPeerId);
 
           // Solo suscribir a los peers y actualizar la lista si ya se ha obtenido el myPeerId
         if (this.myPeerId) {
-          this.dropSendService.getPeers().subscribe((peers) => {
+          this.photoFacade.getPeers().subscribe((peers) => {
             this.updatePeersList(peers);
           });
         }
       });
     // Obtener el display name
-    this.photoFacade.displayName$.subscribe((name) => {
-      this.displayName = name;
+    this.photoFacade.getDisplayNameSignal().subscribe((displayName: string) => {
+      this.photoFacade.updateDisplayName(displayName);
     });
 
+
+
     // Suscribirse a los eventos de nuevos peers
-    this.dropSendService.getPeers().subscribe((peers) => {
+    this.photoFacade.getPeers().subscribe((peers) => {
       this.updatePeersList(peers);
     });
 
     // Escuchar cuando un peer se conecta
-    this.dropSendService.getPeerJoined().subscribe((peer) => {
+    this.photoFacade.getPeerJoined().subscribe((peer) => {
       console.log('lo añadimos porque es nuevo')
       this.addPeer(peer);
     });
 
     // Escuchar cuando un peer se desconecta
-    this.dropSendService.getPeerLeft().subscribe((peerId) => {
+    this.photoFacade.getPeerLeft().subscribe((peerId) => {
       this.removePeer(peerId);
     });
   }
@@ -114,7 +114,7 @@ private addPeer(peer: any): void {
           const arrayBuffer = e.target.result; // El ArrayBuffer del archivo
 
           // Enviar el archivo al peer
-          this.dropSendService.sendFile(arrayBuffer, file.name, peer);
+          this.photoFacade.sendFile(arrayBuffer, file.name, peer);
         };
         reader.readAsArrayBuffer(file);
       });

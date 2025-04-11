@@ -1,6 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SupabaseService } from '../services/supabase.service';
+import { PhotoFacadeService } from '../services/photoFacade.service';
 import { Location } from '@angular/common';
 
 @Component({
@@ -10,15 +10,15 @@ import { Location } from '@angular/common';
   styleUrl: './change-password.component.css',
 })
 export class ChangePasswordComponent {
-  form: any;
+  private fb = inject(FormBuilder);
+  private photoFacade = inject(PhotoFacadeService);
+  private location = inject(Location);
 
-  constructor(private fb: FormBuilder, private supabase: SupabaseService, private location: Location) {
-    this.form = this.fb.group({
-      currentPassword: ['', [Validators.required]],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]],
-    });
-  }
+  form = this.fb.group({
+    currentPassword: ['', [Validators.required]],
+    newPassword: ['', [Validators.required, Validators.minLength(6)]],
+    confirmPassword: ['', [Validators.required]],
+  });
 
   loading = signal(false);
   errorMessage = signal('');
@@ -38,7 +38,7 @@ export class ChangePasswordComponent {
 
     this.loading.set(true);
     try {
-      const { error } = await this.supabase.updatePassword(
+      const { error } = await this.photoFacade.updatePassword(
         currentPassword!,
         newPassword!
       );

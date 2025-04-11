@@ -19,18 +19,17 @@ import { SupabaseService } from '../services/supabase.service';
 })
 export class ManagePhotoComponent implements OnInit {
   cdr = inject(ChangeDetectorRef);
-  photoService = inject(PhotoLibraryService);
   photofacade = inject(PhotoFacadeService);
   router = inject(Router);
   alertCtrl = inject(AlertController);
-  supabaseService = inject(SupabaseService);
-
   selectedImages: { name: string; base64: string }[] = [];
   duplicateAlbums: any[] = [];
   similarAlbums: any[] = [];
   isProcessing: boolean = false;
   albumsLoaded: boolean = false;
   whichAlbum: string | undefined = undefined;
+
+  photoFacade = inject(PhotoFacadeService);
 
   ngOnInit(): void {
     if (
@@ -79,10 +78,10 @@ export class ManagePhotoComponent implements OnInit {
 
     const base64Images = this.selectedImages.map((img) => img.base64);
 
-    this.supabaseService.clearAnalysisBucket().then(() => {
+    this.photoFacade.clearAnalysisBucket().then(() => {
       Promise.all(
         base64Images.map((base64, i) =>
-          this.supabaseService.uploadImageForAnalysis(base64, i)
+          this.photoFacade.uploadImageForAnalysis(base64, i)
         )
       ).then((uploads) => {
         const valid = uploads.filter(
@@ -90,7 +89,7 @@ export class ManagePhotoComponent implements OnInit {
         );
 
         const hashRequests = valid.map(({ url }) =>
-          this.photoService.hashImage(url)
+          this.photoFacade.hashImage(url)
         );
 
         forkJoin(hashRequests).subscribe((hashResponses) => {
@@ -102,7 +101,7 @@ export class ManagePhotoComponent implements OnInit {
 
           this.photofacade.setHashes(hashUrlPairs); // 💾 Guardar los hashes
 
-          this.photoService
+          this.photoFacade
             .compareHashes(hashUrlPairs)
             .subscribe((compareRes) => {
               this.duplicateAlbums = compareRes.albums.filter((a: any) =>
@@ -133,7 +132,7 @@ export class ManagePhotoComponent implements OnInit {
   viewAlbum(albumType: string, albumIndex?: number): void {
     if (albumType === 'duplicate') {
       this.whichAlbum = 'duplicate';
-      this.photofacade .setWhichAlbum(this.whichAlbum);
+      this.photofacade.setWhichAlbum(this.whichAlbum);
       const album = this.duplicateAlbums[albumIndex || 0];
       this.photofacade.updateDuplicatePhotos(album.photos);
     } else if (albumType === 'similar' && albumIndex !== undefined) {
