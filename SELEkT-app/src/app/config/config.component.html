@@ -1,1 +1,39 @@
-<p>config works!</p>
+<div>
+  <div class="upload-container">
+
+    <!-- ZONA AZUL -->
+    <div class="header-section">
+      <button class="back" (click)="goBack()"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 25 25" fill="none">
+        <path d="M8 15L1 8L8 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg></button>
+      <p class="header-title">Configuración
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
+  <path d="M10 18H21M3 18H6M6 18V20M6 18V16M20 12H21M3 12H16M16 12V14M16 12V10M14 6H21M3 6H10M10 6V8M10 6V4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+      </p>
+    </div>
+
+    <!-- ZONA BLANCA CURVA -->
+    <div class="white-section">
+      <div class="white-background-image"></div>
+        <div class="settings-option">
+  <span class="setting-label">Acceso a Galería</span>
+  <label class="switch">
+      <input type="checkbox" [checked]="galleryAccess" (change)="onToggleGalleryAccess($event)" />
+    <span class="slider"></span>
+  </label>
+</div>
+
+<hr class="divider" />
+
+<div class="settings-option">
+  <span class="setting-label">Modo Oscuro</span>
+  <label class="switch">
+    <input type="checkbox" [(ngModel)]="darkMode" />
+    <span class="slider"></span>
+  </label>
+</div>
+
+      </div>
+    </div>
+</div>

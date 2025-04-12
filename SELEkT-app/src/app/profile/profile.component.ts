@@ -24,7 +24,7 @@ export class ProfileComponent {
   }
 
   goToConfig() {
-    this.router.navigate(['/upload']);
+    this.router.navigate(['/config']);
   }
 
   goToColores() {

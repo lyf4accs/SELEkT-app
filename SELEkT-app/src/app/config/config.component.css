@@ -1,0 +1,135 @@
+.white-section {
+  position: relative;
+  background-color: white;
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+  margin-top: -16px;
+  flex: 1;
+  overflow-y: auto;
+  z-index: 1;
+  min-height: 72%;
+  min-width: 100%;
+  justify-content: center;
+  padding-top: 20%;
+  padding-left: 12%;
+  padding-right: 13%;
+}
+
+button{
+  background-color: transparent;
+  border-color: transparent;
+}
+
+
+/* Asegurarse que el contenido esté por encima */
+.white-section>*:not(.white-background-image) {
+  position: relative;
+  z-index: 1;
+}
+
+
+.upload-container {
+  font-family: 'Poppins', sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #041929;
+  overflow: hidden;
+}
+
+/* HEADER AZUL */
+.header-section {
+  background: linear-gradient(180deg, #052F50 0%, #041929 76.57%);
+  color: white;
+  padding: 7rem 1rem 1rem;
+  min-height: 26%;
+  position: relative;
+}
+
+.header-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  justify-self: left;
+  margin-left: 10%;
+  align-items: baseline;
+}
+.settings-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1.5rem 0;
+  font-size: 14px;
+  color: #041929;
+  font-weight: 500;
+}
+
+.setting-label {
+  font-size: 14px;
+  color: #041929;
+}
+
+/* Línea divisoria entre switches */
+.divider {
+  border: none;
+  border-top: 1px solid #052F50;
+  margin: 1rem 0;
+  opacity: 0.4;
+}
+
+/* Estilo de switch personalizado */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Fondo del switch */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #0d2542;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+/* Círculo blanco dentro del switch */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* Al estar activo, mueve el círculo */
+.switch input:checked+.slider:before {
+  transform: translateX(18px);
+}
+
+
+.back {
+  position: absolute;
+  top: 2.5rem;
+  left: 1.5rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 10;
+}
