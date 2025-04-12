@@ -30,6 +30,12 @@
   justify-self: left;
 }
 
+.file-input.disabled-by-condition {
+  opacity: 0.6;
+  pointer-events: auto;
+  /* permite el click */
+  cursor: not-allowed;
+}
 /* Botón Examinar */
 .file-group {
   display: flex;

@@ -9,6 +9,7 @@ import { AlertController } from '@ionic/angular';
 import { environment } from '../../environments/environment';
 import { forkJoin, Observable } from 'rxjs';
 import { SupabaseService } from '../services/supabase.service';
+import { GalleryService } from '../services/GalleryService';
 
 @Component({
   selector: 'app-manage-photo',
@@ -27,6 +28,7 @@ export class ManagePhotoComponent implements OnInit {
   similarAlbums: any[] = [];
   isProcessing: boolean = false;
   albumsLoaded: boolean = false;
+  isButtonDisabledUpload: boolean = false;
   whichAlbum: string | undefined = undefined;
 
   photoFacade = inject(PhotoFacadeService);
@@ -40,10 +42,18 @@ export class ManagePhotoComponent implements OnInit {
       this.similarAlbums = this.photofacade.getAlbums('similar');
       this.albumsLoaded = true;
     }
+    this.isButtonDisabledUpload = !this.photoFacade.getGalleryAccess();
   }
 
   get isButtonDisabled(): boolean {
     return this.selectedImages.length === 0 && !this.isProcessing;
+  }
+
+  onFileClick(event: Event): void {
+    if (this.isButtonDisabledUpload) {
+      event.preventDefault(); // evita que se abra el selector de archivos
+      this.photoFacade.checkGalleryAccess(); // muestra el popup
+    }
   }
 
   getGalleryPhotos(event: any): void {
@@ -68,6 +78,7 @@ export class ManagePhotoComponent implements OnInit {
   }
 
   processImages(): void {
+    this.isProcessing = true;
     if (this.selectedImages.length === 0) {
       alert('Por favor, selecciona imágenes primero.');
       return;

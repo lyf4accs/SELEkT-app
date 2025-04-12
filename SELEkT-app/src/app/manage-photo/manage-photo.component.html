@@ -4,7 +4,15 @@
     <!-- ZONA AZUL -->
     <div class="header-section">
       <p class="header-title">Selecciona imágenes a procesar</p>
-      <input id="file" type="file" (change)="getGalleryPhotos($event)" multiple class="file-input" />
+      <input
+  id="file"
+  type="file"
+  (click)="onFileClick($event)"
+  (change)="getGalleryPhotos($event)"
+  multiple
+  class="file-input"
+  [ngClass]="{ 'disabled-by-condition': isButtonDisabledUpload }"
+/>
     </div>
 
     <!-- ZONA BLANCA CURVA -->

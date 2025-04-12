@@ -19,7 +19,11 @@
         <div class="settings-option">
   <span class="setting-label">Acceso a Galería</span>
   <label class="switch">
-      <input type="checkbox" [checked]="galleryAccess" (change)="onToggleGalleryAccess($event)" />
+     <input
+  type="checkbox"
+  [(ngModel)]="galleryAccess"
+  (change)="onGalleryToggleChanged()"
+/>
     <span class="slider"></span>
   </label>
 </div>

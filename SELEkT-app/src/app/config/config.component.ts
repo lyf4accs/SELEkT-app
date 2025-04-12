@@ -23,6 +23,11 @@ export class ConfigComponent implements OnInit {
   ngOnInit() {
     const saved = localStorage.getItem('galleryPermission');
     this.galleryAccess = saved === 'true';
+
+    // Forzar a Angular a refrescar el binding visual
+    setTimeout(() => {
+      this.galleryAccess = saved === 'true';
+    });
   }
 
   goBack() {
@@ -43,10 +48,11 @@ export class ConfigComponent implements OnInit {
     }
   }
 
-  onToggleGalleryAccess(event: any) {
-    this.galleryAccess = event.target.checked;
+  onGalleryToggleChanged() {
     if (this.galleryAccess) {
       this.requestGalleryPermission();
+    } else {
+      localStorage.setItem('galleryPermission', 'false');
     }
   }
 }

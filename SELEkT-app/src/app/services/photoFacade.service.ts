@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Moodboard } from '../models/Moodboard';
 
@@ -13,6 +13,7 @@ import { SupabaseService } from './supabase.service';
 import { ClipboardService } from './clip-board.service';
 import { NameGeneratorService } from './name-generator.service';
 import { DropsendService } from './dropsend.service';
+import { GalleryService } from './GalleryService';
 
 @Injectable({
   providedIn: 'root',
@@ -27,16 +28,17 @@ export class PhotoFacadeService {
   duplicatePhotos$!: Observable<any[]>;
   similarPhotos$!: Observable<any[]>;
 
-  constructor(
-    private duplicatePhotoService: DuplicatePhotoService,
-    private similarPhotoService: SimilarPhotoService,
-    private hashService: HashService,
-    private dropSendService: DropsendService,
-    private nameGeneratorService: NameGeneratorService,
-    private photoLibraryService: PhotoLibraryService,
-    private supabaseService: SupabaseService,
-    private clipboardService: ClipboardService
-  ) {
+  private duplicatePhotoService = inject(DuplicatePhotoService);
+  private similarPhotoService = inject(SimilarPhotoService);
+  private hashService = inject(HashService);
+  private dropSendService = inject(DropsendService);
+  private nameGeneratorService = inject(NameGeneratorService);
+  private photoLibraryService = inject(PhotoLibraryService);
+  private supabaseService = inject(SupabaseService);
+  private clipboardService = inject(ClipboardService);
+  private galleryService = inject(GalleryService);
+
+  constructor() {
     this.duplicatePhotos$ = this.duplicatePhotoService.duplicatePhotos$;
     this.similarPhotos$ = this.similarPhotoService.similarPhotos$;
   }
@@ -206,5 +208,19 @@ export class PhotoFacadeService {
 
   getNotifications(): Observable<string> {
     return this.dropSendService.getNotifications();
+  }
+
+  checkGalleryAccess(): boolean {
+    return this.galleryService.requestGalleryPermission();
+  }
+
+  /** Guarda el permiso desde cualquier parte */
+  setGalleryAccess(granted: boolean): void {
+    this.galleryService.saveGalleryPermission(granted);
+  }
+
+  /** Accede directamente al estado sin popup */
+  getGalleryAccess(): boolean {
+    return this.galleryService.hasGalleryPermission();
   }
 }

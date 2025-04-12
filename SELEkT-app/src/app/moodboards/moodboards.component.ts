@@ -6,11 +6,13 @@ import { Router, RouterModule } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { SupabaseService } from '../services/supabase.service';
 import { PhotoLibraryService } from '../services/PhotoLibraryService';
+import { GalleryProtectedDirective } from '../shared/directive/gallery.directive';
+
 
 @Component({
   selector: 'app-moodboards',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, GalleryProtectedDirective],
   templateUrl: './moodboards.component.html',
   styleUrl: './moodboards.component.css',
 })
@@ -126,8 +128,6 @@ export class MoodboardsComponent implements OnInit {
       this.cdr.detectChanges();
     }
   }
-
-
 
   goBack() {
     this.router.navigate(['/profile']);
