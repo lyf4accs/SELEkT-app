@@ -27,8 +27,7 @@
               }
             ],
             "styles": ["src/styles.css"],
-            "scripts": [],
-            "allowedCommonJsDependencies": ["@supabase/realtime-js"]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -91,8 +90,7 @@
               }
             ],
             "styles": ["src/styles.css"],
-            "scripts": [],
-            "allowedCommonJsDependencies": ["@supabase/realtime-js"]
+            "scripts": []
           }
         }
       }
