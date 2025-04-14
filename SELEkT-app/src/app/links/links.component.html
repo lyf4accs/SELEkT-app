@@ -1,11 +1,12 @@
 
-@if (albums.length > 0) {
 
-  <button (click)="goBack()" class="back-button">
+<button (click)="goBack()" class="back-button">
       <svg xmlns="http://www.w3.org/2000/svg" width="9" height="16" viewBox="0 0 9 16" fill="none">
       <path d="M8 15L1 8L8 1" stroke="#ffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
   </button>
+
+@if (albums.length > 0) {
 
   @for (album of albums; track album.id) {
     <div class="album-card" (click)="goToAlbum(album.code)">
@@ -41,4 +42,8 @@
       </button>
     </div>
   }
+}@else {
+  <div class="no-albums">
+    <p>No se han encontrado álbumnes</p>
+  </div>
 }

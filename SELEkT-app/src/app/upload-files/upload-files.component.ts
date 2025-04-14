@@ -34,7 +34,7 @@ export class UploadFilesComponent {
   isUploading = false;
 
   async uploadPhotos() {
-    if (this.isUploading) return; // Bloquea si ya está subiendo
+    if (this.isUploading) return;
 
     this.isUploading = true;
 
@@ -48,16 +48,19 @@ export class UploadFilesComponent {
     const soloArchivos = this.files.map((f) => f.file);
     this.albumLink = await this.supabaseService.uploadAlbum(soloArchivos);
 
+    this.isUploading = false;
+
     if (this.albumLink) {
-      const goToAlbum = confirm('✅ Álbum creado. ¿Quieres ir ahora?');
-      if (goToAlbum) {
+      const ir = confirm('✅ Álbum creado. ¿Quieres ir al álbum ahora?');
+
+      if (ir) {
+        // Redirige al álbum
         window.location.href = this.albumLink;
+      } else {
+        // Recarga la vista actual ('upload-files')
+        window.location.reload();
       }
     }
-
-    this.isUploading = false;
   }
-
-
 }
 

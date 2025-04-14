@@ -90,7 +90,7 @@ export class SupabaseService {
 
       // Devolver el enlace para acceder al álbum.
       // Ajusta el dominio según tu despliegue en Netlify.
-      const link = `https://https://selek-t-app.netlify.app/album/${albumCode}`;
+      const link = `https://selek-t-app.netlify.app/album/${albumCode}`;
 
       return link;
     } catch (error) {
