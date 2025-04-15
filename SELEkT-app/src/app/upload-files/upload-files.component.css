@@ -97,6 +97,12 @@
   z-index: 1000;
 }
 
+.upload-button.disabled-by-condition {
+  background: #999;
+  color: #666;
+  cursor: not-allowed;
+}
+
 /* Enlace al álbum generado */
 .album-link-box {
   margin-bottom: 10vh;

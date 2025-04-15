@@ -17,6 +17,12 @@
       <div id="wellcomeText">
         <p class="usuarioText">Usuario</p>
         <p class="emailText"><u>{{ user.email }}</u></p>
+        <span
+  class="badge"
+  [ngClass]="user.isPremium ? 'premium-badge' : 'default-badge'"
+>
+  {{ user.isPremium ? 'Premium' : 'Default' }}
+</span>
       </div>
     </div>
   </div>
@@ -26,7 +32,7 @@
       <div class="profile-form">
 
         <div class="premium-border">
-          <button class="premium-button" (click)="goToPremium()">
+          <button class="premium-button" (click)="goToPremium()" >
             <span>Plan Premium</span>
             <span class="icon">
               <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">

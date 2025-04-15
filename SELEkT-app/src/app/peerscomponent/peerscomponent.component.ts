@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { PhotoFacadeService } from '../services/photoFacade.service';
+import { CommonModule } from '@angular/common';
+import { GalleryProtectedDirective } from '../shared/directive/gallery.directive';
 
 @Component({
   selector: 'app-peerscomponent',
+  standalone:true,
+  imports:[CommonModule, GalleryProtectedDirective],
   templateUrl: './peerscomponent.component.html',
   styleUrls: ['./peerscomponent.component.css'],
 })
@@ -92,6 +96,8 @@ private addPeer(peer: any): void {
   }
 
   selectPeer(peer: any): void {
+     const granted = this.photoFacade.getGalleryAccess();
+     if (!granted) return;
     console.log('Seleccionado el peer:', peer);
     // Crear un input de tipo file y simular el clic para que se abra el selector de archivos
     const fileInput = document.createElement('input');

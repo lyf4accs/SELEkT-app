@@ -271,6 +271,7 @@
     height: 38px;
   }
 
+
   #wellcomeText {
     font-size: 1.1rem;
     top: 9vh;
@@ -308,4 +309,26 @@
       }
     }
 
+        .badge {
+          display: inline-block;
+          margin-top: 0.5rem;
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 4px 10px;
+          border-radius: 999px;
+          text-align: center;
+          width: fit-content;
+        }
+
+        .default-badge {
+          background-color: #d3d3d3;
+          color: #333;
+          box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .premium-badge {
+          background: linear-gradient(to right, #DBB658, #7F682C);
+          color: #333;
+          box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+        }
 }

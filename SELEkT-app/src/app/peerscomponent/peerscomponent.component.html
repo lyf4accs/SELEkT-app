@@ -6,7 +6,7 @@
 
 <div class="peers-wrapper">
   @for (peer of peers; track peer.id) {
-    <div class="peer" (click)="selectPeer(peer)">
+    <div class="peer" (click)="selectPeer(peer)" [appGalleryProtected]="true">
       <div class="peer-circle">
         <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <circle cx="32" cy="32" r="32" fill="#6296bf"/>

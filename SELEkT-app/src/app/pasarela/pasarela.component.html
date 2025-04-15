@@ -1,0 +1,21 @@
+<div class="payment-overlay">
+  <div class="payment-container">
+    <h2>Confirmar pago</h2>
+    <p>Estás a punto de suscribirte al plan <strong>{{ planName }}</strong></p>
+    <p>Total: <strong>{{ price }}</strong></p>
+
+    <form [formGroup]="paymentForm">
+      <input type="text" placeholder="Tarjeta (**** **** **** 1234)" formControlName="cardNumber"  (input)="formatCardNumber()">
+      <div *ngIf="paymentForm.get('cardNumber')?.invalid && paymentForm.get('cardNumber')?.touched" class="error">Número inválido</div>
+
+      <input type="text" placeholder="MM/AA" formControlName="expiryDate">
+      <div *ngIf="paymentForm.get('expiryDate')?.invalid && paymentForm.get('expiryDate')?.touched" class="error">Fecha inválida</div>
+
+      <input type="text" placeholder="CVC" formControlName="cvc">
+      <div *ngIf="paymentForm.get('cvc')?.invalid && paymentForm.get('cvc')?.touched" class="error">CVC inválido</div>
+
+      <button class="pay-button" [disabled]="paymentForm.invalid" (click)="confirmPayment()">Pagar ahora</button>
+      <button class="cancel-button" type="button" (click)="cancel()">Cancelar</button>
+    </form>
+  </div>
+</div>

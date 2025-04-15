@@ -1,0 +1,61 @@
+<div class="modal-overlay">
+  <div class="modal-container">
+    <button class="close-button" (click)="back()">&times;</button>
+    <h1 class="modal-title">SELEKT</h1>
+    <p class="modal-subtitle">Limpia; Comparte; Disfruta<br/> ¡Sin Límites!</p>
+
+    <div class="plan-list">
+  <div class="plan-item"
+       [class.selected]="selectedPlan === 'Anual (Prueba gratuita)'"
+       (click)="selectPlan('Anual (Prueba gratuita)')">
+    <div class="plan-header">
+      <span class="plan-name">Anual (Prueba gratuita)</span>
+      <span class="plan-price">29,99 €</span>
+    </div>
+    <div class="plan-subtext">2,49 €/mes - Tranquilidad total</div>
+  </div>
+
+  <div class="plan-item"
+       [class.selected]="selectedPlan === 'Mensual'"
+       (click)="selectPlan('Mensual')">
+    <div class="plan-header">
+      <span class="plan-name">Mensual</span>
+      <span class="plan-price">9,99 €</span>
+    </div>
+    <div class="plan-subtext">Flexibilidad mes a mes</div>
+  </div>
+
+  <div class="plan-item"
+       [class.selected]="selectedPlan === 'De por vida'"
+       (click)="selectPlan('De por vida')">
+    <div class="plan-header">
+      <span class="plan-name">De por vida</span>
+      <span class="plan-price">59,99 €</span>
+    </div>
+    <div class="plan-subtext">Pago único para siempre</div>
+  </div>
+</div>
+
+
+    <div class="benefits-box">
+      <p><strong>Swiper Mejorado</strong><br />Con posibilidad de añadir imágenes a favoritos - Super Like</p>
+      <p><strong>Links ilimitados</strong><br />¡Ya no tienes por qué elegir!</p>
+    </div>
+
+    <button (click)="showPayment = true" class="cta-button"> {{ selectedPlan === 'Anual (Prueba gratuita)' ? 'Probar 3 días gratis' : 'Comprar' }}</button>
+
+<app-pasarela
+  *ngIf="showPayment"
+  [planName]="selectedPlan"
+  [price]="getPrice(selectedPlan)"  (cancelClicked)="showPayment = false">
+</app-pasarela>
+
+    <p class="cta-info">Luego 29,99 €/año, cancela cuando quieras</p>
+
+    <div class="modal-footer">
+      <a href="#">Privacidad</a>
+      <a href="#">Términos</a>
+      <a href="#">Restaurar</a>
+    </div>
+  </div>
+</div>

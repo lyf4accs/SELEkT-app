@@ -17,10 +17,11 @@ export class ProfileComponent {
   user = {
     username: '@juanperez',
     email: 'juan@example.com',
+    isPremium: true,
   };
 
   goToPremium() {
-    this.router.navigate(['/upload']);
+    this.router.navigate(['/premium']);
   }
 
   goToConfig() {

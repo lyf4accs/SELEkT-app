@@ -12,9 +12,10 @@ export class GalleryService {
     const granted = this.hasGalleryPermission();
 
     if (!granted) {
-      confirm(
+      alert(
         '¡No tenemos permiso de galería!\n\nPuedes ajustarlo en la configuración de tu perfil.'
       );
+      return false;
     }
 
     return granted;

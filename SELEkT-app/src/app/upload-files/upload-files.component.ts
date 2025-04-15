@@ -1,10 +1,14 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
 import { FooterComponent } from '../footer/footer.component';
+import { CommonModule } from '@angular/common';
+import { GalleryProtectedDirective } from '../shared/directive/gallery.directive';
+import { PhotoFacadeService } from '../services/photoFacade.service';
 
 @Component({
   selector: 'app-upload-files',
-  imports: [FooterComponent],
+  standalone: true,
+  imports: [FooterComponent, CommonModule, GalleryProtectedDirective],
   templateUrl: './upload-files.component.html',
   styleUrl: './upload-files.component.css',
 })
@@ -12,11 +16,13 @@ export class UploadFilesComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>; // 👈 acceso al input
   files: { file: File; url: string }[] = [];
   albumLink: string | null = null;
-
+  photoFacade= inject(PhotoFacadeService)
   constructor(private supabaseService: SupabaseService) {}
 
   openFileSelector() {
     console.log('disparando input');
+     const granted = this.photoFacade.getGalleryAccess();
+    if (!granted) return;
     this.fileInput.nativeElement.click(); // 👈 dispara el input
   }
 
@@ -61,6 +67,10 @@ export class UploadFilesComponent {
         window.location.reload();
       }
     }
+  }
+
+  get isButtonDisabled(): boolean {
+    return this.files.length === 0 || this.isUploading;
   }
 }
 

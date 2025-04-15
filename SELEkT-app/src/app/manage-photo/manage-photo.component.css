@@ -147,8 +147,8 @@ li {
 }
 
 .main-button.disabled-by-condition {
-  background-color: #dbdbdb;
-  color: #e5e5e5;
+  background: #999;
+    color: #666;
   cursor: not-allowed;
 }
 

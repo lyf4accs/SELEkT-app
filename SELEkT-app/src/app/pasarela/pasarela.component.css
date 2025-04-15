@@ -1,0 +1,57 @@
+/* payment.component.scss */
+.payment-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.payment-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  font-family: 'Poppins', sans-serif;
+}
+
+input {
+  display: block;
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.pay-button {
+  background: #d32f2f;
+  color: white;
+  border: none;
+  padding: 0.9rem;
+  border-radius: 8px;
+  width: 100%;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.pay-button:disabled {
+  background: #999;
+  color:#666;
+}
+
+.cancel-button {
+  background: transparent;
+  color: #666;
+  border: none;
+  margin-top: 0.5rem;
+  cursor: pointer;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 0.5rem;
+}

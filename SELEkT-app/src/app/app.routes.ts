@@ -14,6 +14,8 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { ConfigComponent } from './config/config.component';
 import { MoodboardDisplayComponent } from './moodboard-display/moodboard-display.component';
 import { MoodboardsComponent } from './moodboards/moodboards.component';
+import { PremiumComponent } from './premium/premium.component';
+import { PasarelaComponent } from './pasarela/pasarela.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/upload', pathMatch: 'full' },
@@ -31,6 +33,8 @@ export const routes: Routes = [
   { path: 'moodboards', component: MoodboardsComponent },
   { path: 'display', component: MoodboardDisplayComponent },
   { path: 'config', component: ConfigComponent },
+  { path: 'premium', component: PremiumComponent },
+  { path: 'pasarela', component: PasarelaComponent },
   {
     path: 'moodboard/:id',
     loadComponent: () =>

@@ -10,7 +10,7 @@
       accept="image/*"
       hidden
     />
-    <button class="add-button" (click)="openFileSelector()">
+    <button class="add-button" (click)="openFileSelector()" [appGalleryProtected]="true">
       +
     </button>
   </div>
@@ -25,7 +25,10 @@
   }
 
   <!-- Botón subir -->
-<button class="upload-button" (click)="uploadPhotos()" [disabled]="isUploading">
+<button class="upload-button"
+        (click)="uploadPhotos()"
+        [disabled]="isButtonDisabled"
+        [ngClass]="{ 'disabled-by-condition': isButtonDisabled }">
   {{ isUploading ? 'Subiendo...' : 'Subir Archivos' }}
 </button>
 
