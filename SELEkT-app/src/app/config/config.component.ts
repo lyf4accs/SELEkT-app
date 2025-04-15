@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import {
@@ -7,6 +7,7 @@ import {
   CameraSource,
   PermissionStatus,
 } from '@capacitor/camera';
+import { ChangeDetectorRef } from '@angular/core';
 
 
 @Component({
@@ -15,44 +16,26 @@ import {
   imports: [FormsModule],
   templateUrl: './config.component.html',
   styleUrl: './config.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfigComponent implements OnInit {
+export class ConfigComponent {
   router = inject(Router);
-  galleryAccess = false;
+  private _galleryAccess = localStorage.getItem('galleryPermission') === 'true';
   darkMode = false;
-  ngOnInit() {
-    const saved = localStorage.getItem('galleryPermission');
-    this.galleryAccess = saved === 'true';
-
-    // Forzar a Angular a refrescar el binding visual
-    setTimeout(() => {
-      this.galleryAccess = saved === 'true';
-    });
-  }
+  cdr = inject(ChangeDetectorRef);
 
   goBack() {
     this.router.navigate(['/profile']);
   }
 
-  async requestGalleryPermission() {
-    const status = await Camera.requestPermissions();
-
-    if (status.photos === 'granted') {
-      console.log('Permiso de galería concedido');
-      this.galleryAccess = true;
-      localStorage.setItem('galleryPermission', 'true');
-    } else {
-      console.log('Permiso de galería denegado');
-      this.galleryAccess = false;
-      localStorage.setItem('galleryPermission', 'false');
-    }
+  get galleryAccess(): boolean {
+    return this._galleryAccess;
   }
 
-  onGalleryToggleChanged() {
-    if (this.galleryAccess) {
-      this.requestGalleryPermission();
-    } else {
-      localStorage.setItem('galleryPermission', 'false');
-    }
+  set galleryAccess(value: boolean) {
+    this._galleryAccess = value;
+    localStorage.setItem('galleryPermission', value ? 'true' : 'false');
+    this.cdr.markForCheck();
   }
+
 }
