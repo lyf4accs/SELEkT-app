@@ -40,7 +40,4 @@ export class ProfileComponent {
     this.router.navigate(['/links']);
   }
 
-  goBack() {
-    this.location.back();
-  }
 }
