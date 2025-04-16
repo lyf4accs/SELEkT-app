@@ -13,6 +13,7 @@ import { Router} from '@angular/router';
 })
 export class ProfileComponent {
   constructor(private router: Router, private location: Location) {}
+  showAboutUs = false;
 
   user = {
     username: '@juanperez',
@@ -39,5 +40,4 @@ export class ProfileComponent {
   goToLink() {
     this.router.navigate(['/links']);
   }
-
 }
