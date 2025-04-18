@@ -101,14 +101,31 @@
   *ngIf="showAboutUs"
   (click)="showAboutUs = false"
 >
-  <div class="about-us-modal-content" (click)="$event.stopPropagation()">
+  <div class="about-us-modal-content"  @fadeInOut (click)="$event.stopPropagation()">
     <h2>Sobre nosotros</h2>
     <p>
-     info del por qué del proyecto<br/>
-     info desarrolladores
+      Somos dos estudiantes de Ingeniería Informática en la UPV y este proyecto nace como parte de nuestro TFG.<br/><br/>
+      Lo hemos diseñado y desarrollado como full-stack developers con un objetivo claro: <b>limpiar, compartir y disfrutar</b> tu espacio digital.<br/><br/>
+      ¡Gracias por formar parte de esta idea!
     </p>
+
+    <div style="margin-top: 1.2rem; font-size: 0.9rem;">
+      <strong>Autores:</strong><br/>
+      <div style="margin-top: 0.5rem;">
+        Javier Latorre Cano
+        <a href="https://github.com/JaviLatorre" target="_blank" rel="noopener">GitHub</a> |
+        <a href="https://www.linkedin.com/in/javilato" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <div style="margin-top: 0.3rem;">
+        Laura J. Illán Ferrández
+        <a href="https://github.com/lyf4accs" target="_blank" rel="noopener">GitHub</a> |
+        <a href="https://www.linkedin.com/in/ljillfer" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+
     <button class="about-us-close-button" (click)="showAboutUs = false">
       Cerrar
     </button>
   </div>
 </div>
+

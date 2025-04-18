@@ -2,6 +2,7 @@
 
 
 .dropsend-main {
+  padding: 2rem 1.5rem;
   position: relative;
   width: 100%;
   height: 100vh;
@@ -24,7 +25,7 @@
   height: 1600px;
   z-index: 0;
   pointer-events: none;
-  background-image:
+  /* background-image:
     radial-gradient(circle at center, transparent 58px, rgba(43, 74, 142, 0.15) 59px, transparent 62px),
     radial-gradient(circle at center, transparent 108px, rgba(43, 74, 142, 0.12) 109px, transparent 112px),
     radial-gradient(circle at center, transparent 158px, rgba(43, 74, 142, 0.10) 159px, transparent 162px),
@@ -33,19 +34,27 @@
     radial-gradient(circle at center, transparent 308px, rgba(43, 74, 142, 0.05) 309px, transparent 312px),
     radial-gradient(circle at center, transparent 358px, rgba(43, 74, 142, 0.04) 359px, transparent 362px),
     radial-gradient(circle at center, transparent 408px, rgba(43, 74, 142, 0.03) 409px, transparent 412px),
-    radial-gradient(circle at center, transparent 458px, rgba(43, 74, 142, 0.02) 459px, transparent 462px);
+    radial-gradient(circle at center, transparent 458px, rgba(43, 74, 142, 0.02) 459px, transparent 462px); */
   background-repeat: no-repeat;
   background-position: center;
 }
 /* Contenedor del nombre y subtítulo */
 .user-info {
+    padding: 1rem;
+      text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 11rem;
+  margin-bottom: 7rem;
   z-index: 2;
   position: relative;
-  bottom: 5%;
+  bottom: 2%;
+}
+
+.peers-wrapper {
+  margin-top: 12rem;
+  position: relative;
+  z-index: 2;
 }
 
 #displayName {
@@ -61,4 +70,61 @@
   color: #003b5c;
   text-align: center;
   margin-top: 0.5rem;
+}
+
+.circles-background {
+  position: absolute;
+  bottom: 20rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 300px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background-color: rgba(43, 74, 142, 0.15);
+  animation: ripple 8s infinite ease-out;
+  transform: translate(-50%, -50%);
+  opacity: 0.5;
+}
+
+.circle:nth-child(2) {
+  animation-delay: 1s;
+}
+
+.circle:nth-child(3) {
+  animation-delay: 2.5s;
+}
+
+.circle:nth-child(4) {
+  animation-delay: 3.5s;
+}
+
+.circle:nth-child(5) {
+  animation-delay: 4.5s;
+}
+
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.4;
+  }
+
+  70% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(3.2);
+    opacity: 0;
+  }
 }
