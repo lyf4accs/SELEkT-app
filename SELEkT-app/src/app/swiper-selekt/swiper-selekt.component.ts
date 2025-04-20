@@ -188,6 +188,8 @@ export class SwiperSelektComponent implements OnInit {
     if (this.draggingIndex === null) return;
     const card = this.cards[this.draggingIndex];
 
+    await Haptics.impact({ style: ImpactStyle.Medium });
+
     card.transform =
       direction === 'left'
         ? 'translate(-200vw, 0) rotate(-30deg)'
@@ -247,10 +249,13 @@ export class SwiperSelektComponent implements OnInit {
   }
 
 
-  moveToEnd() {
+  async moveToEnd() {
     if (this.draggingIndex === null) return;
     const index = this.draggingIndex;
     const card = this.cards[index];
+
+    await Haptics.impact({ style: ImpactStyle.Medium });
+
     this.cards = [
       ...this.cards.slice(0, index),
       ...this.cards.slice(index + 1),
