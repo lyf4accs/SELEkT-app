@@ -462,7 +462,7 @@
 
 :host-context(body.dark-mode) .config-button,
 :host-context(body.dark-mode) .colores-button {
-  color: rgb(31, 111, 235);
+  color: #1f6feb;
 }
 
 :host-context(body.dark-mode) .config-border,

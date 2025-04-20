@@ -12,6 +12,7 @@ import { Filesystem, Directory } from '@capacitor/filesystem';
 import { AlertController } from '@ionic/angular';
 import { environment } from '../../environments/environment';
 import { Dialog } from '@capacitor/dialog';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 @Component({
   selector: 'app-swiper-selekt',
@@ -55,6 +56,13 @@ export class SwiperSelektComponent implements OnInit {
         }
       });
     }
+  }
+
+  async showAlert(header: string, message: string) {
+    await Dialog.alert({
+      title: header,
+      message: message,
+    });
   }
 
   async processPhotos(photos: string[], albumType: 'similar' | 'duplicate') {
@@ -189,44 +197,23 @@ export class SwiperSelektComponent implements OnInit {
 
     setTimeout(async () => {
       if (direction === 'top') {
-        await this.confirmFavorite(card.imageUrl);
+        await this.confirmFavorite();
       } else if (direction === 'left') {
         console.log('esperando confirmación de borrado');
-        await this.confirmDelete(card.imageUrl);
+        await this.confirmDelete();
       }
 
       this.cards.splice(this.draggingIndex!, 1);
       this.draggingIndex = null;
+
+      if (this.cards.length === 0) {
+        await this.showAlert('¡Listo!', 'No hay más imágenes que revisar.');
+        this.return();
+      }
     }, 300);
   }
 
-  async addToFavorites(imageUrl: string) {
-    const fileName = this.getFileNameFromUrl(imageUrl);
-    if (!fileName) {
-      console.error('No se pudo obtener el nombre de archivo.');
-      return;
-    }
-
-    try {
-      const fileData = await Filesystem.readFile({
-        path: fileName,
-        directory: Directory.External,
-      });
-
-      await Filesystem.writeFile({
-        path: `DCIM/Favoritos/${fileName}`,
-        data: fileData.data,
-        directory: Directory.External,
-      });
-
-      console.log('Imagen guardada en favoritos');
-    } catch (error) {
-      console.error('Error al guardar en favoritos:', error);
-    }
-  }
-
-  async confirmDelete(imageUrl: string) {
-    console.log('Esperando confirmación nativa...');
+  async confirmDelete() {
     const { value } = await Dialog.confirm({
       title: 'Eliminar Imagen',
       message: 'Esta acción es irreversible. ¿Deseas continuar?',
@@ -235,45 +222,30 @@ export class SwiperSelektComponent implements OnInit {
     });
 
     if (value) {
-      this.deleteImage(imageUrl);
+      await this.showAlert(
+        'Eliminada',
+        'La imagen fue eliminada correctamente.'
+      );
     } else {
-      console.log('Cancelado');
+      await this.showAlert('Cancelado', 'No se eliminó la imagen.');
     }
   }
 
-  async confirmFavorite(imageUrl: string) {
-    console.log('Esperando confirmación nativa...');
+  async confirmFavorite() {
     const { value } = await Dialog.confirm({
       title: 'Añadir a Favoritos',
-      message: '¿Quieres agregar esta foto a tu album destacado?',
+      message: '¿Quieres agregar esta foto a tu álbum destacado?',
       okButtonTitle: 'Aceptar',
       cancelButtonTitle: 'Cancelar',
     });
 
     if (value) {
-      this.addToFavorites(imageUrl);
+      await this.showAlert('¡Guardado!', 'La imagen fue añadida a favoritos.');
     } else {
-      console.log('Cancelado');
+      await this.showAlert('Cancelado', 'No se añadió la imagen a favoritos.');
     }
   }
 
-  async deleteImage(imageUrl: string) {
-    const fileName = this.getFileNameFromUrl(imageUrl);
-    if (!fileName) {
-      console.error('No se pudo obtener el nombre de archivo.');
-      return;
-    }
-
-    try {
-      await Filesystem.deleteFile({
-        path: fileName,
-        directory: Directory.External,
-      });
-      console.log('Imagen eliminada correctamente');
-    } catch (error) {
-      console.error('Error al eliminar imagen:', error);
-    }
-  }
 
   moveToEnd() {
     if (this.draggingIndex === null) return;
@@ -294,9 +266,7 @@ export class SwiperSelektComponent implements OnInit {
 
   //helper
   getFileNameFromUrl(url: string): string | undefined {
-    const match = this.photoFacade
-      .getHashes()
-      .find((item) => item.url === url);
+    const match = this.photoFacade.getHashes().find((item) => item.url === url);
     return match?.fileName;
   }
 }

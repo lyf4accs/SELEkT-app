@@ -33,6 +33,14 @@ export class FooterComponent implements AfterViewInit {
     setTimeout(() => this.updateIndicatorPosition(), 50);
   }
 
+  handleManageClick() {
+    if (this.router.url.startsWith('/manage')) {
+      window.location.reload(); // Recarga completa si ya estás en /manage
+    } else {
+      this.router.navigate(['/manage']);
+    }
+  }
+
   updateIndicatorPosition() {
     // Obtener la URL actual
     const activeRoute = this.router.url;
