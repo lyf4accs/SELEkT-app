@@ -8,11 +8,9 @@ import {
 import { Router } from '@angular/router';
 import { Card } from '../models/Card';
 import { PhotoFacadeService } from '../services/photoFacade.service';
-import { Filesystem, Directory } from '@capacitor/filesystem';
 import { AlertController } from '@ionic/angular';
 import { environment } from '../../environments/environment';
 import { Dialog } from '@capacitor/dialog';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 @Component({
   selector: 'app-swiper-selekt',
@@ -188,7 +186,6 @@ export class SwiperSelektComponent implements OnInit {
     if (this.draggingIndex === null) return;
     const card = this.cards[this.draggingIndex];
 
-    await Haptics.impact({ style: ImpactStyle.Medium });
 
     card.transform =
       direction === 'left'
@@ -253,8 +250,6 @@ export class SwiperSelektComponent implements OnInit {
     if (this.draggingIndex === null) return;
     const index = this.draggingIndex;
     const card = this.cards[index];
-
-    await Haptics.impact({ style: ImpactStyle.Medium });
 
     this.cards = [
       ...this.cards.slice(0, index),
