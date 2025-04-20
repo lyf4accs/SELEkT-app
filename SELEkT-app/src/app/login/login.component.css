@@ -13,6 +13,15 @@ html, body {
   overflow-x: hidden;
 }
 
+.back-button {
+  position: relative;
+  background-color: transparent;
+  border: none;
+  color: white;
+  bottom: 80%;
+  left: 3%;
+}
+
 .login-container {
   display: flex;
   flex-direction: column;

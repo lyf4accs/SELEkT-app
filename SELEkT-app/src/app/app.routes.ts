@@ -16,6 +16,7 @@ import { MoodboardDisplayComponent } from './moodboard-display/moodboard-display
 import { MoodboardsComponent } from './moodboards/moodboards.component';
 import { PremiumComponent } from './premium/premium.component';
 import { PasarelaComponent } from './pasarela/pasarela.component';
+import { InitComponent } from './init/init.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/upload', pathMatch: 'full' },
@@ -35,6 +36,7 @@ export const routes: Routes = [
   { path: 'config', component: ConfigComponent },
   { path: 'premium', component: PremiumComponent },
   { path: 'pasarela', component: PasarelaComponent },
+  { path: 'init', component: InitComponent },
   {
     path: 'moodboard/:id',
     loadComponent: () =>

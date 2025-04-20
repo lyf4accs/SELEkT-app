@@ -3,6 +3,8 @@
   padding-right: 15%;
   padding-top: 20%;
   overflow: unset;
+  min-height: 100vh;
+  min-width: 100vw;
 }
 
 .back-button {
@@ -110,18 +112,24 @@
 }
 
 :host-context(body.dark-mode) .card {
+  background-color: #0d1117;
   box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
 }
 
 :host-context(body.dark-mode) .card-content {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(22, 27, 34, 0.8);
   color: #f0f6fc;
 }
 
 :host-context(body.dark-mode) .loading-container {
+  background-color: #161b22;
   color: #c9d1d9;
 }
 
 :host-context(body.dark-mode) .white-background-image {
   background-color: #161b22;
+}
+
+:host-context(body.dark-mode) .swiper-container {
+  background-color: transparent;
 }

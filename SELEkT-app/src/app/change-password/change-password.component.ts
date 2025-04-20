@@ -1,7 +1,7 @@
 import { Component, signal, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PhotoFacadeService } from '../services/photoFacade.service';
-import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-change-password',
@@ -12,7 +12,7 @@ import { Location } from '@angular/common';
 export class ChangePasswordComponent {
   private fb = inject(FormBuilder);
   private photoFacade = inject(PhotoFacadeService);
-  private location = inject(Location);
+  private router = inject(Router);
 
   form = this.fb.group({
     currentPassword: ['', [Validators.required]],
@@ -55,6 +55,6 @@ export class ChangePasswordComponent {
   }
 
   goBack() {
-    this.location.back();
+    this.router.navigate(['/profile']);
   }
 }

@@ -22,6 +22,14 @@ body {
   background-color: #003b5c;
 }
 
+.back-button {
+  position: relative;
+  background-color: transparent;
+  border: none;
+  color: white;
+  bottom: 80%;
+  left: 3%;
+}
 /* Sección azul superior */
 .register-header {
   display: flex;
@@ -60,7 +68,7 @@ body {
   border-top-right-radius: 30px;
   width: 100%;
   max-width: 100%;
-  padding: 3rem 1.5rem 4rem;
+  padding: 4rem 2.5rem 5rem;
   box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -73,7 +81,7 @@ body {
   flex-direction: column;
   gap: 1.5rem;
   width: 84%;
-  margin-top: 0,2rem;
+  margin-top: 3rem;
 }
 
 .form-input {

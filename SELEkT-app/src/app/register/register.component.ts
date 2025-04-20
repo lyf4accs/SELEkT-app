@@ -16,9 +16,12 @@ export class RegisterComponent {
 
   ngOnInit() {}
 
+  goBack() {
+    this.router.navigate(['/init']);
+  }
 
   async signUp(): Promise<void> {
-    console.log('botón registrándose')
+    console.log('botón registrándose');
 
     const email = (document.getElementById('correo') as HTMLInputElement).value;
     const password = (document.getElementById('password') as HTMLInputElement)

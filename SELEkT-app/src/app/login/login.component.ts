@@ -12,6 +12,9 @@ export class LoginComponent {
   errorMessage: string | null = null;
 
   constructor(private router: Router) {}
+  goBack() {
+    this.router.navigate(['/init']);
+  }
 
   async signIn(event: Event) {
     event.preventDefault(); // Evita la recarga del formulario

@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
+
+html,
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  background-color: white;
+}
+
+:host {
+  display: block;
+  height: 100%;
+  position: relative;
+}
+
+.white-background-image {
+  position: absolute;
+  inset: 0;
+  background-image: url('../../assets/fondo_selekt.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  z-index: 0;
+  min-width: 170%;
+  opacity: 1;
+  left: 0;
+  margin-left: -30%;
+  margin-bottom: -35%;
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+}
+
+.init-container {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.start-button {
+  width: 80%;
+  max-width: 280px;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #0a2d47;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.start-button:hover {
+  background-color: #15405b;
+}
+
+.footer-text {
+  font-size: 0.9rem;
+  text-align: center;
+  color: #052F50;
+}
+
+.footer-text a {
+  color: #005a8d;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* DARK MODE */
+:host-context(body.dark-mode) {
+  background-color: #0d1117;
+}
+
+:host-context(body.dark-mode) .white-background-image {
+  filter: brightness(0.6);
+}
+
+:host-context(body.dark-mode) .start-button {
+  background-color: white;
+  color: #0a2d47;
+}
+
+:host-context(body.dark-mode) .start-button:hover {
+  background-color: #f0f0f0;
+}
+
+:host-context(body.dark-mode) .footer-text {
+  color: #c9d1d9;
+}
+
+:host-context(body.dark-mode) .footer-text a {
+  color: #58a6ff;
+}
