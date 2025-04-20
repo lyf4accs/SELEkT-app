@@ -9,9 +9,10 @@
 
 html,
 body {
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .register-container {
@@ -153,4 +154,52 @@ body {
   .register-card {
     padding: 3rem;
   }
+}
+
+/* darkmode */
+:host-context(body.dark-mode) .register-container {
+  background-color: #161b22;
+  color: #f0f6fc;
+}
+
+:host-context(body.dark-mode) .register-header {
+  background: linear-gradient(to bottom, #161b22, #161b22);
+  color: #f0f6fc;
+}
+
+:host-context(body.dark-mode) #wellcomeText {
+  color: #c9d1d9;
+}
+
+:host-context(body.dark-mode) .register-card {
+  background-color: #161b22;
+  box-shadow: 0 -5px 20px rgba(255, 255, 255, 0.05);
+}
+
+:host-context(body.dark-mode) .form-input {
+  background-color: transparent;
+  border-bottom: 2px solid #58a6ff;
+  color: #c9d1d9;
+}
+
+:host-context(body.dark-mode) .form-input::placeholder {
+  color: #8b949e;
+}
+
+:host-context(body.dark-mode) .submit-button {
+  background-color: #1f6feb;
+  color: #ffffff;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
+}
+
+:host-context(body.dark-mode) .submit-button:hover {
+  background-color: #388bfd;
+}
+
+:host-context(body.dark-mode) .login {
+  color: #8b949e;
+}
+
+:host-context(body.dark-mode) .login a {
+  color: #58a6ff;
 }

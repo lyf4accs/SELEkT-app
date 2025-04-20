@@ -69,3 +69,25 @@
   text-align: center;
   color: #052F50;
 }
+
+/* darkmode */
+
+:host-context(body.dark-mode) .peer-circle {
+  background-color: #1f6feb;
+}
+
+:host-context(body.dark-mode) circle {
+  fill: #1f6feb;
+}
+
+:host-context(body.dark-mode) .peer-circle svg {
+  fill: #ffffff;
+}
+
+:host-context(body.dark-mode) .peer-name {
+  color: #f0f6fc;
+}
+
+:host-context(body.dark-mode) .no-peers {
+  color: #c9d1d9;
+}

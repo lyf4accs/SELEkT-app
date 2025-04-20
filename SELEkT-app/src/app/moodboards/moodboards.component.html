@@ -40,7 +40,7 @@
   </div>
 
   <div class="upload-button" >
-    <input type="file" (change)="onAddPhotos($event)"  [appGalleryProtected]="true" accept="image/*" multiple hidden #fileInput />
+    <input class= "bg" type="file" (change)="onAddPhotos($event)"  [appGalleryProtected]="true" accept="image/*" multiple hidden #fileInput />
     <button (click)="fileInput.click()" >+</button>
   </div>
 </div>

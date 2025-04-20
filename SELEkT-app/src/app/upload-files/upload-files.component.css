@@ -136,3 +136,41 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
+
+
+/* darkmode */
+:host-context(body.dark-mode) .upload-container {
+  background-color: #161b22;
+}
+
+:host-context(body.dark-mode) .add-button {
+  background-color: #1f6feb;
+  color: white;
+}
+
+:host-context(body.dark-mode) .file-list {
+  color: #c9d1d9;
+}
+
+:host-context(body.dark-mode) .upload-button {
+  background-color: #1f6feb;
+  color: white;
+}
+
+:host-context(body.dark-mode) .upload-button.disabled-by-condition {
+  background-color: #555;
+  color: #999;
+}
+
+:host-context(body.dark-mode) .album-link-box a {
+  color: #1f6feb;
+}
+
+:host-context(body.dark-mode) .preview-img {
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.1);
+}
+
+/* Fondo de backup (en caso de no verse la imagen) */
+:host-context(body.dark-mode) .white-background-image {
+  background-color: #161b22;
+}

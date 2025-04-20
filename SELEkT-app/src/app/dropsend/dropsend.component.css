@@ -128,3 +128,23 @@
     opacity: 0;
   }
 }
+
+
+/* darkmode */
+:host-context(body.dark-mode) .dropsend-main {
+  background-color: #161b22;
+  color: #e0e0e0;
+}
+
+:host-context(body.dark-mode) #displayName {
+  color: #dce3ea;
+}
+
+:host-context(body.dark-mode) .discovery-info {
+  color: #a7b5c3;
+}
+
+:host-context(body.dark-mode) .circle {
+  background-color: rgba(108, 165, 255, 0.08);
+}
+

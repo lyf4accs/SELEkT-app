@@ -23,7 +23,7 @@ button{
 .moodboard-container {
   padding: 1rem;
  overflow: scroll;
-  height: 90vh;
+  min-height: 100vh;
     overflow-y: auto;
     box-sizing: border-box;
 }
@@ -74,7 +74,6 @@ h1 {
 .album-title {
   padding: 0.6rem 0.6rem;
   font-size: 0.9rem;
-  background-color: rgba(255, 255, 255, 0.95);
   color: #052F50;
   font-weight: bold;
   height: 10px;
@@ -102,7 +101,7 @@ h1 {
   grid-column: span 2;
   grid-row: span 2;
 }
-
+tle
 .shape-2 {
   grid-column: span 2;
   grid-row: span 1;
@@ -174,4 +173,77 @@ h1 {
 
 .error-message {
   color: #c0392b;
+}
+
+/* darkmode */
+:host-context(body.dark-mode) .moodboard-container {
+  background-color: #0d1117 !important;
+  min-height: 100vh;
+  color: #c9d1d9;
+}
+
+:host-context(body.dark-mode) h1 {
+  color: #f0f6fc;
+}
+
+:host-context(body.dark-mode) .bg {
+  background-color: #0d1117;
+}
+
+:host-context(body.dark-mode) body {
+  background-color: #0d1117 !important;
+}
+
+
+:host-context(body.dark-mode) .empty-message {
+  color: #8b949e;
+}
+
+:host-context(body.dark-mode) .album-card {
+  background: #161b22;
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.03);
+  border: 1px solid #30363d;
+}
+
+:host-context(body.dark-mode) .album-title {
+  background-color: rgba(22, 27, 34, 0.95);
+  color: #f0f6fc;
+  border-top: 1px solid #30363d;
+}
+
+:host-context(body.dark-mode) .album-actions {
+  background: #161b22;
+  border-top: 1px solid #30363d;
+}
+
+:host-context(body.dark-mode) .album-actions button {
+  color: #8b949e;
+}
+
+:host-context(body.dark-mode) .album-actions button:hover {
+  color: #f85149;
+}
+
+:host-context(body.dark-mode) .upload-button button {
+  color: #fff;
+  background-color: #1f6feb;
+  transition: background-color 0.2s ease;
+}
+
+:host-context(body.dark-mode) .upload-button button:hover {
+  background-color: #1f6feb;
+}
+
+:host-context(body.dark-mode) .loading-message,
+:host-context(body.dark-mode) .error-message {
+  color: #8b949e;
+}
+
+:host-context(body.dark-mode) .error-message {
+  color: #f85149;
+}
+
+:host-context(body.dark-mode) body,
+:host-context(body.dark-mode) html {
+  background-color: #0d1117 !important;
 }

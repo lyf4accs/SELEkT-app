@@ -143,3 +143,30 @@ body {
   border-top-left-radius: 20px;
   box-shadow: -1px -10px 0 0 white;
 }
+
+/* darkmode */
+:host-context(body.dark-mode) {
+  background-color: #0b1824;
+}
+
+:host-context(body.dark-mode) .navigation {
+  background-color: #0e2a4d;
+}
+
+:host-context(body.dark-mode) .navigation ul li a .icon,
+:host-context(body.dark-mode) .navigation ul li a .text {
+  color: #f0f0f0;
+}
+
+:host-context(body.dark-mode) .indicator {
+  border: 6px solid #161b22;
+  background-color: #1f6feb;
+}
+
+:host-context(body.dark-mode) .indicator::before {
+  box-shadow: 1px -10px 0 0 #161b22;
+}
+
+:host-context(body.dark-mode) .indicator::after {
+  box-shadow: -1px -10px 0 0 #161b22;
+}

@@ -55,3 +55,47 @@ input {
   font-size: 12px;
   margin-bottom: 0.5rem;
 }
+
+
+/* darkmode */
+:host-context(body.dark-mode) .payment-container {
+  background: #0d1117;
+  color: #f0f6fc;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+}
+
+:host-context(body.dark-mode) input {
+  background-color: #161b22;
+  border: 1px solid #30363d;
+  color: #f0f6fc;
+}
+
+:host-context(body.dark-mode) input::placeholder {
+  color: #8b949e;
+}
+
+:host-context(body.dark-mode) .pay-button {
+  background: #1f6feb;
+  color: #ffffff;
+}
+
+:host-context(body.dark-mode) .pay-button:hover:not(:disabled) {
+  background: #1f6feb;
+}
+
+:host-context(body.dark-mode) .pay-button:disabled {
+  background: #30363d;
+  color: #8b949e;
+}
+
+:host-context(body.dark-mode) .cancel-button {
+  color: #8b949e;
+}
+
+:host-context(body.dark-mode) .cancel-button:hover {
+  color: #c9d1d9;
+}
+
+:host-context(body.dark-mode) .error {
+  color: #ff7b72;
+}

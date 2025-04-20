@@ -8,7 +8,7 @@
 
 :host {
   display: block;
-  background: linear-gradient(360deg, #021321 0%, #052F50 100%);
+  background: #161b22;
   padding: 1.5rem 0.75rem;
   height: 100%;
   overflow-y: auto;
@@ -91,4 +91,36 @@
   text-align: center;
   margin-top: 4rem;
   position: relative;
+}
+
+/* darkmode */
+:host-context(body.dark-mode) {
+  background: #161b22;
+}
+
+
+:host-context(body.dark-mode) .album-card {
+  background: #0d1117;
+  color: #f0f0f0;
+  box-shadow: 0 3px 8px rgba(255, 255, 255, 0.08);
+}
+
+:host-context(body.dark-mode) .album-link {
+  color: #4fa8dc;
+}
+
+:host-context(body.dark-mode) .album-date {
+  color: #bbbbbb;
+}
+
+:host-context(body.dark-mode) .back-button {
+  color: #ccc;
+}
+
+:host-context(body.dark-mode) .deleteAlbum {
+  background: #aa3e45;
+}
+
+:host-context(body.dark-mode) .no-albums {
+  color: #eee;
 }

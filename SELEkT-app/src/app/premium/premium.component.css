@@ -186,3 +186,68 @@
     font-size: 11px;
   }
 }
+
+
+/* darkmode */
+:host-context(body.dark-mode) .modal-container {
+  background: #161b22;
+  color: #c9d1d9;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.06);
+}
+
+:host-context(body.dark-mode) .modal-overlay {
+  background: linear-gradient(to bottom, #0e2a4d, #0e2a4d);
+}
+
+:host-context(body.dark-mode) .close-button {
+  color: #8b949e;
+}
+
+:host-context(body.dark-mode) .close-button:hover {
+  color: #f0f6fc;
+}
+
+:host-context(body.dark-mode) .modal-title,
+:host-context(body.dark-mode) .modal-subtitle {
+  color: #f0f6fc;
+}
+
+:host-context(body.dark-mode) .plan-item {
+  background: #161b22;
+  border: 1px solid #30363d;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+:host-context(body.dark-mode) .plan-item:hover {
+  border-color: #3fbdf1;
+  background-color: #21262d;
+}
+
+:host-context(body.dark-mode) .plan-item.selected {
+  border-color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.08);
+}
+
+:host-context(body.dark-mode) .plan-header {
+  color: #f0f6fc;
+}
+
+:host-context(body.dark-mode) .plan-subtext {
+  color: #7d8590;
+}
+
+:host-context(body.dark-mode) .benefits-box {
+  background-color: #1c1f26;
+  color: #f0f6fc;
+  border: 1px solid #30363d;
+}
+
+:host-context(body.dark-mode) .cta-info,
+:host-context(body.dark-mode) .modal-footer,
+:host-context(body.dark-mode) .modal-footer a {
+  color: #8b949e;
+}
+
+:host-context(body.dark-mode) .modal-footer a:hover {
+  color: #58a6ff;
+}

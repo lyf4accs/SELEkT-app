@@ -99,3 +99,29 @@
   border-top-right-radius: 32px;
 
 }
+
+/* darkmode */
+:host-context(body.dark-mode) .container {
+  background-color: #161b22;
+}
+
+:host-context(body.dark-mode) .back-button {
+  color: #58a6ff;
+}
+
+:host-context(body.dark-mode) .card {
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+}
+
+:host-context(body.dark-mode) .card-content {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f0f6fc;
+}
+
+:host-context(body.dark-mode) .loading-container {
+  color: #c9d1d9;
+}
+
+:host-context(body.dark-mode) .white-background-image {
+  background-color: #161b22;
+}

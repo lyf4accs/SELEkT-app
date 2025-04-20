@@ -158,3 +158,45 @@
   margin-top: 3rem;
   z-index: 1;
 }
+
+
+/* darkmode */
+:host-context(body.dark-mode) .album-container {
+  background-color: #0e1a25;
+  color: #e0e0e0;
+}
+
+:host-context(body.dark-mode) .album-container::before {
+  opacity: 0.06;
+}
+
+:host-context(body.dark-mode) .album-title {
+  color: #e0f7fa;
+}
+
+:host-context(body.dark-mode) .photo-name {
+  color: #90caf9;
+}
+
+:host-context(body.dark-mode) .photo-card {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+:host-context(body.dark-mode) .colores-button {
+  background-color: #1c2e40;
+  color: #bbdefb;
+  text-shadow: none;
+}
+
+:host-context(body.dark-mode) .colores-button:hover {
+  transform: scale(1.02);
+  background-color: #233b54;
+}
+
+:host-context(body.dark-mode) .no-photos {
+  color: #90caf9;
+}
+
+:host-context(body.dark-mode) .back-button {
+  color: #e0e0e0;
+}

@@ -447,3 +447,58 @@
     height: 38px;
   }
 }
+
+/* dark mode */
+:host-context(body.dark-mode) .profile-card {
+  background-color: #161b22;
+  color: #f0f6fc;
+}
+
+:host-context(body.dark-mode) .config-button,
+:host-context(body.dark-mode) .premium-button,
+:host-context(body.dark-mode) .colores-button {
+  background-color: rgba(22, 27, 34, 0.95);
+}
+
+:host-context(body.dark-mode) .config-button,
+:host-context(body.dark-mode) .colores-button {
+  color: rgb(31, 111, 235);
+}
+
+:host-context(body.dark-mode) .config-border,
+:host-context(body.dark-mode) .colores-border {
+  background: linear-gradient(180deg,
+        rgba(31,
+          111,
+          235, 0.7) 0%,
+        rgba(31,
+          111,
+          235, 0.4) 50%,
+        rgba(31,
+          111,
+          235, 0.7) 100%);
+}
+
+:host-context(body.dark-mode) .profile-header {
+  background: linear-gradient(to bottom, #0d1117, #161b22);
+  color: #f0f6fc;
+}
+
+:host-context(body.dark-mode) .about-us-modal-content {
+  background-color: rgba(22, 27, 34, 0.95);
+  color: #f0f6fc;
+}
+
+:host-context(body.dark-mode) .about-us-close-button {
+  background: #f85149;
+}
+
+:host-context(body.dark-mode) .badge.default-badge {
+  background-color: rgba(22, 27, 34, 0.95);
+  color: #f0f6fc;
+}
+
+:host-context(body.dark-mode) .form-input {
+  border-bottom: 2px solid #8b949e;
+  color: #f0f6fc;
+}

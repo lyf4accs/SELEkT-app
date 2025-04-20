@@ -133,3 +133,33 @@ button{
   cursor: pointer;
   z-index: 10;
 }
+
+:host-context(body.dark-mode) .upload-container {
+  background-color: #0d1117;
+}
+
+:host-context(body.dark-mode) .white-section {
+  background-color: #161b22;
+}
+
+:host-context(body.dark-mode) .header-section {
+  background: linear-gradient(180deg, #0d1117 0%, #161b22 76.57%);
+}
+
+:host-context(body.dark-mode) .header-title,
+:host-context(body.dark-mode) .setting-label,
+:host-context(body.dark-mode) .settings-option {
+  color: #f0f6fc;
+}
+
+:host-context(body.dark-mode) .divider {
+  border-top: 1px solid #30363d;
+}
+
+:host-context(body.dark-mode) .slider {
+  background-color: #30363d;
+}
+
+:host-context(body.dark-mode) .slider:before {
+  background-color: white;
+}

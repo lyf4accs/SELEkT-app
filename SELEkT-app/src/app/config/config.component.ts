@@ -18,11 +18,17 @@ import { ChangeDetectorRef } from '@angular/core';
   styleUrl: './config.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfigComponent {
+export class ConfigComponent implements OnInit{
   router = inject(Router);
   private _galleryAccess = localStorage.getItem('galleryPermission') === 'true';
-  darkMode = false;
+  private _darkMode = localStorage.getItem('darkMode') === 'true';
   cdr = inject(ChangeDetectorRef);
+
+ ngOnInit(): void {
+    if (this._darkMode) {
+      document.body.classList.add('dark-mode');
+    }
+  }
 
   goBack() {
     this.router.navigate(['/profile']);
@@ -35,6 +41,21 @@ export class ConfigComponent {
   set galleryAccess(value: boolean) {
     this._galleryAccess = value;
     localStorage.setItem('galleryPermission', value ? 'true' : 'false');
+    this.cdr.markForCheck();
+  }
+
+  get darkMode(): boolean {
+    return this._darkMode;
+  }
+
+  set darkMode(value: boolean) {
+    this._darkMode = value;
+    localStorage.setItem('darkMode', value ? 'true' : 'false'); // ✅ Guardar en localStorage
+    if (value) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
     this.cdr.markForCheck();
   }
 
