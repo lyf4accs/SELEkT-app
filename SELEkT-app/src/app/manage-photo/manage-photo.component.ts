@@ -165,6 +165,7 @@ export class ManagePhotoComponent implements OnInit {
         album.coverPhoto = album.photos[0];
       }
     });
+    this.photoFacade.setCurrentAlbumIndex(albumIndex!);
 
     this.router.navigate(['/manage/swiper']);
   }

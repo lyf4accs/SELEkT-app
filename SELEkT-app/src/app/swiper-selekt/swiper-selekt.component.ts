@@ -205,10 +205,16 @@ export class SwiperSelektComponent implements OnInit {
       this.cards.splice(this.draggingIndex!, 1);
       this.draggingIndex = null;
 
-      if (this.cards.length === 0) {
-        await this.showAlert('¡Listo!', 'No hay más imágenes que revisar.');
-        this.return();
+    if (this.cards.length === 0) {
+      await this.showAlert('¡Listo!', 'No hay más imágenes que revisar.');
+
+      const index = this.photoFacade.getCurrentAlbumIndex();
+      if (index !== null && (this.w === 'similar' || this.w === 'duplicate')) {
+        this.photoFacade.removeAlbumByIndex(this.w, index);
       }
+
+      this.return();
+    }
     }, 300);
   }
 
@@ -269,4 +275,6 @@ export class SwiperSelektComponent implements OnInit {
     const match = this.photoFacade.getHashes().find((item) => item.url === url);
     return match?.fileName;
   }
+
+
 }

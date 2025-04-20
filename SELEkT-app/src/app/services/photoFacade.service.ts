@@ -14,6 +14,7 @@ import { ClipboardService } from './clip-board.service';
 import { NameGeneratorService } from './name-generator.service';
 import { DropsendService } from './dropsend.service';
 import { GalleryService } from './GalleryService';
+import { PhotoAlbum } from '../models/PhotoAlbum';
 
 @Injectable({
   providedIn: 'root',
@@ -60,14 +61,16 @@ export class PhotoFacadeService {
   // Delegaciones claras a los nuevos servicios
   updateDuplicatePhotos(photos: any[], albums?: any[]) {
     this.duplicatePhotoService.updateDuplicatePhotos(photos, albums);
-  }
-
-  getAlbumByCode(albumCode: string): Promise<number | null> {
-    return this.supabaseService.getAlbumByCode(albumCode);
+    if (albums) this.duplicateAlbums = albums;
   }
 
   updateSimilarPhotos(photos: any[], albums?: any[]) {
     this.similarPhotoService.updateSimilarPhotos(photos, albums);
+    if (albums) this.similarAlbums = albums;
+  }
+
+  getAlbumByCode(albumCode: string): Promise<number | null> {
+    return this.supabaseService.getAlbumByCode(albumCode);
   }
 
   getDuplicatePhotos(): any[] {
@@ -222,5 +225,27 @@ export class PhotoFacadeService {
   /** Accede directamente al estado sin popup */
   getGalleryAccess(): boolean {
     return this.galleryService.hasGalleryPermission();
+  }
+
+  private currentAlbumIndex: number | null = null;
+  private duplicateAlbums: PhotoAlbum[] = [];
+  private similarAlbums: PhotoAlbum[] = [];
+
+  setCurrentAlbumIndex(index: number) {
+    this.currentAlbumIndex = index;
+  }
+
+  getCurrentAlbumIndex(): number | null {
+    return this.currentAlbumIndex;
+  }
+
+  removeAlbumByIndex(albumType: 'duplicate' | 'similar', index: number) {
+    if (albumType === 'duplicate') {
+      this.duplicateAlbums.splice(index, 1);
+      this.updateDuplicatePhotos([], this.duplicateAlbums);
+    } else if (albumType === 'similar') {
+      this.similarAlbums.splice(index, 1);
+      this.updateSimilarPhotos([], this.similarAlbums);
+    }
   }
 }
