@@ -22,9 +22,8 @@ button{
 }
 .moodboard-container {
   padding: 1rem;
- overflow: scroll;
   min-height: 100vh;
-    overflow-y: auto;
+    overflow-y: scroll;
     box-sizing: border-box;
 }
 
