@@ -42,9 +42,10 @@ describe("Configuración – Validación del modo oscuro y acceso a galería en 
     cy.get(".switch input[type='checkbox']").eq(0).uncheck({ force: true }); // Forzar desactivado
     cy.wait(1000);
 
-    // Ir a /upload e intentar usar el botón ➕ sin permiso
-    cy.visit("/upload");
-    cy.get("button.add-button").click();
+    // Ir a /moodboards e intentar usar el botón seleccionar imágenes sin permiso
+    cy.visit("/moodboards");
+    cy.get(".moodboard-container").should("exist");
+    cy.get(".upload-button button").should("be.visible").click();
 
     // Debería mostrar una alerta (galería denegada)
     cy.on("window:alert", (str) => {
@@ -58,9 +59,10 @@ describe("Configuración – Validación del modo oscuro y acceso a galería en 
     cy.get(".switch input[type='checkbox']").eq(0).check({ force: true });
     cy.wait(1000);
 
-    // Volver a /upload y comprobar que ahora sí deja abrir selector
-    cy.visit("/upload");
-    cy.get("button.add-button").click();
+    // Volver a comprobar que ahora sí deja abrir selector
+    cy.visit("/moodboards");
+    cy.get(".moodboard-container").should("exist");
+    cy.get(".upload-button button").should("be.visible").click();
 
     // Debe haber un input de tipo file visible y funcional
    cy.get('input[type="file"]').then(($input) => {
