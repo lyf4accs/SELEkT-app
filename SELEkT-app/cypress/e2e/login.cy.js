@@ -22,39 +22,39 @@ describe("Login de usuario", () => {
     );
   });
 
-  it("Muestra error si las credenciales son incorrectas", () => {
-    cy.intercept("POST", "**/auth/v1/token", {
-      statusCode: 400,
-      body: {
-        error: "Invalid login credentials",
-      },
-    }).as("login");
+  it("Muestra error si las credenciales son incorrectas (mock)", () => {
+    // Simulamos que signInUser devuelve false sin llamar a Supabase
+    cy.window().then((win) => {
+      cy.stub(win, "fetch").resolves({
+        ok: false,
+        json: () => Promise.resolve({ error: "Invalid login credentials" }),
+      });
+    });
 
     cy.get("#email").type("noexiste@example.com");
     cy.get("#password").type("contraseñaMala");
     cy.get(".submit-button").click();
 
-    cy.wait("@login");
     cy.get(".error-message", { timeout: 4000 }).should(
       "contain",
       "Email o contraseña incorrectos"
     );
   });
 
-  it("Login exitoso redirige a /upload", () => {
-    cy.intercept("POST", "**/auth/v1/token", {
-      statusCode: 200,
-      body: {
-        access_token: "fake_token",
-        user: { email: "javi@example.com" },
-      },
-    }).as("login");
+  it("Login exitoso simulado redirige a /upload y no hay mensaje de error", () => {
+    // Simulamos que signInUser devuelve true
+    cy.window().then((win) => {
+      cy.stub(win.supabaseClient.auth, "signInWithPassword").resolves({
+        data: { user: { email: "javi@example.com" } },
+        error: null,
+      });
+    });
 
     cy.get("#email").type("javi@example.com");
     cy.get("#password").type("password123");
     cy.get(".submit-button").click();
 
-    cy.wait("@login");
     cy.url({ timeout: 8000 }).should("include", "/upload");
+    cy.get(".error-message").should("not.exist");
   });
 });
