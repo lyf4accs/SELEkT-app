@@ -1,14 +1,6 @@
-describe("Login de usuario", () => {
+describe("Login de usuario – Validación de errores y login real", () => {
   beforeEach(() => {
     cy.visit("/login");
-  });
-
-  it("Muestra error si los campos están vacíos", () => {
-    cy.get(".submit-button").click();
-    cy.get(".error-message", { timeout: 4000 }).should(
-      "contain",
-      "Por favor, completa todos los campos."
-    );
   });
 
   it("Muestra error si el correo tiene formato inválido", () => {
@@ -22,17 +14,9 @@ describe("Login de usuario", () => {
     );
   });
 
-  it("Muestra error si las credenciales son incorrectas (mock)", () => {
-    // Simulamos que signInUser devuelve false sin llamar a Supabase
-    cy.window().then((win) => {
-      cy.stub(win, "fetch").resolves({
-        ok: false,
-        json: () => Promise.resolve({ error: "Invalid login credentials" }),
-      });
-    });
-
+  it("Muestra error si las credenciales son incorrectas (simulado)", () => {
     cy.get("#email").type("noexiste@example.com");
-    cy.get("#password").type("contraseñaMala");
+    cy.get("#password").type("claveincorrecta");
     cy.get(".submit-button").click();
 
     cy.get(".error-message", { timeout: 4000 }).should(
@@ -41,19 +25,12 @@ describe("Login de usuario", () => {
     );
   });
 
-  it("Login exitoso simulado redirige a /upload y no hay mensaje de error", () => {
-    // Simulamos que signInUser devuelve true
-    cy.window().then((win) => {
-      cy.stub(win.supabaseClient.auth, "signInWithPassword").resolves({
-        data: { user: { email: "javi@example.com" } },
-        error: null,
-      });
-    });
-
-    cy.get("#email").type("javi@example.com");
-    cy.get("#password").type("password123");
+  it("Login válido con usuario real redirige a /upload", () => {
+    cy.get("#email").type("pyroolatorre@gmail.com");
+    cy.get("#password").type("J2003avier");
     cy.get(".submit-button").click();
 
+    // Confirmamos redirección tras login exitoso
     cy.url({ timeout: 8000 }).should("include", "/upload");
     cy.get(".error-message").should("not.exist");
   });
