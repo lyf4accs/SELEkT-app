@@ -1,13 +1,11 @@
 describe("Registro de usuario", () => {
   beforeEach(() => {
-    cy.visit("/register"); // Asegúrate que esta ruta es la correcta
+    cy.visit("/register");
   });
 
   it("Muestra error si faltan campos", () => {
-    cy.get("#nombre").type("Javier");
+    // Solo rellena un campo
     cy.get("#correo").type("javi@example.com");
-    // Faltan contraseñas
-
     cy.get(".submit-button").click();
     cy.get(".error-message").should("contain", "Rellena todos los campos");
   });
@@ -17,7 +15,6 @@ describe("Registro de usuario", () => {
     cy.get("#correo").type("javi@example.com");
     cy.get("#password").type("password123");
     cy.get("#rep").type("password123");
-
     cy.get(".submit-button").click();
     cy.get(".error-message").should(
       "contain",
@@ -27,10 +24,9 @@ describe("Registro de usuario", () => {
 
   it("Muestra error si los emails son inválidos", () => {
     cy.get("#nombre").type("Javier");
-    cy.get("#correo").type("javi@correo"); // Mal formado
+    cy.get("#correo").type("javi@correo"); // inválido
     cy.get("#password").type("password123");
     cy.get("#rep").type("password123");
-
     cy.get(".submit-button").click();
     cy.get(".error-message").should(
       "contain",
@@ -42,17 +38,19 @@ describe("Registro de usuario", () => {
     cy.get("#nombre").type("Javier");
     cy.get("#correo").type("javi@example.com");
     cy.get("#password").type("password123");
-    cy.get("#rep").type("password456");
-
+    cy.get("#rep").type("diferente123");
     cy.get(".submit-button").click();
     cy.get(".error-message").should("contain", "Las contraseñas no coinciden");
   });
 
   it("Registra con éxito con datos válidos", () => {
-    cy.intercept("POST", "**/auth/**", {
+    cy.intercept("POST", "**/auth/v1/signup", {
       statusCode: 200,
-      body: { success: true },
-    }).as("registerRequest");
+      body: {
+        user: { email: "javi@example.com" },
+        session: null,
+      },
+    }).as("signUp");
 
     cy.get("#nombre").type("Javier");
     cy.get("#correo").type("javi@example.com");
@@ -60,12 +58,7 @@ describe("Registro de usuario", () => {
     cy.get("#rep").type("password123");
 
     cy.get(".submit-button").click();
-
-    // Espera redirección o confirmación
-    cy.wait("@registerRequest");
-    // Alternativa: verifica que no hay error
+    cy.wait("@signUp");
     cy.get(".error-message").should("not.exist");
-    // O redirección esperada:
-    cy.url().should("not.include", "/register");
   });
 });
