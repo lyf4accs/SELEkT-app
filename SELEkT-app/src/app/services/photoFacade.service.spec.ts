@@ -567,5 +567,49 @@ describe('PhotoFacadeService', () => {
     expect(result).toEqual(expectedName);
     expect(nameGeneratorServiceSpy.generateName).toHaveBeenCalledWith(seed);
   });
+
+  it('should set and get the current album index', () => {
+    service.setCurrentAlbumIndex(3);
+
+    const result = service.getCurrentAlbumIndex();
+
+    expect(result).toBe(3);
+  });
+
+  it('should remove album and update duplicates if albumType is "duplicate"', () => {
+    const mockAlbums = [{ id: '1' }, { id: '2' }];
+    (service as any).duplicateAlbums = [...mockAlbums];
+
+    service.removeAlbumByIndex('duplicate', 0);
+
+    expect((service as any).duplicateAlbums.length).toBe(1);
+    expect(duplicatePhotoServiceSpy.updateDuplicatePhotos).toHaveBeenCalledWith(
+      [],
+      [{ id: '2' }]
+    );
+  });
+
+  it('should remove album and update similars if albumType is "similar"', () => {
+    const mockAlbums = [{ id: 'a' }, { id: 'b' }];
+    (service as any).similarAlbums = [...mockAlbums];
+
+    service.removeAlbumByIndex('similar', 1);
+
+    expect((service as any).similarAlbums.length).toBe(1);
+    expect(similarPhotoServiceSpy.updateSimilarPhotos).toHaveBeenCalledWith(
+      [],
+      [{ id: 'a' }]
+    );
+  });
+
+  it('should call supabaseService.clearAnalysisBucket', async () => {
+    supabaseServiceSpy.clearAnalysisBucket.and.returnValue(Promise.resolve());
+
+    await service.clearAnalysisBucket();
+
+    expect(supabaseServiceSpy.clearAnalysisBucket).toHaveBeenCalled();
+  });
+
+
 });
 
